@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="VECTOR2D.h" />
+    <ClInclude Include="src\VECTOR2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="VECTOR2D.cpp" />
+    <ClCompile Include="src\VECTOR2D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
