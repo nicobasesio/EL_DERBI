@@ -19,9 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\mundo.h" />
+    <ClInclude Include="src\raton.h" />
+    <ClInclude Include="src\tablero.h" />
     <ClInclude Include="src\VECTOR2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\mundo.cpp" />
+    <ClCompile Include="src\principal.cpp" />
+    <ClCompile Include="src\raton.cpp" />
+    <ClCompile Include="src\tablero.cpp" />
     <ClCompile Include="src\VECTOR2D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

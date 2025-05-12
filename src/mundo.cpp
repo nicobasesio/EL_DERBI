@@ -1,0 +1,22 @@
+#include "mundo.h"
+void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
+    posicion_central_click = posicion_central;
+    // Aquí no detectamos clics en el menú si no estamos en el estado de menú principal
+}
+
+void Mundo::set_posicion_central_click_anterior(VECTOR2D& posicion_central)
+{
+    posicion_central_click_anterior = posicion_central; //centro de la casilla a la que se hace click
+
+}
+void Mundo::set_casilla_actual(VECTOR2D& casilla_act)
+{
+    casilla_actual = casilla_act;
+}
+void Mundo::set_casilla_anterior(VECTOR2D& casilla_ant)
+{
+    casilla_anterior = casilla_ant;
+}
+void Mundo::inicializa() {
+    // Código de inicialización del mundo
+}
