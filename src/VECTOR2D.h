@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 struct VECTOR2D
 {
 	double x{};

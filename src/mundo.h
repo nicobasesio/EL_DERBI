@@ -15,6 +15,10 @@ class Mundo
 public:
 	void dibuja();
 	void inicializa();
+	void inicializa_demi();
+	double x_ojo{}, y_ojo{}, z_ojo{};
+	int columnas;
+	int filas;
 public:
 	void set_posicion_central_click(VECTOR2D& posicion_central_click);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
 	void set_posicion_central_click_anterior(VECTOR2D& posicion_central);

@@ -18,5 +18,8 @@ void Mundo::set_casilla_anterior(VECTOR2D& casilla_ant)
     casilla_anterior = casilla_ant;
 }
 void Mundo::inicializa() {
-    // Código de inicialización del mundo
+    x_ojo = 0.0;
+    y_ojo = 7.5;
+    z_ojo = 30.0;
+    inicializa_demi();
 }
