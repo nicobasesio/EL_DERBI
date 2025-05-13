@@ -19,17 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mundo.h" />
-    <ClInclude Include="raton.h" />
+    <ClInclude Include="src\mundo.h" />
+    <ClInclude Include="src\raton.h" />
+    <ClInclude Include="src\tablero.h" />
     <ClInclude Include="src\VECTOR2D.h" />
-    <ClInclude Include="tablero.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="mundo.cpp" />
-    <ClCompile Include="principal.cpp" />
-    <ClCompile Include="raton.cpp" />
+    <ClCompile Include="src\mundo.cpp" />
+    <ClCompile Include="src\principal.cpp" />
+    <ClCompile Include="src\raton.cpp" />
+    <ClCompile Include="src\tablero.cpp" />
     <ClCompile Include="src\VECTOR2D.cpp" />
-    <ClCompile Include="tablero.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

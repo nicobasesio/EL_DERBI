@@ -9,6 +9,7 @@ using namespace std;
 
 Mundo mundo;
 Raton raton;
+Tablero tablero;
 VECTOR2D posicion_central_click{};
 VECTOR2D posicion_central_click_anterior{};
 
@@ -19,38 +20,42 @@ void mouseClick(int button, int state, int x, int y);
 void display();
 
 int main(int argc, char* argv[]) {
-   
-
-    // Inicialización de GLUT y creación de la ventana
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiJuego");
 
-    // Habilitar luces y definir perspectiva
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
+    // Modo 2D ortográfico
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-15, 15, -5, 20);  // Cámara 2D
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Desactivar iluminación (no usamos normales ni materiales)
+    glDisable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
-    glMatrixMode(GL_PROJECTION);
-    gluPerspective(40.0, 800 / 600.0f, 0.1, 100);  // 40 es el punto de referencia de las casillas
 
-    // Registrar los callbacks
+    // Registrar callbacks
     glutDisplayFunc(OnDraw);
-    glutTimerFunc(25, OnTimer, 0);
+    glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
     glutMouseFunc(mouseClick);
-    // Inicialización del mundo y funciones de ratón
+
+    // Inicializa mundo
     mundo.inicializa();
-    //mundo.control_piezas();
+    mundo.inicializa_tab();
 
-    glutMainLoop(); // LOOP principal hace que no se cierre programa
-
+    glutMainLoop();
     return 0;
 }
 void OnDraw() {
-    // Redibujar la escena
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    mundo.dibuja();
+
     glutSwapBuffers();
 }
 

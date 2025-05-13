@@ -18,13 +18,13 @@
     <ClInclude Include="src\VECTOR2D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="tablero.h">
+    <ClInclude Include="src\raton.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="mundo.h">
+    <ClInclude Include="src\tablero.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="raton.h">
+    <ClInclude Include="src\mundo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,16 +32,16 @@
     <ClCompile Include="src\VECTOR2D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="tablero.cpp">
+    <ClCompile Include="src\mundo.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="principal.cpp">
+    <ClCompile Include="src\raton.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="mundo.cpp">
+    <ClCompile Include="src\tablero.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="raton.cpp">
+    <ClCompile Include="src\principal.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
