@@ -21,5 +21,12 @@ void Mundo::inicializa() {
     x_ojo = 0.0;
     y_ojo = 7.5;
     z_ojo = 30.0;
-    inicializa_demi();
+    inicializa_tab();
+}
+void Mundo::inicializa_tab() {
+    columnas = 8;
+    filas = 8;
+    tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 1.0 });
+}
+void Mundo:: dibuja(){
 }

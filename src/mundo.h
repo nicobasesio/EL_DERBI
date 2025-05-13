@@ -6,6 +6,7 @@
 
 class Mundo
 {
+	Tablero tablero;
 	VECTOR2D posicion_central_click; //es la posicion del centro de la casilla a la que se hace click
 	VECTOR2D posicion_central_click_anterior;
 	VECTOR2D casilla_actual;
@@ -15,7 +16,7 @@ class Mundo
 public:
 	void dibuja();
 	void inicializa();
-	void inicializa_demi();
+	void inicializa_tab();
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
 	int filas;
