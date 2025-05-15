@@ -84,36 +84,60 @@ void mouseClick(int button, int state, int x, int y) {
             raton.posicion.y = static_cast<double>(static_cast<double>((-18 * y) + (575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
         }
         // Cuadrante arriba derecha
-        if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
+        else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
             raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
             raton.posicion.y = double((double(-18 * y + 575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
         }
         // Cuadrante abajo derecha
-        if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+        else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
             raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
             raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
         }
         // Cuadrante abajo izquierda
-        if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+        else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
             raton.posicion.x = (static_cast<double>(14) * x - 5600) / 385;
             raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
+        }
+        else {
+            mundo.casilla_seleccionada = false;
+            return;
         }
 
 
         /*PROCESO QUE SE SIGUIÓ PARA SINCRONIZAR LAS COORDENADAS QUE LEE EL RATÓN Y LAS QUE LEEN LAS CASILLAS*/
         //std::cout << "Posicion del clic: (" << raton.posicion.x << ", " << raton.posicion.y << ")" << std::endl;
-        posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
-        posicion_central_click_anterior.y = posicion_central_click.y;
-        posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
+        //posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
+        //posicion_central_click_anterior.y = posicion_central_click.y;
+        //posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
         //std::cout << "Raton lee: (" << x << ", " << y << ")" << std::endl;
         //std::cout << "Pos central click: (" << posicion_central_click.x << "," << posicion_central_click.y << ")"<<std::endl;
         //std::cout << "Pos central click anterior: (" << posicion_central_click_anterior.x << "," << posicion_central_click_anterior.y << ")" << std::endl;
 
 
 
-        mundo.set_posicion_central_click(posicion_central_click);
+        /*mundo.set_posicion_central_click(posicion_central_click);
         mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
         mundo.set_casilla_actual(raton.casilla);    // Se pasa la casilla actual de principa.cpp a mundo.cpp
         mundo.set_casilla_anterior(raton.casilla_anterior);// Se pasa la casilla anterior de principa.cpp a mundo.cpp
+        mundo.casilla_seleccionada = true;*/
+        VECTOR2D centro = raton.elige_casilla();
+        if (centro.x != 0.0 || centro.y != 0.0) {
+            posicion_central_click_anterior = posicion_central_click;
+            posicion_central_click = centro;
+            if (posicion_central_click.x == 0.0 && posicion_central_click.y == 0.0) {
+                mundo.casilla_seleccionada = false; 
+                return; 
+            }
+
+            mundo.set_posicion_central_click(posicion_central_click);
+            mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
+            mundo.set_casilla_actual(raton.casilla);
+            mundo.set_casilla_anterior(raton.casilla_anterior);
+            mundo.casilla_seleccionada = true;
+        }
+        else {
+            mundo.casilla_seleccionada = false;
+        }
+
     }
 }

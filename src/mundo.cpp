@@ -31,5 +31,7 @@ void Mundo::inicializa_tab() {
 }
 void Mundo::dibuja() {
     tablero.dibuja_tablero(columnas, filas);
-    
+    if (casilla_seleccionada)
+        tablero.dibuja_casilla(posicion_central_click);
+
 }

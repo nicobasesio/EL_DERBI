@@ -25,5 +25,6 @@ public:
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
 	int filas;
+	bool casilla_seleccionada = false;
 };
 
