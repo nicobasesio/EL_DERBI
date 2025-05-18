@@ -26,7 +26,12 @@ void Mundo::inicializa() {
 void Mundo::inicializa_tab() {
     columnas = 8;
     filas = 8;
-    tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 1.0 });
+    // Asegúrate de que las coordenadas estén configuradas correctamente
+    tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 3.0 });
 }
-void Mundo:: dibuja(){
+void Mundo::dibuja() {
+    tablero.dibuja_tablero(columnas, filas);
+    if (casilla_seleccionada)
+        tablero.dibuja_casilla(posicion_central_click);
+
 }

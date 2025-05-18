@@ -9,6 +9,7 @@ using namespace std;
 
 Mundo mundo;
 Raton raton;
+Tablero tablero;
 VECTOR2D posicion_central_click{};
 VECTOR2D posicion_central_click_anterior{};
 
@@ -19,38 +20,42 @@ void mouseClick(int button, int state, int x, int y);
 void display();
 
 int main(int argc, char* argv[]) {
-   
-
-    // Inicialización de GLUT y creación de la ventana
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiJuego");
 
-    // Habilitar luces y definir perspectiva
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
+    // Modo 2D ortográfico
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-15, 15, -5, 20);  // Cámara 2D
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Desactivar iluminación (no usamos normales ni materiales)
+    glDisable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
-    glMatrixMode(GL_PROJECTION);
-    gluPerspective(40.0, 800 / 600.0f, 0.1, 100);  // 40 es el punto de referencia de las casillas
 
-    // Registrar los callbacks
+    // Registrar callbacks
     glutDisplayFunc(OnDraw);
-    glutTimerFunc(25, OnTimer, 0);
+    glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
     glutMouseFunc(mouseClick);
-    // Inicialización del mundo y funciones de ratón
+
+    // Inicializa mundo
     mundo.inicializa();
-    //mundo.control_piezas();
+    mundo.inicializa_tab();
 
-    glutMainLoop(); // LOOP principal hace que no se cierre programa
-
+    glutMainLoop();
     return 0;
 }
 void OnDraw() {
-    // Redibujar la escena
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    mundo.dibuja();
+
     glutSwapBuffers();
 }
 
@@ -79,36 +84,60 @@ void mouseClick(int button, int state, int x, int y) {
             raton.posicion.y = static_cast<double>(static_cast<double>((-18 * y) + (575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
         }
         // Cuadrante arriba derecha
-        if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
+        else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
             raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
             raton.posicion.y = double((double(-18 * y + 575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
         }
         // Cuadrante abajo derecha
-        if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+        else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
             raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
             raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
         }
         // Cuadrante abajo izquierda
-        if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+        else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
             raton.posicion.x = (static_cast<double>(14) * x - 5600) / 385;
             raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
+        }
+        else {
+            mundo.casilla_seleccionada = false;
+            return;
         }
 
 
         /*PROCESO QUE SE SIGUIÓ PARA SINCRONIZAR LAS COORDENADAS QUE LEE EL RATÓN Y LAS QUE LEEN LAS CASILLAS*/
         //std::cout << "Posicion del clic: (" << raton.posicion.x << ", " << raton.posicion.y << ")" << std::endl;
-        posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
-        posicion_central_click_anterior.y = posicion_central_click.y;
-        posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
+        //posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
+        //posicion_central_click_anterior.y = posicion_central_click.y;
+        //posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
         //std::cout << "Raton lee: (" << x << ", " << y << ")" << std::endl;
         //std::cout << "Pos central click: (" << posicion_central_click.x << "," << posicion_central_click.y << ")"<<std::endl;
         //std::cout << "Pos central click anterior: (" << posicion_central_click_anterior.x << "," << posicion_central_click_anterior.y << ")" << std::endl;
 
 
 
-        mundo.set_posicion_central_click(posicion_central_click);
+        /*mundo.set_posicion_central_click(posicion_central_click);
         mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
         mundo.set_casilla_actual(raton.casilla);    // Se pasa la casilla actual de principa.cpp a mundo.cpp
         mundo.set_casilla_anterior(raton.casilla_anterior);// Se pasa la casilla anterior de principa.cpp a mundo.cpp
+        mundo.casilla_seleccionada = true;*/
+        VECTOR2D centro = raton.elige_casilla();
+        if (centro.x != 0.0 || centro.y != 0.0) {
+            posicion_central_click_anterior = posicion_central_click;
+            posicion_central_click = centro;
+            if (posicion_central_click.x == 0.0 && posicion_central_click.y == 0.0) {
+                mundo.casilla_seleccionada = false; 
+                return; 
+            }
+
+            mundo.set_posicion_central_click(posicion_central_click);
+            mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
+            mundo.set_casilla_actual(raton.casilla);
+            mundo.set_casilla_anterior(raton.casilla_anterior);
+            mundo.casilla_seleccionada = true;
+        }
+        else {
+            mundo.casilla_seleccionada = false;
+        }
+
     }
 }
