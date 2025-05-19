@@ -2,6 +2,7 @@
 #include "VECTOR2D.h"
 #include "tablero.h"
 #include "raton.h"
+#include "peon.h"
 #include <vector>
 
 class Mundo
@@ -12,6 +13,8 @@ class Mundo
 	VECTOR2D casilla_actual;
 	VECTOR2D casilla_anterior;
 	VECTOR2D coordRatonFin, coordRatonInicial;
+	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
+	Peon peonR1, peonR2, peonR3, peonR4, peonR5, peonR6, peonR7, peonR8;
 
 public:
 	void dibuja();
@@ -25,6 +28,15 @@ public:
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
 	int filas;
-	bool casilla_seleccionada = false;
+	bool casilla_seleccionada = false; //será true cuando se haya movido una pieza
+
+	//las siguientes variables son para el tema de las piezas comidas
+	int material_rojo = 0; //contador de puntos de piezas comidas
+	int material_blanco = 0;
+	int dif_material_int;
+
+	int b = 0;      // Se lleva el conteo del numero de piezas blancas comidas
+	int r = 0;      // Se lleva el conteo del numero de piezas negras comidas
+
 };
 

@@ -33,5 +33,24 @@ void Mundo::dibuja() {
     tablero.dibuja_tablero(columnas, filas);
     if (casilla_seleccionada)
         tablero.dibuja_casilla(posicion_central_click);
+    
+    //Blancas
+    peonB1.dibuja_pieza();
+    peonB2.dibuja_pieza();
+    peonB3.dibuja_pieza();
+    peonB4.dibuja_pieza();
+    peonB5.dibuja_pieza();
+    peonB6.dibuja_pieza();
+    peonB7.dibuja_pieza();
+    peonB8.dibuja_pieza();
 
+    //Rojas
+    peonR1.dibuja_pieza();
+    peonR2.dibuja_pieza();
+    peonR3.dibuja_pieza();
+    peonR4.dibuja_pieza();
+    peonR5.dibuja_pieza();
+    peonR6.dibuja_pieza();
+    peonR7.dibuja_pieza();
+    peonR8.dibuja_pieza();
 }
