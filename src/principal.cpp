@@ -106,9 +106,9 @@ void mouseClick(int button, int state, int x, int y) {
 
         /*PROCESO QUE SE SIGUIÓ PARA SINCRONIZAR LAS COORDENADAS QUE LEE EL RATÓN Y LAS QUE LEEN LAS CASILLAS*/
         //std::cout << "Posicion del clic: (" << raton.posicion.x << ", " << raton.posicion.y << ")" << std::endl;
-        //posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
-        //posicion_central_click_anterior.y = posicion_central_click.y;
-        //posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
+        posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
+        posicion_central_click_anterior.y = posicion_central_click.y;
+        posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
         //std::cout << "Raton lee: (" << x << ", " << y << ")" << std::endl;
         //std::cout << "Pos central click: (" << posicion_central_click.x << "," << posicion_central_click.y << ")"<<std::endl;
         //std::cout << "Pos central click anterior: (" << posicion_central_click_anterior.x << "," << posicion_central_click_anterior.y << ")" << std::endl;
