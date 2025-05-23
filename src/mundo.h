@@ -6,7 +6,11 @@
 #include "alfil.h"
 #include "pieza.h"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include <vector>
+=======
+#include "alfil.h"
+>>>>>>> Stashed changes
 =======
 #include "alfil.h"
 >>>>>>> Stashed changes
@@ -35,6 +39,9 @@ class Mundo
 	Torre torreR2;
 	Alfil alfilB1, alfilB2;
 	Alfil alfilR1, alfilR2;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 public:

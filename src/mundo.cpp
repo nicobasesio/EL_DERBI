@@ -91,6 +91,9 @@ void Mundo::inicializa() {
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
@@ -106,6 +109,9 @@ void Mundo::inicializa() {
     torreB2.set_color_pieza(true);
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     //Piezas rojas
@@ -124,6 +130,9 @@ void Mundo::inicializa() {
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
@@ -139,6 +148,9 @@ void Mundo::inicializa() {
     torreR2.set_color_pieza(false);
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 }
@@ -168,6 +180,9 @@ void Mundo::dibuja() {
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     //Rojas
@@ -185,6 +200,9 @@ void Mundo::dibuja() {
     torreR2.dibuja_pieza();
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
 
