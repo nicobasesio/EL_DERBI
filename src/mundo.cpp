@@ -84,23 +84,10 @@ void Mundo::inicializa() {
     peonB6.set_pos_pieza({ 3,4.5 });
     peonB7.set_pos_pieza({ 5,4.5 });
     peonB8.set_pos_pieza({ 7,4.5 });
-<<<<<<< Updated upstream
-=======
     torreB1.set_pos_pieza({ -7, 2.5 });
     torreB2.set_pos_pieza({ 7, 2.5 });
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
     peonB3.set_color_pieza(true);
@@ -109,22 +96,11 @@ void Mundo::inicializa() {
     peonB6.set_color_pieza(true);
     peonB7.set_color_pieza(true);
     peonB8.set_color_pieza(true);
-<<<<<<< Updated upstream
-=======
     torreB1.set_color_pieza(true);
     torreB2.set_color_pieza(true);
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 
     //Piezas rojas
     peonR1.set_pos_pieza({ -7,14.5 });
@@ -135,23 +111,11 @@ void Mundo::inicializa() {
     peonR6.set_pos_pieza({ 3,14.5 });
     peonR7.set_pos_pieza({ 5,14.5 });
     peonR8.set_pos_pieza({ 7,14.5 });
-<<<<<<< Updated upstream
-=======
     torreR1.set_pos_pieza({ -7, 16.5 });
     torreR2.set_pos_pieza({ 7, 16.5 });
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
     peonR3.set_color_pieza(false);
@@ -160,22 +124,10 @@ void Mundo::inicializa() {
     peonR6.set_color_pieza(false);
     peonR7.set_color_pieza(false);
     peonR8.set_color_pieza(false);
-<<<<<<< Updated upstream
-=======
     torreR1.set_color_pieza(false);
     torreR2.set_color_pieza(false);
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 }
 void Mundo::inicializa_tab() {
@@ -198,22 +150,11 @@ void Mundo::dibuja() {
     peonB6.dibuja_pieza();
     peonB7.dibuja_pieza();
     peonB8.dibuja_pieza();
-<<<<<<< Updated upstream
-=======
+
     torreB1.dibuja_pieza();
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
     //Rojas
     peonR1.dibuja_pieza();
@@ -224,21 +165,9 @@ void Mundo::dibuja() {
     peonR6.dibuja_pieza();
     peonR7.dibuja_pieza();
     peonR8.dibuja_pieza();
-<<<<<<< Updated upstream
-=======
     torreR1.dibuja_pieza();
     torreR2.dibuja_pieza();
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
