@@ -92,6 +92,9 @@ void Mundo::inicializa() {
     alfilB2.set_pos_pieza({ 3, 2.5 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -110,6 +113,9 @@ void Mundo::inicializa() {
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -131,6 +137,9 @@ void Mundo::inicializa() {
     alfilR2.set_pos_pieza({ 3, 16.5 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -149,6 +158,9 @@ void Mundo::inicializa() {
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -181,6 +193,9 @@ void Mundo::dibuja() {
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -201,6 +216,9 @@ void Mundo::dibuja() {
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
