@@ -3,6 +3,8 @@
 #include "tablero.h"
 #include "raton.h"
 #include "peon.h"
+#include "alfil.h"
+#include "pieza.h"
 #include <vector>
 
 class Mundo
@@ -19,6 +21,8 @@ class Mundo
 	VECTOR2D posicion_actual;
 	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
 	Peon peonR1, peonR2, peonR3, peonR4, peonR5, peonR6, peonR7, peonR8;
+	//Alfil alfilB1, alfilB2;
+	//Alfil alfilR1, alfilR2;
 
 public:
 	void dibuja();
