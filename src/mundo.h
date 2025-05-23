@@ -8,7 +8,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include <vector>
+=======
+#include "alfil.h"
+>>>>>>> Stashed changes
 =======
 #include "alfil.h"
 >>>>>>> Stashed changes
@@ -45,6 +49,9 @@ class Mundo
 	Alfil alfilR1, alfilR2;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
