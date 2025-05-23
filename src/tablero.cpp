@@ -106,7 +106,7 @@ void Tablero::dibuja_casilla(VECTOR2D posicion_central_click)
 {
 	if (posicion_central_click.x == 0.0 && posicion_central_click.y == 0.0)
 		return;
-	glColor3ub(0, 200, 0);
+	glColor3ub(255, 51, 51);
 	glBegin(GL_POLYGON);
 
 	glVertex3f(static_cast<float>(posicion_central_click.x - 1), static_cast<float>(posicion_central_click.y - 1), 0.0f);//abajo izq
@@ -118,7 +118,7 @@ void Tablero::dibuja_casilla(VECTOR2D posicion_central_click)
 
 void Tablero::dibuja_casilla_anterior_tras_movimiento(VECTOR2D posicion_central_click_anterior)
 {
-	glColor3ub(0, 200, 0);
+	glColor3ub(255, 51, 51);
 	glBegin(GL_POLYGON);
 
 	glVertex3f(static_cast<float>(posicion_central_click_anterior.x - 1), static_cast<float>(posicion_central_click_anterior.y - 1), 0.0f);//abajo izq
