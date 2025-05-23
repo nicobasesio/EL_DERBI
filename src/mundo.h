@@ -5,7 +5,11 @@
 #include "peon.h"
 #include "alfil.h"
 #include "pieza.h"
+<<<<<<< Updated upstream
 #include <vector>
+=======
+#include "alfil.h"
+>>>>>>> Stashed changes
 
 class Mundo
 {
@@ -21,8 +25,17 @@ class Mundo
 	VECTOR2D posicion_actual;
 	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
 	Peon peonR1, peonR2, peonR3, peonR4, peonR5, peonR6, peonR7, peonR8;
+<<<<<<< Updated upstream
 	//Alfil alfilB1, alfilB2;
 	//Alfil alfilR1, alfilR2;
+=======
+	Torre torreB1;
+	Torre torreB2;
+	Torre torreR1;
+	Torre torreR2;
+	Alfil alfilB1, alfilB2;
+	Alfil alfilR1, alfilR2;
+>>>>>>> Stashed changes
 
 public:
 	void dibuja();

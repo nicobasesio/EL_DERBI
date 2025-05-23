@@ -36,4 +36,9 @@ void Alfil::set_color_pieza(bool a)
 		color = TRUE;
 	if (a == FALSE)
 		color = FALSE;
+<<<<<<< Updated upstream
 }
+=======
+}
+
+>>>>>>> Stashed changes
