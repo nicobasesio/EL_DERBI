@@ -6,6 +6,7 @@
 #include <vector>
 #include "torre.h"
 #include "pieza.h"
+#include "alfil.h"
 
 class Mundo
 {
@@ -25,6 +26,8 @@ class Mundo
 	Torre torreB2;
 	Torre torreR1;
 	Torre torreR2;
+	Alfil alfilB1, alfilB2;
+	Alfil alfilR1, alfilR2;
 
 public:
 	void dibuja();

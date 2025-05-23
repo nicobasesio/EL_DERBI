@@ -89,6 +89,9 @@ void Mundo::inicializa() {
     peonB8.set_pos_pieza({ 7,4.5 });
     torreB1.set_pos_pieza({ -7, 2.5 });
     torreB2.set_pos_pieza({ 7, 2.5 });
+    alfilB1.set_pos_pieza({ -3, 2.5 });
+    alfilB2.set_pos_pieza({ 3, 2.5 });
+
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
     peonB3.set_color_pieza(true);
@@ -99,6 +102,8 @@ void Mundo::inicializa() {
     peonB8.set_color_pieza(true);
     torreB1.set_color_pieza(true);
     torreB2.set_color_pieza(true);
+    alfilB1.set_color_pieza(true);
+    alfilB2.set_color_pieza(true);
 
     //Piezas rojas
     peonR1.set_pos_pieza({ -7,14.5 });
@@ -111,6 +116,9 @@ void Mundo::inicializa() {
     peonR8.set_pos_pieza({ 7,14.5 });
     torreR1.set_pos_pieza({ -7, 16.5 });
     torreR2.set_pos_pieza({ 7, 16.5 });
+    alfilR1.set_pos_pieza({ -3, 16.5 });
+    alfilR2.set_pos_pieza({ 3, 16.5 });
+
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
     peonR3.set_color_pieza(false);
@@ -121,6 +129,8 @@ void Mundo::inicializa() {
     peonR8.set_color_pieza(false);
     torreR1.set_color_pieza(false);
     torreR2.set_color_pieza(false);
+    alfilR1.set_color_pieza(false);
+    alfilR2.set_color_pieza(false);
 
 }
 void Mundo::inicializa_tab() {
@@ -145,6 +155,8 @@ void Mundo::dibuja() {
     peonB8.dibuja_pieza();
     torreB1.dibuja_pieza();
     torreB2.dibuja_pieza();
+    alfilB1.dibuja_pieza();
+    alfilB2.dibuja_pieza();
 
     //Rojas
     peonR1.dibuja_pieza();
@@ -157,5 +169,7 @@ void Mundo::dibuja() {
     peonR8.dibuja_pieza();
     torreR1.dibuja_pieza();
     torreR2.dibuja_pieza();
+    alfilR1.dibuja_pieza();
+    alfilR2.dibuja_pieza();
 }
 
