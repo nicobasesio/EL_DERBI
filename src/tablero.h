@@ -14,7 +14,7 @@ public:
 
 	void dibuja_tablero(int c, int f);
 	void dibuja_cuadrado_blanco(double i, double j);
-	void dibuja_cuadrado_rojo(double i, double j);
+	void dibuja_cuadrado_verde(double i, double j);
 	void dibuja_fondo();
 	void dibuja_marco(double i, double j);
 	

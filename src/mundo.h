@@ -4,6 +4,8 @@
 #include "raton.h"
 #include "peon.h"
 #include <vector>
+#include "torre.h"
+#include "pieza.h"
 
 class Mundo
 {
@@ -19,6 +21,10 @@ class Mundo
 	VECTOR2D posicion_actual;
 	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
 	Peon peonR1, peonR2, peonR3, peonR4, peonR5, peonR6, peonR7, peonR8;
+	Torre torreB1;
+	Torre torreB2;
+	Torre torreR1;
+	Torre torreR2;
 
 public:
 	void dibuja();

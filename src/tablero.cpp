@@ -20,7 +20,7 @@ void Tablero::dibuja_tablero(int c, int f)
 			if ((i + j) % 2 != 0) //si la suma de fila + columna es imparpar, dibuja blanco, sino, rojo
 				dibuja_cuadrado_blanco(i, j); //blanco
 			else
-				dibuja_cuadrado_rojo(i, j); //rojo
+				dibuja_cuadrado_verde(i, j); //rojo
 		}
 	}
 
@@ -39,7 +39,7 @@ void Tablero::dibuja_tablero(int c, int f)
 
 void Tablero::dibuja_cuadrado_blanco(double i, double j)
 {
-	glColor3ub(255, 255, 255);
+	glColor3ub(144, 238, 144);
 	glBegin(GL_POLYGON);
 	//posicion es el centro del cuadrado. Se le suman o restan cosas para ubicar sus vertices
 	//vértices del cuadrado. static cast<float> lo que hace es que el valor se convierta a float porque glVertex3f necesita float como argumentos
@@ -52,9 +52,9 @@ void Tablero::dibuja_cuadrado_blanco(double i, double j)
 
 }
 
-void Tablero::dibuja_cuadrado_rojo(double i, double j)
+void Tablero::dibuja_cuadrado_verde(double i, double j)
 {
-	glColor3ub(255, 51, 36);
+	glColor3ub(0, 100, 0);
 	glBegin(GL_POLYGON);
 
 	glVertex3f(static_cast<float>(coordenadas.x + 2 * i - 1), static_cast<float>(coordenadas.y + 2 * j - 1), -0.0001f);//abajo izq

@@ -10,10 +10,11 @@ void Mundo::crear_matriz_control() {
     columnas = 8;
     filas = 8;
     // primera columna
+    control[0][0] = &torreB1;
     control[0][1] = &peonB1;
     control[0][2] = nullptr;
     control[0][3] = &peonR1;
-
+    control[0][4] = &torreR1;
     // segunda columna
     control[1][1] = &peonB2;
     control[1][2] = nullptr;
@@ -45,9 +46,11 @@ void Mundo::crear_matriz_control() {
     control[6][3] = &peonR7;
 
     // octaba columna
+    control[7][0] = &torreB2;
     control[7][1] = &peonB8;
     control[7][2] = nullptr;
     control[7][3] = &peonR8;
+    control[7][4] = &torreR2;
 
 }
 
@@ -84,6 +87,8 @@ void Mundo::inicializa() {
     peonB6.set_pos_pieza({ 3,4.5 });
     peonB7.set_pos_pieza({ 5,4.5 });
     peonB8.set_pos_pieza({ 7,4.5 });
+    torreB1.set_pos_pieza({ -7, 2.5 });
+    torreB2.set_pos_pieza({ 7, 2.5 });
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
     peonB3.set_color_pieza(true);
@@ -92,6 +97,8 @@ void Mundo::inicializa() {
     peonB6.set_color_pieza(true);
     peonB7.set_color_pieza(true);
     peonB8.set_color_pieza(true);
+    torreB1.set_color_pieza(true);
+    torreB2.set_color_pieza(true);
 
     //Piezas rojas
     peonR1.set_pos_pieza({ -7,14.5 });
@@ -102,6 +109,8 @@ void Mundo::inicializa() {
     peonR6.set_pos_pieza({ 3,14.5 });
     peonR7.set_pos_pieza({ 5,14.5 });
     peonR8.set_pos_pieza({ 7,14.5 });
+    torreR1.set_pos_pieza({ -7, 16.5 });
+    torreR2.set_pos_pieza({ 7, 16.5 });
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
     peonR3.set_color_pieza(false);
@@ -110,6 +119,8 @@ void Mundo::inicializa() {
     peonR6.set_color_pieza(false);
     peonR7.set_color_pieza(false);
     peonR8.set_color_pieza(false);
+    torreR1.set_color_pieza(false);
+    torreR2.set_color_pieza(false);
 
 }
 void Mundo::inicializa_tab() {
@@ -132,6 +143,8 @@ void Mundo::dibuja() {
     peonB6.dibuja_pieza();
     peonB7.dibuja_pieza();
     peonB8.dibuja_pieza();
+    torreB1.dibuja_pieza();
+    torreB2.dibuja_pieza();
 
     //Rojas
     peonR1.dibuja_pieza();
@@ -142,5 +155,7 @@ void Mundo::dibuja() {
     peonR6.dibuja_pieza();
     peonR7.dibuja_pieza();
     peonR8.dibuja_pieza();
+    torreR1.dibuja_pieza();
+    torreR2.dibuja_pieza();
 }
 
