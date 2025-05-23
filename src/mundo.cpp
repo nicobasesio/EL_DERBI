@@ -1,4 +1,57 @@
 #include "mundo.h"
+#include "pieza.h"
+#include "freeglut.h"
+
+// Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
+   //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
+std::vector<std::vector<Pieza*>> control(8, std::vector<Pieza*>(8, nullptr)); //es un vector de vectores que contienen punteros a objetos de tipo Pieza MATRIZ PARA TABLERO SILVERMAN
+
+void Mundo::crear_matriz_control() {
+    columnas = 8;
+    filas = 8;
+    // primera columna
+    control[0][1] = &peonB1;
+    control[0][2] = nullptr;
+    control[0][3] = &peonR1;
+
+    // segunda columna
+    control[1][1] = &peonB2;
+    control[1][2] = nullptr;
+    control[1][3] = &peonR2;
+
+    // tercera columna
+    control[2][1] = &peonB3;
+    control[2][2] = nullptr;
+    control[2][3] = &peonR3;
+
+    // cuarta columna
+    control[3][1] = &peonB4;
+    control[3][2] = nullptr;
+    control[3][3] = &peonR4;
+
+    // quinta columna
+    control[4][1] = &peonB5;
+    control[4][2] = nullptr;
+    control[4][3] = &peonR5;
+
+    // sexta columna
+    control[5][1] = &peonB6;
+    control[5][2] = nullptr;
+    control[5][3] = &peonR6;
+
+    // septima columna
+    control[6][1] = &peonB7;
+    control[6][2] = nullptr;
+    control[6][3] = &peonR7;
+
+    // octaba columna
+    control[7][1] = &peonB8;
+    control[7][2] = nullptr;
+    control[7][3] = &peonR8;
+
+}
+
+
 void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
     posicion_central_click = posicion_central;
     // Aquí no detectamos clics en el menú si no estamos en el estado de menú principal
@@ -22,6 +75,42 @@ void Mundo::inicializa() {
     y_ojo = 7.5;
     z_ojo = 30.0;
     inicializa_tab();
+    //Piezas blancas
+    peonB1.set_pos_pieza({ -7,4.5 });
+    peonB2.set_pos_pieza({ -5,4.5 });
+    peonB3.set_pos_pieza({ -3,4.5 });
+    peonB4.set_pos_pieza({ -1,4.5 });
+    peonB5.set_pos_pieza({ 1,4.5 });
+    peonB6.set_pos_pieza({ 3,4.5 });
+    peonB7.set_pos_pieza({ 5,4.5 });
+    peonB8.set_pos_pieza({ 7,4.5 });
+    peonB1.set_color_pieza(true); //Cambios
+    peonB2.set_color_pieza(true);
+    peonB3.set_color_pieza(true);
+    peonB4.set_color_pieza(true);
+    peonB5.set_color_pieza(true);
+    peonB6.set_color_pieza(true);
+    peonB7.set_color_pieza(true);
+    peonB8.set_color_pieza(true);
+
+    //Piezas rojas
+    peonR1.set_pos_pieza({ -7,14.5 });
+    peonR2.set_pos_pieza({ -5,14.5 });
+    peonR3.set_pos_pieza({ -3,14.5 });
+    peonR4.set_pos_pieza({ -1,14.5 });
+    peonR5.set_pos_pieza({ 1,14.5 });
+    peonR6.set_pos_pieza({ 3,14.5 });
+    peonR7.set_pos_pieza({ 5,14.5 });
+    peonR8.set_pos_pieza({ 7,14.5 });
+    peonR1.set_color_pieza(false); //Cambios
+    peonR2.set_color_pieza(false);
+    peonR3.set_color_pieza(false);
+    peonR4.set_color_pieza(false);
+    peonR5.set_color_pieza(false);
+    peonR6.set_color_pieza(false);
+    peonR7.set_color_pieza(false);
+    peonR8.set_color_pieza(false);
+
 }
 void Mundo::inicializa_tab() {
     columnas = 8;
@@ -54,3 +143,4 @@ void Mundo::dibuja() {
     peonR7.dibuja_pieza();
     peonR8.dibuja_pieza();
 }
+
