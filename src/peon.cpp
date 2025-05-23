@@ -24,7 +24,7 @@ bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control)
 }
 
 std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa la torre en nuestra matriz de control
-	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, si valor cambiará a true
+	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
 	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
 	//un peon negro solo puede ir hacia abajo
 	if (casillaValida(pos.x, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
