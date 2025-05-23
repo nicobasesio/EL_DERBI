@@ -11,7 +11,7 @@ class Pieza
 
 
 public:
-	bool color;	// FALSE es negro. TRUE es blanco
+	bool color;	// FALSE es rojo. TRUE es blanco
 	bool haComidoPieza;
 
 	VECTOR2D posicion_pieza{}; // comun a todas las piezas
