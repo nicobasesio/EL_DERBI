@@ -6,6 +6,7 @@
 #include "alfil.h"
 #include "pieza.h"
 #include "torre.h"
+#include "caballo.h"
 #include <vector>
 class Mundo
 {
