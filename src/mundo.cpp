@@ -1,9 +1,6 @@
 #include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
-
-//COMENTARIO PARA VER QUE GIT FUNCIONA
-
 #include <iostream>
 #include <algorithm>
 #include <cmath>
