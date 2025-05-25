@@ -42,6 +42,7 @@ public:
 	bool casillaValida(int fila, int columna);
 	void crear_matriz_control();
 	void imprimirmatriz();
+	
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
@@ -65,5 +66,6 @@ public:
 	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
 	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
 };
+
 
 

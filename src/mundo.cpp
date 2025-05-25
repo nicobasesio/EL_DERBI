@@ -8,6 +8,8 @@
 #include <string>
 
 
+
+
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
 std::vector<std::vector<Pieza*>> control(8, std::vector<Pieza*>(8, nullptr)); //es un vector de vectores que contienen punteros a objetos de tipo Pieza MATRIZ PARA TABLERO SILVERMAN
@@ -81,6 +83,7 @@ void Mundo::inicializa() {
     y_ojo = 7.5;
     z_ojo = 30.0;
     inicializa_tab();
+
     //Piezas blancas
     peonB1.set_pos_pieza({ -7,4.5 });
     peonB2.set_pos_pieza({ -5,4.5 });
@@ -94,6 +97,7 @@ void Mundo::inicializa() {
     torreB2.set_pos_pieza({ 7, 2.5 });
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
+
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
     peonB3.set_color_pieza(true);
@@ -184,7 +188,6 @@ void Mundo::dibuja() {
     peonB6.dibuja_pieza();
     peonB7.dibuja_pieza();
     peonB8.dibuja_pieza();
-
     torreB1.dibuja_pieza();
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
@@ -205,8 +208,20 @@ void Mundo::dibuja() {
     alfilR2.dibuja_pieza();
 }
 
-void Mundo::mueve_piezas()
-{
-    
+
+void Mundo::mueve_piezas() {
+    movida = false;
+    //Vector2D pos_fuera_tablero = { 20.0, 20.0 };
+    if (posicion_central_click.x != 0 && posicion_central_click.y != 0) {
+
+        // movimiento peonB1 
+        if (peonB1.posicion_pieza.x == posicion_central_click_anterior.x && peonB1.posicion_pieza.y == posicion_central_click_anterior.y && turno == true)
+        {
+            
+        }
+    }
 
 }
+
+
+
