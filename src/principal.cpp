@@ -1,4 +1,4 @@
-#include "ETSIDI.h"
+Ôªø#include "ETSIDI.h"
 #include <iostream>
 #include "mundo.h"
 #include "raton.h"
@@ -25,14 +25,14 @@ int main(int argc, char* argv[]) {
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiJuego");
 
-    // Modo 2D ortogr·fico
+    // Modo 2D ortogr√°fico
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-15, 15, -5, 20);  // C·mara 2D
+    gluOrtho2D(-15, 15, -5, 20);  // C√°mara 2D
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Desactivar iluminaciÛn (no usamos normales ni materiales)
+    // Desactivar iluminaci√≥n (no usamos normales ni materiales)
     glDisable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
@@ -73,71 +73,91 @@ void display() {
     glutSwapBuffers();
 }
 
+
+
 void mouseClick(int button, int state, int x, int y) {
+    static bool pieza_seleccionada = false;
 
-    // Manejar eventos de clic del ratÛn
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
-        // Cuadrante arriba izquierda
+        // Transformar coordenadas de pantalla a coordenadas del mundo
         if ((x >= 15 && x <= 400) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-            raton.posicion.x = (static_cast<double>(14) * x - 5600) / 385;
-            raton.posicion.y = static_cast<double>(static_cast<double>((-18 * y) + (575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
+            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
+            raton.posicion.y = ((-18.0 * y) + (575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
         }
-        // Cuadrante arriba derecha
         else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-            raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
-            raton.posicion.y = double((double(-18 * y + 575 * 18 * 18 / 21 + 13 * 18)) / (575 * 18 / 21));
+            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
+            raton.posicion.y = ((-18.0 * y + 575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
         }
-        // Cuadrante abajo derecha
         else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-            raton.posicion.x = (static_cast<double>(-14) * x + 5600) / -385;
-            raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
+            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
+            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
         }
-        // Cuadrante abajo izquierda
         else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-            raton.posicion.x = (static_cast<double>(14) * x - 5600) / 385;
-            raton.posicion.y = double((double(3 * y - 3 * (575 * 18 / 21 + 13))) / (575 * 18 / 21 - 575));
+            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
+            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
         }
         else {
             mundo.casilla_seleccionada = false;
             return;
         }
 
-
-        /*PROCESO QUE SE SIGUI” PARA SINCRONIZAR LAS COORDENADAS QUE LEE EL RAT”N Y LAS QUE LEEN LAS CASILLAS*/
-        //std::cout << "Posicion del clic: (" << raton.posicion.x << ", " << raton.posicion.y << ")" << std::endl;
-        posicion_central_click_anterior.x = posicion_central_click.x;//para guardar la posicion anterior del click. Se usa para el movimiento de piezas
-        posicion_central_click_anterior.y = posicion_central_click.y;
-        posicion_central_click = raton.elige_casilla(); //la funcion reconoce el centro de la casilla clickeada
-        //std::cout << "Raton lee: (" << x << ", " << y << ")" << std::endl;
-        //std::cout << "Pos central click: (" << posicion_central_click.x << "," << posicion_central_click.y << ")"<<std::endl;
-        //std::cout << "Pos central click anterior: (" << posicion_central_click_anterior.x << "," << posicion_central_click_anterior.y << ")" << std::endl;
-
-
-
-        /*mundo.set_posicion_central_click(posicion_central_click);
-        mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
-        mundo.set_casilla_actual(raton.casilla);    // Se pasa la casilla actual de principa.cpp a mundo.cpp
-        mundo.set_casilla_anterior(raton.casilla_anterior);// Se pasa la casilla anterior de principa.cpp a mundo.cpp
-        mundo.casilla_seleccionada = true;*/
         VECTOR2D centro = raton.elige_casilla();
-        if (centro.x != 0.0 || centro.y != 0.0) {
-            posicion_central_click_anterior = posicion_central_click;
+        int i = static_cast<int>(raton.casilla.x) - 1;
+        int j = static_cast<int>(raton.casilla.y) - 1;
+
+        // Verificar si la casilla es v√°lida
+        if (!mundo.casillaValida(i, j)) {
+            std::cout << "[INFO] Casilla vac√≠a o inv√°lida, no se puede seleccionar\n";
+            return;
+        }
+
+        if (!pieza_seleccionada) {
+            // Primer clic: seleccionar pieza
+            if (mundo.getControl()[i][j] == nullptr) {
+                std::cout << "[INFO] Casilla vac√≠a, no se puede seleccionar\n";
+                return;
+            }
+
+            if (mundo.getControl()[i][j]->get_color() != mundo.turno) {
+                std::cout << "[INFO] No puedes mover piezas del otro color\n";
+                return;
+            }
+
+            // Selecci√≥n v√°lida
             posicion_central_click = centro;
-            if (posicion_central_click.x == 0.0 && posicion_central_click.y == 0.0) {
-                mundo.casilla_seleccionada = false; 
-                return; 
+            posicion_central_click_anterior = centro;
+            mundo.set_posicion_central_click(centro);
+            mundo.set_posicion_central_click_anterior(centro);
+            mundo.casilla_seleccionada = true;
+            pieza_seleccionada = true;
+        }
+        else {
+            // Segundo clic: intentar mover
+            posicion_central_click = centro;
+
+            if (posicion_central_click.x == posicion_central_click_anterior.x &&
+                posicion_central_click.y == posicion_central_click_anterior.y) {
+                std::cout << "[INFO] Casilla deseleccionada\n";
+                mundo.casilla_seleccionada = false;
+                pieza_seleccionada = false;
+                return;
             }
 
             mundo.set_posicion_central_click(posicion_central_click);
             mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
             mundo.set_casilla_actual(raton.casilla);
             mundo.set_casilla_anterior(raton.casilla_anterior);
-            mundo.casilla_seleccionada = true;
-        }
-        else {
-            mundo.casilla_seleccionada = false;
-        }
 
+            if (!mundo.casilla_seleccionada) {
+                std::cout << "[INFO] No hay casilla seleccionada, no se puede mover\n";
+                pieza_seleccionada = false;
+                return;
+            }
+
+            mundo.casilla_seleccionada = true;
+            mundo.mueve();
+            pieza_seleccionada = false;
+        }
     }
 }
+

@@ -1,10 +1,10 @@
-#include "mundo.h"
+ï»¿#include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
 
-// Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
+
+// Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la informaciÃ³n
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
-std::vector<std::vector<Pieza*>> control(8, std::vector<Pieza*>(8, nullptr)); //es un vector de vectores que contienen punteros a objetos de tipo Pieza MATRIZ PARA TABLERO SILVERMAN
 
 void Mundo::crear_matriz_control() {
     columnas = 8;
@@ -28,11 +28,14 @@ void Mundo::crear_matriz_control() {
     control[3][1] = &peonB4;
     control[3][2] = nullptr;
     control[3][3] = &peonR4;
+      
 
     // quinta columna
+    control[4][0] = &reyB;
     control[4][1] = &peonB5;
     control[4][2] = nullptr;
     control[4][3] = &peonR5;
+    control[4][7] = &reyR;
 
     // sexta columna
     control[5][1] = &peonB6;
@@ -49,12 +52,23 @@ void Mundo::crear_matriz_control() {
     control[7][2] = nullptr;
     control[7][3] = &peonR8;
 
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (control[i][j])
+                std::cout << "[DEBUG] control[" << i << "][" << j << "] = " << typeid(*control[i][j]).name() << "\n";
+            else
+                std::cout << "[DEBUG] control[" << i << "][" << j << "] = nullptr\n";
+        }
+    }
+
 }
+
+Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr)) {}
 
 
 void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
     posicion_central_click = posicion_central;
-    // Aquí no detectamos clics en el menú si no estamos en el estado de menú principal
+    // AquÃ­ no detectamos clics en el menÃº si no estamos en el estado de menÃº principal
 }
 
 void Mundo::set_posicion_central_click_anterior(VECTOR2D& posicion_central)
@@ -88,6 +102,8 @@ void Mundo::inicializa() {
     torreB2.set_pos_pieza({ 7, 2.5 });
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
+    reyB.set_pos({ 1,2.5 });
+    
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
     peonB3.set_color_pieza(true);
@@ -100,6 +116,9 @@ void Mundo::inicializa() {
     torreB2.set_color_pieza(true);
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
+    reyB.set_color(true);
+    
+    
 
 
     //Piezas rojas
@@ -115,6 +134,7 @@ void Mundo::inicializa() {
     torreR2.set_pos_pieza({ 7, 16.5 });
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
+    reyR.set_pos({ 1,16.5 });
 
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
@@ -128,12 +148,15 @@ void Mundo::inicializa() {
     torreR2.set_color_pieza(false);
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
+    reyR.set_color(false);
+
+    crear_matriz_control();
 
 }
 void Mundo::inicializa_tab() {
     columnas = 8;
     filas = 8;
-    // Asegúrate de que las coordenadas estén configuradas correctamente
+    // AsegÃºrate de que las coordenadas estÃ©n configuradas correctamente
     tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 3.0 });
 }
 void Mundo::dibuja() {
@@ -155,6 +178,8 @@ void Mundo::dibuja() {
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
+    reyB.dibuja();
+
 
     //Rojas
     peonR1.dibuja_pieza();
@@ -169,5 +194,133 @@ void Mundo::dibuja() {
     torreR2.dibuja_pieza();
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
+    reyR.dibuja();
+
 }
+
+bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tamaï¿½o de la matriz control al comprobar si es jaque o no
+    return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
+}
+
+void Mundo::mueve()
+{
+    
+     
+    //movimiento reyB
+    if (posicion_central_click_anterior.x == reyB.posicion_pieza.x && posicion_central_click_anterior.y == reyB.posicion_pieza.y && turno == true) //si seleccionas el rey blanco y es su turno, entonces:
+    {     
+
+        int movx = std::abs(reyB.posicion_pieza.x - posicion_central_click.x); // distancia entre la posicion del rey y la del click del movimiento
+        int movy = std::abs(reyB.posicion_pieza.y - posicion_central_click.y);
+        std::cout << "[DEBUG] movx: " << movx << std::endl;
+        std::cout << "[DEBUG] movy: " << movy << std::endl;
+
+        
+        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) // si el movimiento es de una casilla
+        {
+            
+           
+            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true)) { // Si la casilla no esta en jaque 
+                if (reyB.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
+                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
+                    {
+                        comidasR();
+                    }
+                    else
+                    {
+                        comidasB();
+                    }
+
+
+                }
+                std::cout << "[DEBUG] Moviendo reyB a: "<< std::endl;
+                reyB.mueve(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de Rojas\n" << std::endl;
+            }
+            else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+                std::cout << "\nEl rey blanco NO se puede mover a una casilla atacada\n" << std::endl;
+        }
+
+    }
+
+   
+    //movimiento reyB
+    if (posicion_central_click_anterior.x == reyR.posicion_pieza.x && posicion_central_click_anterior.y == reyR.posicion_pieza.y && turno == false) //si seleccionas el rey blanco y es su turno, entonces:
+    {
+
+        int movx = std::abs(reyR.posicion_pieza.x - posicion_central_click.x); // distancia entre la posicion del rey y la del click del movimiento
+        int movy = std::abs(reyR.posicion_pieza.y - posicion_central_click.y);
+
+
+        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) // si el movimiento es de una casilla
+        {
+
+            
+            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true)) { // Si la casilla no esta en jaque 
+                if (reyR.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
+                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
+                    {
+                        comidasR();
+                    }
+                    else
+                    {
+                        comidasB();
+                    }
+
+
+                }
+            
+                std::cout << "[DEBUG] Moviendo reyR a: " << std::endl;
+                reyR.mueve(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = true;
+                std::cout << "Turno de negras\n" << std::endl;
+            }
+            else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+                std::cout << "\nEl rey blanco NO se puede mover a una casilla atacada\n" << std::endl;
+                
+        }
+
+    }
+        
+}
+
+void Mundo::comidasB() { //se aÃ±aden las piezas blancas comidas al vector comidaB y se ejecuta el movimiento de la pieza comida a la posicion deseada
+    
+}
+
+void Mundo::comidasR() { //se aÃ±aden las piezas rojas comidas al vector comidaR y se ejecuta el movimiento de la pieza comida a la posicion deseada
+
+}
+
+void Mundo::actualizar_matriz_control() 
+{
+    control[casilla_actual.x - 1][casilla_actual.y - 1] = control[casilla_anterior.x - 1][casilla_anterior.y - 1];//actualizan la matriz control en cada movimiento
+    control[casilla_anterior.x - 1][casilla_anterior.y - 1] = {};
+}
+
+bool Mundo::casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey) { // esta funcion unicamente comprueba si el rey amenazado puede moverse a otra casilla (Vector2D to) sin que siga amenazado
+    // Realiza el movimiento temporalmente
+    //auto piezaOriginal = control[to.x][to.y]; // guarda el tipo de pieza que hay en la casilla a la que se quiere ir (puede ser casilla en blanco) para luego revertir el cambio
+    //control[to.x][to.y] = control[from.x][from.y];
+    //control[from.x][from.y] = nullptr;
+
+
+   // bool enJaque = estaEnJaque(colorRey);
+
+
+    // Revertir el movimiento
+    //control[from.x][from.y] = control[to.x][to.y];
+    //control[to.x][to.y] = piezaOriginal;
+
+    return false; //enJaque; // si tras realizar el movimiento con el rey a dicha casilla sigue en jaque, entonces la salida de la funcion serï¿½ false. La matriz de control no sufre cambios
+    // esta funcion se llama en la funciï¿½n de estaEnJaqueMate()
+}
+
+
+
 
