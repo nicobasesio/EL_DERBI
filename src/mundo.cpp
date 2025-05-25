@@ -337,7 +337,7 @@ void Mundo::mueve()
                 actualizar_matriz_control();
                 movida = true;
                 turno = true;
-                std::cout << "Turno de negras\n" << std::endl;
+                std::cout << "Turno de blancas\n" << std::endl;
             }
             else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
                 std::cout << "\nEl rey blanco NO se puede mover a una casilla atacada\n" << std::endl;
