@@ -1,6 +1,12 @@
 #include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <string>
+
 
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
@@ -136,6 +142,34 @@ void Mundo::inicializa_tab() {
     // Asegúrate de que las coordenadas estén configuradas correctamente
     tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 3.0 });
 }
+
+void Mundo::imprimirmatriz() {
+    for (int i = 0; i < control.size(); ++i) {
+        for (int j = 0; j < control[i].size(); ++j) {
+            if (control[i][j] == nullptr)
+                std::cout << "  [   ]" << std::endl;
+            else if (control[i][j] == &peonB1)
+                std::cout << "[ peonB1 ]" << std::endl;
+            else if (control[i][j] == &peonB2)
+                std::cout << "[ peonB2 ]" << std::endl;
+            else if (control[i][j] == &peonB3)
+                std::cout << "[ peonB3 ]" << std::endl;
+            else if (control[i][j] == &peonB4)
+                std::cout << "[ peonB4 ]" << std::endl;
+            else if (control[i][j] == &peonB5)
+                std::cout << "[ peonB5 ]" << std::endl;
+            else if (control[i][j] == &peonB6)
+                std::cout << "[peonB6 ]" << std::endl;
+            else if (control[i][j] == &peonB7)
+                std::cout << "[peonB7 ]" << std::endl;
+            else if (control[i][j] == &peonB8)
+                std::cout << "[peonB8 ]" << std::endl;
+
+        }
+    }
+    std::cout << "\n\n" << std::endl;
+}
+
 void Mundo::dibuja() {
     tablero.dibuja_tablero(columnas, filas);
     if (casilla_seleccionada)
@@ -171,3 +205,8 @@ void Mundo::dibuja() {
     alfilR2.dibuja_pieza();
 }
 
+void Mundo::mueve_piezas()
+{
+    
+
+}
