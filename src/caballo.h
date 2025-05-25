@@ -1,9 +1,9 @@
 #pragma once
 #include "pieza.h"
+#include "raton.h"
+#include "ETSIDI.h"
 class Caballo : public Pieza
 {
-<<<<<<< Updated upstream
-=======
 private:
 	Raton r;
 	bool color; // false rojo; true negro
@@ -12,10 +12,9 @@ private:
 	ETSIDI::SpriteSequence sprite2{ "imagenes/caballoR.png",1 };
 
 public:
-	caballo() 
+	Caballo() 
 	{
-		sprite.setCenter
+		sprite.setCenter(+0.75,0.75);
 	}
->>>>>>> Stashed changes
 };
 
