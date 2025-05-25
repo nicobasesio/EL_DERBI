@@ -37,9 +37,5 @@ public:
 		return posicion_pieza;
 	}
 
-	Caballo() 
-	{
-		sprite.setCenter(+0.75,0.75);
-	}
 };
 
