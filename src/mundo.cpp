@@ -1,6 +1,7 @@
 #include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
+//COMENTARIO PARA VER QUE GIT FUNCIONA
 
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
