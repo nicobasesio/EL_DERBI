@@ -31,6 +31,8 @@ class Mundo
 	Caballo caballoR1, caballoR2;
 
 public:
+	bool turno = true; // para poder acceder desde principal.cpp
+	
 	void dibuja();
 	void inicializa();
 	void inicializa_tab();
@@ -41,6 +43,7 @@ public:
 	void set_casilla_anterior(VECTOR2D& casilla_ant);
 	bool casillaValida(int fila, int columna);
 	void crear_matriz_control();
+	void imprimirmatriz();
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
