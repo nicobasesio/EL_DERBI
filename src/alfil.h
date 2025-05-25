@@ -30,6 +30,5 @@ public:
 	VECTOR2D get_pos() {
 		return posicion_pieza;
 	}
-	//hola alfil soy nico
 
 };
