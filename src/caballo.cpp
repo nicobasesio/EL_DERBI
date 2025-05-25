@@ -11,7 +11,9 @@ void Caballo::muevepieza(double x, double y)
 	posicion_pieza.x = x;
 	posicion_pieza.y = y;
 
+
 }
+
 
 void Caballo::set_pos_pieza(const VECTOR2D& pos)
 {
@@ -30,7 +32,6 @@ void Caballo::dibuja_pieza()
 
 	glPopMatrix();
 	glFlush();
-
 }
 
 void Caballo::set_color_pieza(bool a)
