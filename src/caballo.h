@@ -9,9 +9,13 @@ class Caballo : public Pieza
 {
 private:
 	Raton r;
+	bool color;
+	bool haComidoPieza;
+	ETSIDI::SpriteSequence sprite{ "imagenes/caballoB.png",1 };
+	ETSIDI::SpriteSequence sprite2{ "imagenes/caballoR.png",1 };
 
-<<<<<<< Updated upstream
-=======
+
+
 public:
 	Caballo() 
 	{
@@ -34,6 +38,6 @@ public:
 	{
 		return posicion_pieza;
 	}
->>>>>>> Stashed changes
+
 };
 

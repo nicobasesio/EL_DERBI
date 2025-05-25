@@ -8,6 +8,7 @@
 #include "torre.h"
 #include "caballo.h"
 #include <vector>
+
 class Mundo
 {
 	Tablero tablero;
@@ -28,6 +29,8 @@ class Mundo
 	Torre torreR2;
 	Alfil alfilB1, alfilB2;
 	Alfil alfilR1, alfilR2;
+	Caballo caballoB1, caballoB2;
+	Caballo caballoR1, caballoR2;
 
 public:
 	void dibuja();

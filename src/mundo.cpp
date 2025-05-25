@@ -122,8 +122,8 @@ void Mundo::inicializa() {
     torreR2.set_pos_pieza({ 7, 16.5 });
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
-    caballoR1.set_pos_pieza({ 5, 5 });
-    caballoR2.set_pos_pieza({ -5, 5 });
+    caballoR1.set_pos_pieza({ 5, 16.5 });
+    caballoR2.set_pos_pieza({ -5, 16.5 });
 
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
