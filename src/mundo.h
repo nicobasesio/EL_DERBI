@@ -8,7 +8,7 @@
 #include "torre.h"
 #include "caballo.h"
 #include <vector>
-
+//comentario para que se suba bien
 class Mundo
 {
 	Tablero tablero;
