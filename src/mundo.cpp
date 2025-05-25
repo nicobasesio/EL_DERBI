@@ -1,14 +1,12 @@
 #include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
-
-//COMENTARIO PARA VER QUE GIT FUNCIONA
-
 #include <iostream>
 #include <algorithm>
 #include <cmath>
 #include <vector>
 #include <string>
+
 
 
 
@@ -85,6 +83,7 @@ void Mundo::inicializa() {
     y_ojo = 7.5;
     z_ojo = 30.0;
     inicializa_tab();
+
     //Piezas blancas
     peonB1.set_pos_pieza({ -7,4.5 });
     peonB2.set_pos_pieza({ -5,4.5 });
@@ -98,9 +97,6 @@ void Mundo::inicializa() {
     torreB2.set_pos_pieza({ 7, 2.5 });
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
-    caballoB1.set_pos_pieza({ 5,2.5 });
-    caballoB2.set_pos_pieza({ -5,2.5 });
-
 
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
@@ -114,8 +110,6 @@ void Mundo::inicializa() {
     torreB2.set_color_pieza(true);
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
-    caballoB1.set_color_pieza(true);
-    caballoB2.set_color_pieza(true);
 
 
     //Piezas rojas
@@ -131,8 +125,6 @@ void Mundo::inicializa() {
     torreR2.set_pos_pieza({ 7, 16.5 });
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
-    caballoR1.set_pos_pieza({ 5, 16.5 });
-    caballoR2.set_pos_pieza({ -5, 16.5 });
 
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
@@ -146,8 +138,7 @@ void Mundo::inicializa() {
     torreR2.set_color_pieza(false);
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
-    caballoR1.set_color_pieza(false);
-    caballoR2.set_color_pieza(false);
+
 }
 void Mundo::inicializa_tab() {
     columnas = 8;
@@ -197,14 +188,10 @@ void Mundo::dibuja() {
     peonB6.dibuja_pieza();
     peonB7.dibuja_pieza();
     peonB8.dibuja_pieza();
-
     torreB1.dibuja_pieza();
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
-
-    caballoB1.dibuja_pieza();
-    caballoB2.dibuja_pieza();
 
     //Rojas
     peonR1.dibuja_pieza();
@@ -219,12 +206,22 @@ void Mundo::dibuja() {
     torreR2.dibuja_pieza();
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
-    caballoR1.dibuja_pieza();
-    caballoR2.dibuja_pieza();
 }
 
-void Mundo::mueve_piezas()
-{
-    
+
+void Mundo::mueve_piezas() {
+    movida = false;
+    //Vector2D pos_fuera_tablero = { 20.0, 20.0 };
+    if (posicion_central_click.x != 0 && posicion_central_click.y != 0) {
+
+        // movimiento peonB1 
+        if (peonB1.posicion_pieza.x == posicion_central_click_anterior.x && peonB1.posicion_pieza.y == posicion_central_click_anterior.y && turno == true)
+        {
+            
+        }
+    }
 
 }
+
+
+
