@@ -243,6 +243,8 @@ void Mundo::dibuja() {
     caballoR2.dibuja_pieza();
     reyR.dibuja();
 
+    
+
 }
 
 bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o de la matriz control al comprobar si es jaque o no
@@ -271,17 +273,19 @@ void Mundo::mueve()
                 if (reyB.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
                     {
+                       
                         comidasR();
                     }
                     else
                     {
+                        
                         comidasB();
                     }
 
 
                 }
                 std::cout << "[DEBUG] Moviendo reyB a: " << std::endl;
-                reyB.mueve(posicion_central_click.x, posicion_central_click.y);
+                reyB.muevepieza(posicion_central_click.x, posicion_central_click.y);
                 actualizar_matriz_control();
                 movida = true;
                 turno = false;
@@ -294,7 +298,7 @@ void Mundo::mueve()
     }
 
 
-    //movimiento reyB
+    //movimiento reyR
     if (posicion_central_click_anterior.x == reyR.posicion_pieza.x && posicion_central_click_anterior.y == reyR.posicion_pieza.y && turno == false) //si seleccionas el rey blanco y es su turno, entonces:
     {
 
@@ -310,10 +314,12 @@ void Mundo::mueve()
                 if (reyR.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
                     {
+                        
                         comidasR();
                     }
                     else
                     {
+                        
                         comidasB();
                     }
 
@@ -321,7 +327,7 @@ void Mundo::mueve()
                 }
 
                 std::cout << "[DEBUG] Moviendo reyR a: " << std::endl;
-                reyR.mueve(posicion_central_click.x, posicion_central_click.y);
+                reyR.muevepieza(posicion_central_click.x, posicion_central_click.y);
                 actualizar_matriz_control();
                 movida = true;
                 turno = true;
@@ -336,13 +342,39 @@ void Mundo::mueve()
 
 }
 
-void Mundo::comidasB() { //se añaden las piezas blancas comidas al vector comidaB y se ejecuta el movimiento de la pieza comida a la posicion deseada
+void Mundo::comidasB() {
+    std::cout << "Pieza comida" << std::endl;
+
+    // Obtener puntero a la pieza comida
+    Pieza* pieza_comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+
+    // Verificar que no sea nullptr antes de hacer push y moverla
+    if (pieza_comida != nullptr) {
+        comidaB.push_back(pieza_comida);
+        comidaB.back()->muevepieza(pos_comidaB_X, -2); // Mover fuera del tablero
+        pos_comidaB_X -= 2.0;
+    }
+    else {
+        std::cerr << "[ERROR] pieza_comida era nullptr" << std::endl;
+    }
+}
+
+
+void Mundo::comidasR() { //se añaden las piezas blancas comidas al vector comidaB y se ejecuta el movimiento de la pieza comida a la posicion deseada
+
+    std::cout << "Pieza comida" << std::endl;
+
+    // Añadir la pieza comida al vector
+    comidaR.push_back(control[casilla_actual.x - 1][casilla_actual.y - 1]);
+
+    // Mover la pieza a la "zona de piezas comidas"
+    comidaR.back()->muevepieza(pos_comidaR_X, -2);  // Y fijo en -2
+
+    // Desplazar la X para la siguiente pieza
+    pos_comidaR_X += 2.0;
 
 }
 
-void Mundo::comidasR() { //se añaden las piezas rojas comidas al vector comidaR y se ejecuta el movimiento de la pieza comida a la posicion deseada
-
-}
 
 void Mundo::actualizar_matriz_control()
 {

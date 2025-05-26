@@ -22,7 +22,7 @@ public:
 		color = TRUE; 
 
 	}
-	void mueve(double, double);
+	void muevepieza(double, double);
 	void set_pos(const VECTOR2D& pos);	
 	void dibuja();
 	void set_color(bool a);

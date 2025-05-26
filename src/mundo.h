@@ -80,6 +80,9 @@ public:
 	double pos_peonB_comidoX = 6;
 	double pos_peonN_comidoX = 6;
 
+	double pos_comidaB_X = 7.0;
+	double pos_comidaR_X = -7.0;
+
 
 	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
 	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
