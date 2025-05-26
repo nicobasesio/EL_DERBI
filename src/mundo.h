@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include "rey.h"
+#include "caballo.h"
 class Mundo
 {
 	Tablero tablero;
@@ -27,6 +28,8 @@ class Mundo
 	Torre torreR2;
 	Alfil alfilB1, alfilB2;
 	Alfil alfilR1, alfilR2;
+	Caballo caballoB1, caballoB2;
+	Caballo caballoR1, caballoR2;
 	Rey reyB, reyR;
 	std::vector<std::vector<Pieza*>> control;
 

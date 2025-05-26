@@ -10,47 +10,82 @@ void Mundo::crear_matriz_control() {
     columnas = 8;
     filas = 8;
     // primera columna
+    control[0][0] = &torreB1;
     control[0][1] = &peonB1;
     control[0][2] = nullptr;
-    control[0][3] = &peonR1;
+    control[0][3] = nullptr;
+    control[0][4] = nullptr;
+    control[0][5] = nullptr;
+    control[0][6] = &peonR1;
+    control[0][7] = &torreR1;
 
     // segunda columna
+    control[1][0] = &caballoB1;
     control[1][1] = &peonB2;
     control[1][2] = nullptr;
-    control[1][3] = &peonR2;
-
+    control[1][3] = nullptr;
+    control[1][4] = nullptr;
+    control[1][5] = nullptr;
+    control[1][6] = &peonR2;
+    control[1][7] = &caballoR1;
     // tercera columna
+    control[2][0] = &alfilB1;
     control[2][1] = &peonB3;
     control[2][2] = nullptr;
-    control[2][3] = &peonR3;
+    control[2][3] = nullptr;
+    control[2][4] = nullptr;
+    control[2][5] = nullptr;
+    control[2][6] = &peonR3;
+    control[2][7] = &alfilR1;
 
     // cuarta columna
     control[3][1] = &peonB4;
     control[3][2] = nullptr;
-    control[3][3] = &peonR4;
+    control[3][3] = nullptr;
+    control[3][4] = nullptr;
+    control[3][5] = nullptr;
+    control[3][6] = &peonR4;
 
 
     // quinta columna
     control[4][0] = &reyB;
     control[4][1] = &peonB5;
     control[4][2] = nullptr;
-    control[4][3] = &peonR5;
+    control[4][3] = nullptr;
+    control[4][4] = nullptr;
+    control[4][5] = nullptr;
+    control[4][6] = &peonR5;
     control[4][7] = &reyR;
 
     // sexta columna
+    control[5][0] = &alfilB2;
     control[5][1] = &peonB6;
     control[5][2] = nullptr;
-    control[5][3] = &peonR6;
+    control[5][3] = nullptr;
+    control[5][4] = nullptr;
+    control[5][5] = nullptr;
+    control[5][6] = &peonR6;
+    control[5][7] = &alfilR2;
 
     // septima columna
+    control[6][0] = &caballoB2;
     control[6][1] = &peonB7;
     control[6][2] = nullptr;
-    control[6][3] = &peonR7;
+    control[6][3] = nullptr;
+    control[6][4] = nullptr;
+    control[6][5] = nullptr;
+    control[6][6] = &peonR7;
+    control[6][7] = &caballoR2;
 
     // octaba columna
+    control[7][0] = &torreB2;
     control[7][1] = &peonB8;
     control[7][2] = nullptr;
-    control[7][3] = &peonR8;
+    control[7][3] = nullptr;
+    control[7][4] = nullptr;
+    control[7][5] = nullptr;
+    control[7][6] = &peonR8;
+    control[7][7] = &torreR2;
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -102,6 +137,8 @@ void Mundo::inicializa() {
     torreB2.set_pos_pieza({ 7, 2.5 });
     alfilB1.set_pos_pieza({ -3, 2.5 });
     alfilB2.set_pos_pieza({ 3, 2.5 });
+    caballoB1.set_pos_pieza({ -5, 2.5 });
+    caballoB2.set_pos_pieza({ 5, 2.5 });
     reyB.set_pos({ 1,2.5 });
 
     peonB1.set_color_pieza(true); //Cambios
@@ -116,6 +153,8 @@ void Mundo::inicializa() {
     torreB2.set_color_pieza(true);
     alfilB1.set_color_pieza(true);
     alfilB2.set_color_pieza(true);
+    caballoB1.set_color_pieza(true);
+    caballoB2.set_color_pieza(true);
     reyB.set_color(true);
 
 
@@ -134,6 +173,8 @@ void Mundo::inicializa() {
     torreR2.set_pos_pieza({ 7, 16.5 });
     alfilR1.set_pos_pieza({ -3, 16.5 });
     alfilR2.set_pos_pieza({ 3, 16.5 });
+    caballoR1.set_pos_pieza({ -5, 16.5 });
+    caballoR2.set_pos_pieza({ 5, 16.5 });
     reyR.set_pos({ 1,16.5 });
 
     peonR1.set_color_pieza(false); //Cambios
@@ -148,6 +189,8 @@ void Mundo::inicializa() {
     torreR2.set_color_pieza(false);
     alfilR1.set_color_pieza(false);
     alfilR2.set_color_pieza(false);
+    caballoR1.set_color_pieza(false);
+    caballoR2.set_color_pieza(false);
     reyR.set_color(false);
 
     crear_matriz_control();
@@ -178,6 +221,8 @@ void Mundo::dibuja() {
     torreB2.dibuja_pieza();
     alfilB1.dibuja_pieza();
     alfilB2.dibuja_pieza();
+    caballoB1.dibuja_pieza();
+    caballoB2.dibuja_pieza();
     reyB.dibuja();
 
 
@@ -194,6 +239,8 @@ void Mundo::dibuja() {
     torreR2.dibuja_pieza();
     alfilR1.dibuja_pieza();
     alfilR2.dibuja_pieza();
+    caballoR1.dibuja_pieza();
+    caballoR2.dibuja_pieza();
     reyR.dibuja();
 
 }
