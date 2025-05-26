@@ -1,14 +1,12 @@
-#pragma once
-#include "VECTOR2D.h"
-#include "tablero.h"
-#include "raton.h"
-#include "peon.h"
-#include "alfil.h"
 #include "pieza.h"
 #include "torre.h"
-#include "caballo.h"
+#include "tablero.h"
+#include "peon.h"
+#include "alfil.h"
+#include "rey.h"
 #include <vector>
-//comentario para que se suba bien
+#include <iostream>
+#include "rey.h"
 class Mundo
 {
 	Tablero tablero;
@@ -29,30 +27,43 @@ class Mundo
 	Torre torreR2;
 	Alfil alfilB1, alfilB2;
 	Alfil alfilR1, alfilR2;
-	Caballo caballoB1, caballoB2;
-	Caballo caballoR1, caballoR2;
+	Rey reyB, reyR;
+	std::vector<std::vector<Pieza*>> control;
+
+
+
+
 
 public:
-	bool turno = true; // para poder acceder desde principal.cpp
-	
+	Mundo();
+	bool turno = true; //true: turno de blancos, false: turno de rojas
+	std::vector<std::vector<Pieza*>>& getControl() { return control; }
+
 	void dibuja();
 	void inicializa();
 	void inicializa_tab();
-	void mueve_piezas();
+	void mueve();
 	void set_posicion_central_click(VECTOR2D& posicion_central_click);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
 	void set_posicion_central_click_anterior(VECTOR2D& posicion_central);
 	void set_casilla_actual(VECTOR2D& casilla_act);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
 	void set_casilla_anterior(VECTOR2D& casilla_ant);
 	bool casillaValida(int fila, int columna);
 	void crear_matriz_control();
-	void imprimirmatriz();
-	
+
+
+
+	bool casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey);
+	void actualizar_matriz_control();
+
+
+	void comidasB();
+	void comidasR();
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
 	int filas;
 	bool casilla_seleccionada = false; //será true cuando se haya movido una pieza
-	
+
 	bool movida = false; //será true cuando se haya movido una pieza
 
 	//las siguientes variables son para el tema de las piezas comidas
