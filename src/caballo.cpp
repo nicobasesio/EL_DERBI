@@ -53,3 +53,7 @@ void Caballo::set_color_pieza(bool a)
 	if (a == FALSE)
 		color = FALSE;
 }
+std::vector<VECTOR2D> Caballo:: get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
+	std::vector<VECTOR2D> a; 
+	return a;
+}
