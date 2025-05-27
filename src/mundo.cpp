@@ -352,9 +352,7 @@ void Mundo::mueve()
     
     //movimiento peonB1
     // --- movimiento peón blanco peonB1: sólo un paso hacia delante ---
-    if (posicion_central_click_anterior.x == peonB1.posicion_pieza.x
-        && posicion_central_click_anterior.y == peonB1.posicion_pieza.y
-        && turno == true)  // peón seleccionado y es turno blanco
+    if (posicion_central_click_anterior.x == peonB1.posicion_pieza.x && posicion_central_click_anterior.y == peonB1.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
     {
         // 1) desplazamientos con signo y absolutos
         int dx = static_cast<int>(posicion_central_click.x - peonB1.posicion_pieza.x);
@@ -366,18 +364,23 @@ void Mundo::mueve()
         // 2) índices de la matriz de destino
         int ix = casilla_actual.x - 1;
         int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;
 
         // 3) avance simple: misma columna, un paso hacia delante
         bool avance_simple = (dx == 0 && dy == 2);
 
+        bool avance_doble = (movx == 0 && movy == 4 && srcY == 2
+            // además, casilla intermedia libre:
+            && control[ix][iy - 1] == nullptr && control[ix][iy] == nullptr);
+
         // 4) captura diagonal: un paso en Y y un paso en X, y pieza enemiga en destino
         bool captura_diagonal = (std::abs(dx) == 2 && dy == 2 && peonB1.pieza_comible(casilla_actual, control));
 
-        if (avance_simple) {
-            // movemos sin comer
-            peonB1.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
+        if (avance_simple || avance_doble)
+        {
+            peonB1.muevepieza(posicion_central_click.x,posicion_central_click.y);
         }
+
         else if (captura_diagonal) {
             // determinamos el color de la pieza capturada y registramos la captura
             if (control[ix][iy]->get_color() == false) {
@@ -402,25 +405,6 @@ void Mundo::mueve()
         std::cout << "Turno de Rojas\n";
     }
 
-
-
-
-      /*  // Avance válido: misma columna (dx == 0) y un paso hacia delante (dy == 2)
-        if (movx == 0 && movy == 2)
-        {
-            // Mover el peón
-            peonB1.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
-            actualizar_matriz_control();
-            movida = true;
-            turno = false;
-            std::cout << "Turno de Rojas\n";
-        }
-        else
-        {
-            std::cout << "Movimiento inválido: el peón solo puede avanzar una casilla hacia delante\n";
-        }*/
-    
 
 
 
