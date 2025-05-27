@@ -5,53 +5,19 @@
 #include "pieza.h"
 #include "peon.h"
 
-void Peon::muevepieza(double x, double y)
+void Peon::mueve(double x, double y)
 {
+
 	posicion_pieza.x = x;
 	posicion_pieza.y = y;
 }
 
-bool Peon::piezaAhogada(std::vector<VECTOR2D> posiciones)
-{
-	if (posiciones.size() == 0)
-		return true;
-	else
-		return false;
-}
-
-bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
-	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
-}
-
-std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa la torre en nuestra matriz de control
-	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
-	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
-	//un peon negro solo puede ir hacia abajo
-	if (casillaValida(pos.x, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x][pos.y - 1] == nullptr) {
-			posiciones.push_back({ static_cast<double>(pos.x), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
-			//haComidoPieza = false;
-		}
-	}
-	if (casillaValida(pos.x + 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x + 1][pos.y - 1] != nullptr && control[pos.x + 1][pos.y - 1]->get_color() == true) { //come hacia abajo derecha una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x + 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
-			haComidoPieza = true;
-		}
-	}
-	if (casillaValida(pos.x - 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x - 1][pos.y - 1] != nullptr && control[pos.x - 1][pos.y - 1]->get_color() == true) { //come hacia abajo izda una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x - 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
-			haComidoPieza = true;
-		}
-	}
-	return posiciones;
-}
 
 void Peon::set_pos_pieza(const VECTOR2D& pos)
 {
 	if (r.casilla.x == 0 && r.casilla.y == 0)
 		posicion_pieza = pos;
+
 }
 
 void Peon::dibuja_pieza()
@@ -73,3 +39,61 @@ void Peon::set_color_pieza(bool a)
 	if (a == false)
 		color = false;
 }
+
+bool Peon::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control) { //Detecta si hay pieza que se puede comer el peon
+	int peon_X = casilla_actual.x - 2;
+	int peon_y = casilla_actual.y - 2;
+
+	for (int dx = 0; dx < 3; ++dx) {  //for para darme las 8 casillas al rededor del peon
+		for (int dy = 0; dy < 3; ++dy) {
+			if (dx == 1 && dy == 1) {
+				continue;
+			}
+			int x = peon_X + dx - 1;
+			int y = peon_y + dy - 1;
+			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
+				if (control[x][y] != nullptr) {
+					//std::cout << "Hay pieza comible para el rey en control[" << x << "," << y << "]\n";
+					return true;
+				}
+			}
+		}
+	}
+}
+
+/*bool Peon::piezaAhogada(std::vector<VECTOR2D> posiciones)
+{
+	if (posiciones.size() == 0)
+		return true;
+	else
+		return false;
+}*/
+
+/*bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
+	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
+}*/
+
+/*std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa el peon en nuestra matriz de control
+	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
+	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
+	//un peon negro solo puede ir hacia abajo
+	if (casillaValida(pos.x, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
+		if (control[pos.x][pos.y - 1] == nullptr) {
+			posiciones.push_back({ static_cast<double>(pos.x), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde el peon puede moverse
+			//haComidoPieza = false;
+		}
+	}
+	if (casillaValida(pos.x + 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
+		if (control[pos.x + 1][pos.y - 1] != nullptr && control[pos.x + 1][pos.y - 1]->get_color() == true) { //come hacia abajo derecha una pieza blanca
+			posiciones.push_back({ static_cast<double>(pos.x + 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
+			haComidoPieza = true;
+		}
+	}
+	if (casillaValida(pos.x - 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
+		if (control[pos.x - 1][pos.y - 1] != nullptr && control[pos.x - 1][pos.y - 1]->get_color() == true) { //come hacia abajo izda una pieza blanca
+			posiciones.push_back({ static_cast<double>(pos.x - 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
+			haComidoPieza = true;
+		}
+	}
+	return posiciones;
+}*/

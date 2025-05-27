@@ -349,6 +349,75 @@ void Mundo::mueve()
         }
 
     }
+    //movimiento peonB1
+   
+    if (posicion_central_click_anterior.x == peonB1.posicion_pieza.x && posicion_central_click_anterior.y == peonB1.posicion_pieza.y && turno == true) //si seleccionas el peon blanco y es su turno, entonces:
+    {
+
+        int movx = std::abs(peonB1.posicion_pieza.x - posicion_central_click.x); // distancia entre la posicion del peon y la del click del movimiento
+        int movy = std::abs(peonB1.posicion_pieza.y - posicion_central_click.y);
+        std::cout << "[DEBUG] movx: " << movx << std::endl;
+        std::cout << "[DEBUG] movy: " << movy << std::endl;
+
+
+        if (movx <= 0 && movy <= 4 && !(movx == 0 && movy == 0)) // si el movimiento es de una casilla
+        {
+
+
+            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true)) { // Si la casilla no esta en jaque 
+                if (peonB1.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
+                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
+                    {
+                        comidasR();
+                    }
+                    else
+                    {
+                        comidasB();
+                    }
+
+
+                }
+                std::cout << "[DEBUG] Moviendo peonB1 a: " << std::endl;
+                peonB1.mueve(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de Rojas\n" << std::endl;
+            }
+            else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+                std::cout << "\nEl peon blanco NO se puede mover a una casilla atacada\n" << std::endl;
+        }
+        else if  (movx <= 0 && movy <= 2 && !(movx == 0 && movy == 0)) // si el movimiento es de dps casillas
+       
+        {
+
+            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true)) { // Si la casilla no esta en jaque 
+                if (peonB1.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
+                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
+                    {
+                        comidasR();
+                    }
+                    else
+                    {
+                        comidasB();
+                    }
+
+
+                }
+                std::cout << "[DEBUG] Moviendo peonB1 a: " << std::endl;
+                peonB1.mueve(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de Rojas\n" << std::endl;
+            }
+            else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+                std::cout << "\nEl peon blanco NO se puede mover a una casilla atacada\n" << std::endl;
+        }
+
+    }
+   
+    
 
 }
 
