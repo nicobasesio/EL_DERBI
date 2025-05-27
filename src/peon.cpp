@@ -5,7 +5,7 @@
 #include "pieza.h"
 #include "peon.h"
 
-void Peon::mueve(double x, double y)
+void Peon::muevepieza(double x, double y)
 {
 
 	posicion_pieza.x = x;
@@ -61,19 +61,19 @@ bool Peon::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*
 	}
 }
 
-/*bool Peon::piezaAhogada(std::vector<VECTOR2D> posiciones)
+bool Peon::piezaAhogada(std::vector<VECTOR2D> posiciones)
 {
 	if (posiciones.size() == 0)
 		return true;
 	else
 		return false;
-}*/
+}
 
-/*bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
+bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
-}*/
+}
 
-/*std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa el peon en nuestra matriz de control
+std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa el peon en nuestra matriz de control
 	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
 	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
 	//un peon negro solo puede ir hacia abajo
@@ -96,4 +96,4 @@ bool Peon::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*
 		}
 	}
 	return posiciones;
-}*/
+}
