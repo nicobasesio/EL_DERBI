@@ -39,12 +39,14 @@ void Mundo::crear_matriz_control() {
     control[2][7] = &alfilR1;
 
     // cuarta columna
+    control[3][0] = &reinaB;
     control[3][1] = &peonB4;
     control[3][2] = nullptr;
     control[3][3] = nullptr;
     control[3][4] = nullptr;
     control[3][5] = nullptr;
     control[3][6] = &peonR4;
+    control[3][7] = &reinaR;
 
 
     // quinta columna
@@ -140,6 +142,7 @@ void Mundo::inicializa() {
     caballoB1.set_pos_pieza({ -5, 2.5 });
     caballoB2.set_pos_pieza({ 5, 2.5 });
     reyB.set_pos({ 1,2.5 });
+    reinaB.set_pos_pieza({ -1,2.5 });
 
     peonB1.set_color_pieza(true); //Cambios
     peonB2.set_color_pieza(true);
@@ -156,6 +159,8 @@ void Mundo::inicializa() {
     caballoB1.set_color_pieza(true);
     caballoB2.set_color_pieza(true);
     reyB.set_color(true);
+    reinaB.set_color_pieza(true);
+
 
 
 
@@ -176,6 +181,8 @@ void Mundo::inicializa() {
     caballoR1.set_pos_pieza({ -5, 16.5 });
     caballoR2.set_pos_pieza({ 5, 16.5 });
     reyR.set_pos({ 1,16.5 });
+    reinaR.set_pos_pieza({-1,16.5 });
+
 
     peonR1.set_color_pieza(false); //Cambios
     peonR2.set_color_pieza(false);
@@ -192,6 +199,8 @@ void Mundo::inicializa() {
     caballoR1.set_color_pieza(false);
     caballoR2.set_color_pieza(false);
     reyR.set_color(false);
+    reinaR.set_color_pieza(false);
+
 
     crear_matriz_control();
 
@@ -224,6 +233,7 @@ void Mundo::dibuja() {
     caballoB1.dibuja_pieza();
     caballoB2.dibuja_pieza();
     reyB.dibuja();
+    reinaB.dibuja_pieza();
 
 
     //Rojas
@@ -242,9 +252,9 @@ void Mundo::dibuja() {
     caballoR1.dibuja_pieza();
     caballoR2.dibuja_pieza();
     reyR.dibuja();
+    reinaR.dibuja_pieza();
 
-    
-
+   
 }
 
 bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o de la matriz control al comprobar si es jaque o no
