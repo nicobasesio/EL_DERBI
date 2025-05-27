@@ -181,7 +181,7 @@ void Mundo::inicializa() {
     caballoR1.set_pos_pieza({ -5, 16.5 });
     caballoR2.set_pos_pieza({ 5, 16.5 });
     reyR.set_pos({ 1,16.5 });
-    reinaR.set_pos_pieza({-1,16.5 });
+    reinaR.set_pos_pieza({ -1,16.5 });
 
 
     peonR1.set_color_pieza(false); //Cambios
@@ -254,7 +254,7 @@ void Mundo::dibuja() {
     reyR.dibuja();
     reinaR.dibuja_pieza();
 
-   
+
 }
 
 bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o de la matriz control al comprobar si es jaque o no
@@ -283,12 +283,12 @@ void Mundo::mueve()
                 if (reyB.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
                     {
-                       
+
                         comidasR();
                     }
                     else
                     {
-                        
+
                         comidasB();
                     }
 
@@ -324,12 +324,12 @@ void Mundo::mueve()
                 if (reyR.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
                     {
-                        
+
                         comidasR();
                     }
                     else
                     {
-                        
+
                         comidasB();
                     }
 
@@ -556,6 +556,4 @@ bool Mundo::casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey) { // esta f
     return false; //enJaque; // si tras realizar el movimiento con el rey a dicha casilla sigue en jaque, entonces la salida de la funcion ser� false. La matriz de control no sufre cambios
     // esta funcion se llama en la funci�n de estaEnJaqueMate()
 }
-
-//correccion
 
