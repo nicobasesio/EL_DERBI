@@ -349,6 +349,63 @@ void Mundo::mueve()
         }
 
     }
+
+    //movimiento caballoB1
+  
+    if (posicion_central_click_anterior.x == caballoB1.posicion_pieza.x &&
+        posicion_central_click_anterior.y == caballoB1.posicion_pieza.y &&
+        turno == true)  // caballo seleccionado y es turno blanco
+    {
+        // 1.desplazamientos con signo
+        int dx = static_cast<int>(posicion_central_click.x - caballoB1.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - caballoB1.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+
+        // 2.índices de la matriz de destino
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 3.validar forma de salto del caballo (L)
+        bool movimiento_L = (movx == 2 && movy == 1) || (movx == 1 && movy == 2);
+
+        if (!movimiento_L) {
+            std::cout << "Movimiento inválido: el caballo se mueve en L (2x1 o 1x2)\n";
+            return;
+        }
+
+        // 4.comprobar si hay pieza en el destino
+        bool captura = false;
+        if (caballoB1.pieza_comible(casilla_actual, control)) {
+            captura = true;
+        }
+
+        // 5.ejecutar el movimiento
+        if (captura) {
+            Pieza* target = control[ix][iy];
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+        }
+
+        caballoB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+
+        // 6. actualizar el tablero y pasar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;
+        std::cout << "Turno de Rojas\n";
+    }
+
     
     //movimiento peonB1
     // --- movimiento peón blanco peonB1: sólo un paso hacia delante ---
@@ -920,76 +977,8 @@ void Mundo::mueve()
          std::cout << "Turno de Rojas\n";
      }
 
-    // Movimiento caballo blanco1 
-    if (std::round(posicion_central_click_anterior.x) == std::round(caballoB1.posicion_pieza.x) && std::round(posicion_central_click_anterior.y) == std::round(caballoB1.posicion_pieza.y) && turno == true)
-    {
-        int x_origen = static_cast<int>(std::round(caballoB1.posicion_pieza.x));
-        int y_origen = static_cast<int>(std::round(caballoB1.posicion_pieza.y));
-        int x_destino = static_cast<int>(std::round(posicion_central_click.x));
-        int y_destino = static_cast<int>(std::round(posicion_central_click.y));
-
-        int dx = x_destino - x_origen;
-        int dy = y_destino - y_origen;
-
-        int abs_dx = std::abs(dx);
-        int abs_dy = std::abs(dy);
-
-        //condicion del movimiento del caballo (movimiento en L)
-        bool movimiento_valido = (abs_dx == 2 && abs_dy == 1) || (abs_dx == 1 && abs_dy == 2);
-
-        if (movimiento_valido)
-        {
-            if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr)
-            {
-                // el caballo puede comerse cualquier pieza, incluso del mismo color
-                comidasR(); 
-            }
-
-            caballoB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
-            actualizar_matriz_control();
-            movida = true;
-            turno = false;
-            std::cout << "Turno de Rojas\n" << std::endl;
-        }
-        else
-        {
-            std::cout << "\n Movimiento invalido para el caballo\n" << std::endl;
-        }
-    }
-
-
-    //movimiento caballo blanco2
-    if (posicion_central_click_anterior.x == caballoB2.posicion_pieza.x && posicion_central_click_anterior.y == caballoB2.posicion_pieza.y && turno == true)
-    {
-        int dx = posicion_central_click.x - caballoB2.posicion_pieza.x;
-        int dy = posicion_central_click.y - caballoB2.posicion_pieza.y;
-        int abs_dx = std::abs(dx);
-        int abs_dy = std::abs(dy);
-
-        //condicion del movimiento del caballo (movimiento en L)
-        bool movimiento_valido = (abs_dx == 2 && abs_dy == 1) || (abs_dx == 1 && abs_dy == 2);
-
-        if (movimiento_valido)
-        {
-
-            if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr)
-            {
-                comidasR();
-            }
-
-
-
-            caballoB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
-            actualizar_matriz_control();
-            movida = true;
-            turno = false;
-            std::cout << "Turno de Rojas\n" << std::endl;
-        }
-        else
-        {
-            std::cout << "\n Movimiento invalido para el caballo\n" << std::endl;
-        }
-    }
+    
+     
     // Movimiento reinaB
     if (posicion_central_click_anterior.x == reinaB.posicion_pieza.x &&
         posicion_central_click_anterior.y == reinaB.posicion_pieza.y && turno == true)
