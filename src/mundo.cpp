@@ -350,6 +350,7 @@ void Mundo::mueve()
 
     }
 
+
     // Movimiento reinaB
     if (posicion_central_click_anterior.x == reinaB.posicion_pieza.x &&
         posicion_central_click_anterior.y == reinaB.posicion_pieza.y && turno == true)
@@ -364,32 +365,25 @@ void Mundo::mueve()
 
         if (movimiento_valido)
         {
-            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 },
-                { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+            if (reinaB.pieza_comible(casilla_actual, control))
             {
-                if (reinaB.pieza_comible(casilla_actual, control))
-                {
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
-                        control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
-                    {
-                        comidasR();
-                    }
-                    else
+                        control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
                     {
                         comidasB();
                     }
-                }
+                    else
+                    {
+                        comidasR();
+                    }
+             
+            }
 
-                reinaB.muevepieza(posicion_central_click.x, posicion_central_click.y);
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;
-                std::cout << "Turno de rojas\n";
-            }
-            else
-            {
-                std::cout << "\nLa reina blanca no puede moverse a una casilla atacada\n";
-            }
+            reinaB.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            movida = true;
+            turno = false;
+            std::cout << "Turno de rojas\n";
         }
     }
 
@@ -407,32 +401,24 @@ void Mundo::mueve()
 
         if (movimiento_valido)
         {
-            if (!casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 },
-                { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
+            if (reinaR.pieza_comible(casilla_actual, control))
             {
-                if (reinaR.pieza_comible(casilla_actual, control))
+                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
+                    control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() ==false)
                 {
-                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
-                        control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
-                    {
-                        comidasB();
-                    }
-                    else
-                    {
-                        comidasR();
-                    }
+                    comidasB();
                 }
+                else
+                {
+                    comidasR();
+                }
+            }
 
-                reinaR.muevepieza(posicion_central_click.x, posicion_central_click.y);
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;
-                std::cout << "Turno de negras\n";
-            }
-            else
-            {
-                std::cout << "\nLa reina roja no puede moverse a una casilla atacada\n";
-            }
+            reinaR.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            movida = true;
+            turno = false;
+            std::cout << "Turno de blancas\n";
         }
     }
 
