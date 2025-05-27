@@ -410,5 +410,5 @@ bool Mundo::casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey) { // esta f
     // esta funcion se llama en la funci�n de estaEnJaqueMate()
 }
 
-
+//correccion
 
