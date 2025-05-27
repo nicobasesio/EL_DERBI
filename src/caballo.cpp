@@ -53,7 +53,38 @@ void Caballo::set_color_pieza(bool a)
 	if (a == FALSE)
 		color = FALSE;
 }
-std::vector<VECTOR2D> Caballo:: get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
-	std::vector<VECTOR2D> a; 
-	return a;
+std::vector<VECTOR2D> Caballo::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) 
+{
+	std::vector<VECTOR2D> posiciones; //posiciones de control de las piezas negras
+	for (int i = 1; i < control.size(); i++)
+	{
+		if (casillaValida(pos.x + i, pos.y, control)) //no se salga de la matriz
+		{
+			if (control[pos.x + i][pos.y] == nullptr) //recorre la fila en horizontal
+			{
+				posiciones.push_back({ static_cast<double>(pos.x + i), static_cast<double>(pos.y) }); //posiciones donde el caballo puede moverse
+			}
+			else if (control[pos.x + i][pos.y] != nullptr && control[pos.x + i][pos.y]->get_color() == false) //detecta pipeza negra
+			{
+				break;
+			}
+		}
+	}
+	for (int i = 1; i < control.size(); i++)
+	{
+		if (casillaValida(pos.x - i, pos.y, control))
+		{
+			if (control[pos.x - i][pos.y] == nullptr)
+			{
+				posiciones.push_back({ static_cast<double> (pos.x - i), static_cast <double> (pos.y) }); //posiciones donde el caballo puede moverse
+			}
+			else if (control[pos.x - i][pos.y] != nullptr && control[pos.x - i][pos.y]->get_color() == true) 
+			{
+				posiciones.push_back({ static_cast<double> (pos.x - i), static_cast<double> (pos.y) });
+				break;
+			}
+		}
+	}
+	return posiciones;
 }
+
