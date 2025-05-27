@@ -6,6 +6,51 @@
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
 
+bool Mundo::caminoLibre(Pieza& pieza, VECTOR2D destino)
+{
+    int x1 = coordAMatriz(pieza.posicion_pieza.x);
+    int y1 = coordAMatriz(pieza.posicion_pieza.y);
+    int x2 = coordAMatriz(destino.x);
+    int y2 = coordAMatriz(destino.y);
+
+    std::cout << "[caminoLibre] pieza.posicion_pieza = (" << x1 << ", " << y1 << "), destino = (" << x2 << ", " << y2 << ")" << std::endl;
+
+    if (x1 < 0 || x1 >= 8 || y1 < 0 || y1 >= 8 || x2 < 0 || x2 >= 8 || y2 < 0 || y2 >= 8) {
+        std::cout << "[caminoLibre] Índices fuera de rango: " << x1 << "," << y1 << " -> " << x2 << "," << y2 << std::endl;
+        return false;
+    }
+
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    int stepX = (dx == 0) ? 0 : (dx > 0 ? 1 : -1);
+    int stepY = (dy == 0) ? 0 : (dy > 0 ? 1 : -1);
+
+    int x = x1 + stepX;
+    int y = y1 + stepY;
+
+    while (x != x2 || y != y2) {
+        if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+            std::cout << "[caminoLibre] Coordenadas fuera de rango en el bucle: " << x << "," << y << std::endl;
+            return false;
+        }
+
+        if (control[x][y] != nullptr) {
+            std::cout << "[caminoLibre] Camino bloqueado en: " << x << "," << y << std::endl;
+            return false;
+        }
+
+        x += stepX;
+        y += stepY;
+    }
+
+    std::cout << "[caminoLibre] Camino libre desde " << x1 << "," << y1 << " a " << x2 << "," << y2 << std::endl;
+    return true;
+}
+
+
+
+
 void Mundo::crear_matriz_control() {
     columnas = 8;
     filas = 8;
@@ -102,6 +147,10 @@ void Mundo::crear_matriz_control() {
 
 Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr)) {}
 
+int Mundo::coordAMatriz(float coord)
+{
+    return static_cast<int>((coord + 7.0f) / 2.0f);  // Ajusta si tus casillas están separadas más de 2 unidades
+}
 
 void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
     posicion_central_click = posicion_central;
@@ -160,8 +209,6 @@ void Mundo::inicializa() {
     caballoB2.set_color_pieza(true);
     reyB.set_color(true);
     reinaB.set_color_pieza(true);
-
-
 
 
 
@@ -299,7 +346,7 @@ void Mundo::mueve()
                 actualizar_matriz_control();
                 movida = true;
                 turno = false;
-                std::cout << "Turno de Rojas\n" << std::endl;
+                std::cout << "Turno de rojas\n" << std::endl;
             }
             else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
                 std::cout << "\nEl rey blanco NO se puede mover a una casilla atacada\n" << std::endl;
@@ -341,7 +388,7 @@ void Mundo::mueve()
                 actualizar_matriz_control();
                 movida = true;
                 turno = true;
-                std::cout << "Turno de negras\n" << std::endl;
+                std::cout << "Turno de blancas\n" << std::endl;
             }
             else if (casilla_Jaque({ casilla_anterior.x - 1, casilla_anterior.y - 1 }, { casilla_actual.x - 1, casilla_actual.y - 1 }, true))
                 std::cout << "\nEl rey blanco NO se puede mover a una casilla atacada\n" << std::endl;
@@ -365,8 +412,10 @@ void Mundo::mueve()
 
         if (movimiento_valido)
         {
-            if (reinaB.pieza_comible(casilla_actual, control))
+            if (caminoLibre(reinaB, posicion_central_click)) // Esto debe estar dentro del if
             {
+                if (reinaB.pieza_comible(casilla_actual, control))
+                {
                     if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
                         control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
                     {
@@ -376,16 +425,25 @@ void Mundo::mueve()
                     {
                         comidasR();
                     }
-             
-            }
+                }
 
-            reinaB.muevepieza(posicion_central_click.x, posicion_central_click.y);
-            actualizar_matriz_control();
-            movida = true;
-            turno = false;
-            std::cout << "Turno de rojas\n";
+                reinaB.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de rojas\n";
+            }
+            else
+            {
+                std::cout << "Movimiento inválido: camino no libre para reinaB\n";
+            }
         }
+
     }
+
+    
+
+
 
     // Movimiento reinaR
     if (posicion_central_click_anterior.x == reinaR.posicion_pieza.x &&
@@ -401,26 +459,35 @@ void Mundo::mueve()
 
         if (movimiento_valido)
         {
-            if (reinaR.pieza_comible(casilla_actual, control))
+            if (caminoLibre(reinaR, posicion_central_click)) // Esto debe estar dentro del if
             {
-                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
-                    control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() ==false)
+                if (reinaR.pieza_comible(casilla_actual, control))
                 {
-                    comidasB();
+                    if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
+                        control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
+                    {
+                        comidasB();
+                    }
+                    else
+                    {
+                        comidasR();
+                    }
                 }
-                else
-                {
-                    comidasR();
-                }
-            }
 
-            reinaR.muevepieza(posicion_central_click.x, posicion_central_click.y);
-            actualizar_matriz_control();
-            movida = true;
-            turno = false;
-            std::cout << "Turno de blancas\n";
+                reinaR.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de blancas\n";
+            }
+            else
+            {
+                std::cout << "Movimiento inválido: camino no libre para reinaR\n";
+            }
         }
+
     }
+
 
 
 }
@@ -482,6 +549,7 @@ bool Mundo::casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey) { // esta f
     return false; //enJaque; // si tras realizar el movimiento con el rey a dicha casilla sigue en jaque, entonces la salida de la funcion ser� false. La matriz de control no sufre cambios
     // esta funcion se llama en la funci�n de estaEnJaqueMate()
 }
+
 
 
 
