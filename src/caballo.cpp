@@ -53,40 +53,32 @@ void Caballo::set_color_pieza(bool a)
 	if (a == FALSE)
 		color = FALSE;
 }
-std::vector<VECTOR2D> Caballo::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) 
+
+std::vector<VECTOR2D> Caballo::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos)
 {
-	std::vector<VECTOR2D> posiciones; //posiciones de control de las piezas negras
-	for (int i = 1; i < control.size(); i++)
+	std::vector<VECTOR2D> posiciones;
+
+	// Todos los movimientos posibles del caballo en forma de L
+	int movimientos[8][2] = {
+		{2, 1}, {1, 2}, {-1, 2}, {-2, 1},
+		{-2, -1}, {-1, -2}, {1, -2}, {2, -1}
+	};
+
+	for (int i = 0; i < 8; ++i)
 	{
-		if (casillaValida(pos.x + i, pos.y, control)) //no se salga de la matriz
+		int x = pos.x - 1 + movimientos[i][0];
+		int y = pos.y - 1 + movimientos[i][1];
+
+		if (casillaValida(x, y, control))
 		{
-			if (control[pos.x + i][pos.y] == nullptr) //recorre la fila en horizontal
-			{
-				posiciones.push_back({ static_cast<double>(pos.x + i), static_cast<double>(pos.y) }); //posiciones donde el caballo puede moverse
-			}
-			else if (control[pos.x + i][pos.y] != nullptr && control[pos.x + i][pos.y]->get_color() == false) //detecta pipeza negra
-			{
-				break;
-			}
+			// Permitir moverse a cualquier casilla, incluso si hay pieza del mismo color
+			posiciones.push_back({ static_cast<double>(x + 1), static_cast<double>(y + 1) });
 		}
 	}
-	for (int i = 1; i < control.size(); i++)
-	{
-		if (casillaValida(pos.x - i, pos.y, control))
-		{
-			if (control[pos.x - i][pos.y] == nullptr)
-			{
-				posiciones.push_back({ static_cast<double> (pos.x - i), static_cast <double> (pos.y) }); //posiciones donde el caballo puede moverse
-			}
-			else if (control[pos.x - i][pos.y] != nullptr && control[pos.x - i][pos.y]->get_color() == true) 
-			{
-				posiciones.push_back({ static_cast<double> (pos.x - i), static_cast<double> (pos.y) });
-				break;
-			}
-		}
-	}
+
 	return posiciones;
 }
+
 
 bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>>control)
 {
@@ -106,5 +98,6 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 				return true;
 			}
 		}
+		return false;
 	}
 }
