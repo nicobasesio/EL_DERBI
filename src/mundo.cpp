@@ -351,573 +351,1419 @@ void Mundo::mueve()
     }
     
     //movimiento peonB1
-    // --- movimiento peón blanco peonB1: sólo un paso hacia delante ---
-    if (posicion_central_click_anterior.x == peonB1.posicion_pieza.x && posicion_central_click_anterior.y == peonB1.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
+    if (posicion_central_click_anterior.x == peonB1.posicion_pieza.x && posicion_central_click_anterior.y == peonB1.posicion_pieza.y&& turno == true)  // peón blanco seleccionado y es turno de blancas
     {
-        // 1) desplazamientos con signo
+        // 1) desplazamientos en unidades de casilla
         int dx = static_cast<int>(posicion_central_click.x - peonB1.posicion_pieza.x);
         int dy = static_cast<int>(posicion_central_click.y - peonB1.posicion_pieza.y);
         int movx = std::abs(dx);
         int movy = std::abs(dy);
         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-        // 2) índices de la matriz de destino
+        // 2) índices destino en la matriz (0..7)
         int ix = casilla_actual.x - 1;
         int iy = casilla_actual.y - 1;
-        int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-        // comprobamos primero que destino está dentro del tablero
+        // 3) validar dentro del tablero
         if (!casillaValida(ix, iy)) {
             std::cout << "Movimiento inválido: fuera del tablero\n";
             return;
         }
 
-        // 3a) avance simple: misma columna y un paso hacia delante
+        // 4a) avance simple: misma columna, un paso adelante
         bool avance_simple = (dx == 0 && dy == 2);
 
-        // 3b) doble avance: misma columna, dos pasos,
-        //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
         bool avance_doble = false;
-        if (movx == 0 && movy == 4 && srcY == 2) {
+        if (dx == 0 && dy == 4 && srcY == 2) {
             int iy_inter = iy - 1;
-            if (casillaValida(ix, iy_inter) &&
-                control[ix][iy_inter] == nullptr &&
-                control[ix][iy] == nullptr)
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
             {
                 avance_doble = true;
             }
         }
 
-        // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
         bool captura_diagonal = false;
-        if (movx == 2 && movy == 2) {
+        if ((dx == 2 || dx == -2) && dy == 2) {
             if (peonB1.pieza_comible(casilla_actual, control)) {
                 captura_diagonal = true;
             }
         }
 
-        // 4) ejecutar la jugada válida
+        // 5) ejecutar jugada
         if (avance_simple || avance_doble) {
-            peonB1.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
+            peonB1.muevepieza(posicion_central_click.x,posicion_central_click.y);
         }
         else if (captura_diagonal) {
-            // registramos la captura según color de la pieza en destino
             Pieza* target = control[ix][iy];
+            // registrar la captura
             if (target->get_color() == false)
                 comidasR();
             else
                 comidasB();
-            peonB1.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
+            peonB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
-            std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                << "o capturar en diagonal\n";
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
             return;
         }
 
-        // 5) actualizar el tablero y pasar turno
         actualizar_matriz_control();
         movida = true;
-        turno = false;
+        turno = false;  // turno de las rojas
         std::cout << "Turno de Rojas\n";
     }
 
-
     
     // movimiento peonB2
-// --- movimiento peón blanco peonB2: un paso adelante, doble o captura diagonal ---
-    if (posicion_central_click_anterior.x == peonB2.posicion_pieza.x && posicion_central_click_anterior.y == peonB2.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
+    if (posicion_central_click_anterior.x == peonB2.posicion_pieza.x && posicion_central_click_anterior.y == peonB2.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
     {
-        // 1) desplazamientos con signo
+        // 1) desplazamientos en unidades de casilla
         int dx = static_cast<int>(posicion_central_click.x - peonB2.posicion_pieza.x);
         int dy = static_cast<int>(posicion_central_click.y - peonB2.posicion_pieza.y);
         int movx = std::abs(dx);
         int movy = std::abs(dy);
         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-        // 2) índices de la matriz de destino
+        // 2) índices destino en la matriz (0..7)
         int ix = casilla_actual.x - 1;
         int iy = casilla_actual.y - 1;
-        int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-        // comprobamos primero que destino está dentro del tablero
+        // 3) validar dentro del tablero
         if (!casillaValida(ix, iy)) {
             std::cout << "Movimiento inválido: fuera del tablero\n";
             return;
         }
 
-        // 3a) avance simple: misma columna y un paso hacia delante
+        // 4a) avance simple: misma columna, un paso adelante
         bool avance_simple = (dx == 0 && dy == 2);
 
-        // 3b) doble avance: misma columna, dos pasos,
-        //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
         bool avance_doble = false;
-        if (movx == 0 && movy == 4 && srcY == 2) {
+        if (dx == 0 && dy == 4 && srcY == 2) {
             int iy_inter = iy - 1;
-            if (casillaValida(ix, iy_inter) &&
-                control[ix][iy_inter] == nullptr &&
-                control[ix][iy] == nullptr)
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
             {
                 avance_doble = true;
             }
         }
 
-        // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
         bool captura_diagonal = false;
-        if (movx == 2 && movy == 2) {
+        if ((dx == 2 || dx == -2) && dy == 2) {
             if (peonB2.pieza_comible(casilla_actual, control)) {
                 captura_diagonal = true;
             }
         }
 
-        // 4) ejecutar la jugada válida
+        // 5) ejecutar jugada
         if (avance_simple || avance_doble) {
-            peonB2.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
+            peonB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else if (captura_diagonal) {
-            // registramos la captura según color de la pieza en destino
             Pieza* target = control[ix][iy];
+            // registrar la captura
             if (target->get_color() == false)
                 comidasR();
             else
                 comidasB();
-            peonB2.muevepieza(posicion_central_click.x,
-                posicion_central_click.y);
+            peonB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
-            std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                << "o capturar en diagonal\n";
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
             return;
         }
 
-        // 5) actualizar el tablero y pasar turno
         actualizar_matriz_control();
         movida = true;
-        turno = false;
+        turno = false;  // turno de las rojas
         std::cout << "Turno de Rojas\n";
     }
 
      //movimiento peonB3
-     if (posicion_central_click_anterior.x == peonB3.posicion_pieza.x && posicion_central_click_anterior.y == peonB3.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
-     {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB3.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB3.posicion_pieza.y);
-         int movx = std::abs(dx);
-         int movy = std::abs(dy);
-         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+    if (posicion_central_click_anterior.x == peonB3.posicion_pieza.x && posicion_central_click_anterior.y == peonB3.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB3.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB3.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
-         int ix = casilla_actual.x - 1;
-         int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-         // comprobamos primero que destino está dentro del tablero
-         if (!casillaValida(ix, iy)) {
-             std::cout << "Movimiento inválido: fuera del tablero\n";
-             return;
-         }
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
-             }
-         }
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
 
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB3.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
-             }
-         }
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB3.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
 
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB3.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB3.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
-         }
-         else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
-             return;
-         }
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB3.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB3.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
 
-         // 5) actualizar el tablero y pasar turno
-         actualizar_matriz_control();
-         movida = true;
-         turno = false;
-         std::cout << "Turno de Rojas\n";
-     }
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
 
      //movimiento peonB4
-     if (posicion_central_click_anterior.x == peonB4.posicion_pieza.x && posicion_central_click_anterior.y == peonB4.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
-     {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB4.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB4.posicion_pieza.y);
-         int movx = std::abs(dx);
-         int movy = std::abs(dy);
-         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+    if (posicion_central_click_anterior.x == peonB4.posicion_pieza.x && posicion_central_click_anterior.y == peonB4.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB4.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB4.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
-         int ix = casilla_actual.x - 1;
-         int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-         // comprobamos primero que destino está dentro del tablero
-         if (!casillaValida(ix, iy)) {
-             std::cout << "Movimiento inválido: fuera del tablero\n";
-             return;
-         }
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
-             }
-         }
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
 
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB4.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
-             }
-         }
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB4.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
 
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB4.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB4.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
-         }
-         else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
-             return;
-         }
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB4.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB4.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
 
-         // 5) actualizar el tablero y pasar turno
-         actualizar_matriz_control();
-         movida = true;
-         turno = false;
-         std::cout << "Turno de Rojas\n";
-     }
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
 
-     //movimiento peonB3
-     if (posicion_central_click_anterior.x == peonB5.posicion_pieza.x && posicion_central_click_anterior.y == peonB5.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
-     {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB5.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB5.posicion_pieza.y);
-         int movx = std::abs(dx);
-         int movy = std::abs(dy);
-         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+     //movimiento peonB5
+    if (posicion_central_click_anterior.x == peonB5.posicion_pieza.x && posicion_central_click_anterior.y == peonB5.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB5.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB5.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
-         int ix = casilla_actual.x - 1;
-         int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-         // comprobamos primero que destino está dentro del tablero
-         if (!casillaValida(ix, iy)) {
-             std::cout << "Movimiento inválido: fuera del tablero\n";
-             return;
-         }
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
-             }
-         }
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
 
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB5.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
-             }
-         }
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB5.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
 
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB5.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB5.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
-         }
-         else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
-             return;
-         }
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB5.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB5.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
 
-         // 5) actualizar el tablero y pasar turno
-         actualizar_matriz_control();
-         movida = true;
-         turno = false;
-         std::cout << "Turno de Rojas\n";
-     }
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
 
      //movimiento peonB6
-     if (posicion_central_click_anterior.x == peonB6.posicion_pieza.x && posicion_central_click_anterior.y == peonB6.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
-     {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB6.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB6.posicion_pieza.y);
-         int movx = std::abs(dx);
-         int movy = std::abs(dy);
-         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+    if (posicion_central_click_anterior.x == peonB6.posicion_pieza.x && posicion_central_click_anterior.y == peonB6.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB6.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB6.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
-         int ix = casilla_actual.x - 1;
-         int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
 
-         // comprobamos primero que destino está dentro del tablero
-         if (!casillaValida(ix, iy)) {
-             std::cout << "Movimiento inválido: fuera del tablero\n";
-             return;
-         }
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
-             }
-         }
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
 
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB6.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
-             }
-         }
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB1.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
 
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB6.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB6.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
-         }
-         else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
-             return;
-         }
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB6.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB6.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
 
-         // 5) actualizar el tablero y pasar turno
-         actualizar_matriz_control();
-         movida = true;
-         turno = false;
-         std::cout << "Turno de Rojas\n";
-     }
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
 
      //movimiento peonB7
-     if (posicion_central_click_anterior.x == peonB7.posicion_pieza.x && posicion_central_click_anterior.y == peonB7.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
+    if (posicion_central_click_anterior.x == peonB7.posicion_pieza.x && posicion_central_click_anterior.y == peonB7.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB7.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB7.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
+
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB7.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB7.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB7.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
+
+     //movimiento peonB8
+    if (posicion_central_click_anterior.x == peonB6.posicion_pieza.x && posicion_central_click_anterior.y == peonB8.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    {
+        // 1) desplazamientos en unidades de casilla
+        int dx = static_cast<int>(posicion_central_click.x - peonB8.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonB8.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+
+        // 2) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 3) validar dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 4a) avance simple: misma columna, un paso adelante
+        bool avance_simple = (dx == 0 && dy == 2);
+
+        // 4b) doble avance: fila inicial (srcY == 2), dos pasos, y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == 4 && srcY == 2) {
+            int iy_inter = iy - 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr
+                && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 4c) captura diagonal: solo hacia adelante (dy == 2)
+        //    y un paso a la derecha (dx ==  2) o izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == 2) {
+            if (peonB8.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 5) ejecutar jugada
+        if (avance_simple || avance_doble) {
+            peonB8.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            // registrar la captura
+            if (target->get_color() == false)
+                comidasR();
+            else
+                comidasB();
+            peonB8.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón solo puede avanzar hacia delante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de las rojas
+        std::cout << "Turno de Rojas\n";
+    }
+
+     //movimiento peonR1
+    if (posicion_central_click_anterior.x == peonR1.posicion_pieza.x && posicion_central_click_anterior.y == peonR1.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR1.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR1.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR1.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+
+
+     //movimiento peonR2
+    if (posicion_central_click_anterior.x == peonR2.posicion_pieza.x && posicion_central_click_anterior.y == peonR2.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR2.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR2.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR2.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR3
+    if (posicion_central_click_anterior.x == peonR3.posicion_pieza.x && posicion_central_click_anterior.y == peonR3.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR3.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR3.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR3.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR3.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR3.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR4
+    if (posicion_central_click_anterior.x == peonR4.posicion_pieza.x && posicion_central_click_anterior.y == peonR4.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR4.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR4.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR4.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR4.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR4.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR5
+    if (posicion_central_click_anterior.x == peonR5.posicion_pieza.x && posicion_central_click_anterior.y == peonR5.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR5.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR5.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR5.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR5.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR5.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR6
+    if (posicion_central_click_anterior.x == peonR6.posicion_pieza.x && posicion_central_click_anterior.y == peonR6.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR6.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR6.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR6.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR6.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR6.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR7
+    if (posicion_central_click_anterior.x == peonR7.posicion_pieza.x && posicion_central_click_anterior.y == peonR7.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR7.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR7.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR7.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR7.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR7.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     //movimiento peonR8
+    if (posicion_central_click_anterior.x == peonR8.posicion_pieza.x && posicion_central_click_anterior.y == peonR8.posicion_pieza.y && turno == false)  // peón rojo seleccionado y es turno de las rojas
+    {
+        // 1) filtro de clic dentro del tablero (1..8)
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+            casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
+
+        // 2) cálculo de desplazamiento en “casillas” (dx, dy)
+        int dx = static_cast<int>(posicion_central_click.x - peonR8.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - peonR8.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx=" << movx << ", movy=" << movy << std::endl;
+
+        // 3) índices destino en la matriz (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
+        int srcY = casilla_anterior.y;  // fila origen 0..7
+
+        // 4) validar que destino esté dentro del tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
+
+        // 5a) avance simple: misma columna, un paso “adelante” (dy == –2)
+        bool avance_simple = (dx == 0 && dy == -2);
+
+        // 5b) doble avance: fila inicial (srcY == 7), dos pasos (dy == –4) y casillas libres
+        bool avance_doble = false;
+        if (dx == 0 && dy == -4 && srcY == 7) {
+            int iy_inter = iy + 1;
+            if (casillaValida(ix, iy_inter)
+                && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
+            {
+                avance_doble = true;
+            }
+        }
+
+        // 5c) captura diagonal: sólo hacia “adelante” (dy == –2)
+        //     y un paso a la derecha  (dx ==  2)
+        //     o un paso a la izquierda (dx == -2)
+        bool captura_diagonal = false;
+        if ((dx == 2 || dx == -2) && dy == -2) {
+            if (peonR8.pieza_comible(casilla_actual, control)) {
+                captura_diagonal = true;
+            }
+        }
+
+        // 6) ejecutar la jugada válida
+        if (avance_simple || avance_doble) {
+            peonR8.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else if (captura_diagonal) {
+            Pieza* target = control[ix][iy];
+            if (target->get_color() == false)
+                comidasR();  // captura pieza blanca
+            else
+                comidasB();  // caso excepcional
+            peonR8.muevepieza(posicion_central_click.x, posicion_central_click.y);
+        }
+        else {
+            std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
+                << "o capturar en diagonal adelante (derecha o izquierda)\n";
+            return;
+        }
+
+        // 7) actualizar tablero y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = true;   // ahora juegan las blancas
+        std::cout << "Turno de Blancas\n";
+    }
+
+     
+     // movimiento alfilB1
+     if (posicion_central_click_anterior.x == alfilB1.posicion_pieza.x && posicion_central_click_anterior.y == alfilB1.posicion_pieza.y && turno == true)  // turno de blancas
      {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB7.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB7.posicion_pieza.y);
+         // filtro de clic dentro del tablero
+         if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+             casilla_actual.y < 1 || casilla_actual.y > 8) {
+             return;
+         }
+
+         // 1) cálculo de desplazamiento
+         int dx = static_cast<int>(posicion_central_click.x - alfilB1.posicion_pieza.x);
+         int dy = static_cast<int>(posicion_central_click.y - alfilB1.posicion_pieza.y);
          int movx = std::abs(dx);
          int movy = std::abs(dy);
          std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
+         // 2) índices destino (0..7)
          int ix = casilla_actual.x - 1;
          int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
 
-         // comprobamos primero que destino está dentro del tablero
+         // 3) comprobación de tablero
          if (!casillaValida(ix, iy)) {
              std::cout << "Movimiento inválido: fuera del tablero\n";
              return;
          }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+         // 4) sólo diagonal estricta (cualquier dirección)
+         bool es_diagonal = (movx == movy && movx > 0);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
+         // 5) ejecutar movimiento o captura sin validar ruta
+         if (es_diagonal) {
+             Pieza* destino = control[ix][iy];
+             if (destino == nullptr) {
+                 // casilla vacía
+                 alfilB1.muevepieza(posicion_central_click.x,
+                     posicion_central_click.y);
              }
-         }
-
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB7.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
+             else if (alfilB1.pieza_comible(casilla_actual, control)) {
+                 // captura enemiga
+                 if (destino->get_color() == false)
+                     comidasR();  // comes pieza roja
+                 else
+                     comidasB();  // caso excepcional
+                 alfilB1.muevepieza(posicion_central_click.x,
+                     posicion_central_click.y);
              }
-         }
-
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB7.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB7.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
+             else {
+                 std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
+                 return;
+             }
          }
          else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
+             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
              return;
          }
 
-         // 5) actualizar el tablero y pasar turno
+         // 6) actualizar y cambiar turno
          actualizar_matriz_control();
          movida = true;
-         turno = false;
+         turno = false;  // turno de rojas
          std::cout << "Turno de Rojas\n";
      }
 
-     //movimiento peonB8
-     if (posicion_central_click_anterior.x == peonB8.posicion_pieza.x && posicion_central_click_anterior.y == peonB8.posicion_pieza.y && turno == true)  // peón seleccionado y es turno blanco
+
+     // movimiento alfilB2
+     if (posicion_central_click_anterior.x == alfilB2.posicion_pieza.x && posicion_central_click_anterior.y == alfilB2.posicion_pieza.y && turno == true)  // turno de blancas
      {
-         // 1) desplazamientos con signo
-         int dx = static_cast<int>(posicion_central_click.x - peonB8.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - peonB8.posicion_pieza.y);
+         // filtro de clic dentro del tablero
+         if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
+             casilla_actual.y < 1 || casilla_actual.y > 8) {
+             return;
+         }
+
+         // 1) cálculo de desplazamiento
+         int dx = static_cast<int>(posicion_central_click.x - alfilB2.posicion_pieza.x);
+         int dy = static_cast<int>(posicion_central_click.y - alfilB2.posicion_pieza.y);
          int movx = std::abs(dx);
          int movy = std::abs(dy);
          std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices de la matriz de destino
+         // 2) índices destino (0..7)
          int ix = casilla_actual.x - 1;
          int iy = casilla_actual.y - 1;
-         int srcY = casilla_anterior.y;  // fila 0..7 de origen
 
-         // comprobamos primero que destino está dentro del tablero
+         // 3) comprobación de tablero
          if (!casillaValida(ix, iy)) {
              std::cout << "Movimiento inválido: fuera del tablero\n";
              return;
          }
 
-         // 3a) avance simple: misma columna y un paso hacia delante
-         bool avance_simple = (dx == 0 && dy == 2);
+         // 4) sólo diagonal estricta (cualquier dirección)
+         bool es_diagonal = (movx == movy && movx > 0);
 
-         // 3b) doble avance: misma columna, dos pasos,
-         //    fila inicial (srcY==2), y casillas intermedia y destino válidas y libres
-         bool avance_doble = false;
-         if (movx == 0 && movy == 4 && srcY == 2) {
-             int iy_inter = iy - 1;
-             if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-             {
-                 avance_doble = true;
+         // 5) ejecutar movimiento o captura sin validar ruta
+         if (es_diagonal) {
+             Pieza* destino = control[ix][iy];
+             if (destino == nullptr) {
+                 // casilla vacía
+                 alfilB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
-         }
-
-         // 3c) captura diagonal: un paso en X y un paso en Y, destino válido y pieza enemiga
-         bool captura_diagonal = false;
-         if (movx == 2 && movy == 2) {
-             if (peonB8.pieza_comible(casilla_actual, control)) {
-                 captura_diagonal = true;
+             else if (alfilB2.pieza_comible(casilla_actual, control)) {
+                 // captura enemiga
+                 if (destino->get_color() == false)
+                     comidasR();  // comes pieza roja
+                 else
+                     comidasB();  // caso excepcional
+                 alfilB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
-         }
-
-         // 4) ejecutar la jugada válida
-         if (avance_simple || avance_doble) {
-             peonB8.muevepieza(posicion_central_click.x, posicion_central_click.y);
-         }
-         else if (captura_diagonal) {
-             // registramos la captura según color de la pieza en destino
-             Pieza* target = control[ix][iy];
-             if (target->get_color() == false)
-                 comidasR();
-             else
-                 comidasB();
-             peonB8.muevepieza(posicion_central_click.x,
-                 posicion_central_click.y);
+             else {
+                 std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
+                 return;
+             }
          }
          else {
-             std::cout << "Movimiento inválido: el peón solo puede avanzar 1 o 2 casillas hacia delante\n"
-                 << "o capturar en diagonal\n";
+             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
              return;
          }
 
-         // 5) actualizar el tablero y pasar turno
+         // 6) actualizar y cambiar turno
          actualizar_matriz_control();
          movida = true;
-         turno = false;
+         turno = false;  // turno de rojas
          std::cout << "Turno de Rojas\n";
+     }
+     
+     // movimiento alfilR1 
+     if (posicion_central_click_anterior.x == alfilR1.posicion_pieza.x && posicion_central_click_anterior.y == alfilR1.posicion_pieza.y && turno == false)  // alfil rojo seleccionado y es turno de las rojas
+     {
+         // filtro de clic dentro del tablero
+         if (casilla_actual.x < 1 || casilla_actual.x > 8 ||casilla_actual.y < 1 || casilla_actual.y > 8) {
+             return;
+         }
+
+         // 1) cálculo de desplazamiento
+         int dx = static_cast<int>(posicion_central_click.x - alfilR1.posicion_pieza.x);
+         int dy = static_cast<int>(posicion_central_click.y - alfilR1.posicion_pieza.y);
+         int movx = std::abs(dx);
+         int movy = std::abs(dy);
+         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+
+         // 2) índices destino (0..7)
+         int ix = casilla_actual.x - 1;
+         int iy = casilla_actual.y - 1;
+
+         // 3) comprobación de tablero
+         if (!casillaValida(ix, iy)) {
+             std::cout << "Movimiento inválido: fuera del tablero\n";
+             return;
+         }
+
+         // 4) sólo diagonal estricta (cualquier dirección)
+         bool es_diagonal = (movx == movy && movx > 0);
+
+         // 5) ejecutar movimiento o captura sin validar ruta
+         if (es_diagonal) {
+             Pieza* destino = control[ix][iy];
+             if (destino == nullptr) {
+                 // casilla vacía
+                 alfilR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+             }
+             else if (alfilR1.pieza_comible(casilla_actual, control)) {
+                 // captura enemiga
+                 if (destino->get_color() == true)
+                     comidasB();  // comes pieza blanca
+                 else
+                     comidasR();  // caso excepcional
+                 alfilR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+             }
+             else {
+                 std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
+                 return;
+             }
+         }
+         else {
+             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
+             return;
+         }
+
+         // 6) actualizar y cambiar turno
+         actualizar_matriz_control();
+         movida = true;
+         turno = true;   // ahora juegan las blancas
+         std::cout << "Turno de Blancas\n";
+     }
+
+     // movimiento alfilR1 
+     if (posicion_central_click_anterior.x == alfilR2.posicion_pieza.x && posicion_central_click_anterior.y == alfilR2.posicion_pieza.y && turno == false)  // alfil rojo seleccionado y es turno de las rojas
+     {
+         // filtro de clic dentro del tablero
+         if (casilla_actual.x < 1 || casilla_actual.x > 8 || casilla_actual.y < 1 || casilla_actual.y > 8) {
+             return;
+         }
+
+         // 1) cálculo de desplazamiento
+         int dx = static_cast<int>(posicion_central_click.x - alfilR2.posicion_pieza.x);
+         int dy = static_cast<int>(posicion_central_click.y - alfilR2.posicion_pieza.y);
+         int movx = std::abs(dx);
+         int movy = std::abs(dy);
+         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+
+         // 2) índices destino (0..7)
+         int ix = casilla_actual.x - 1;
+         int iy = casilla_actual.y - 1;
+
+         // 3) comprobación de tablero
+         if (!casillaValida(ix, iy)) {
+             std::cout << "Movimiento inválido: fuera del tablero\n";
+             return;
+         }
+
+         // 4) sólo diagonal estricta (cualquier dirección)
+         bool es_diagonal = (movx == movy && movx > 0);
+
+         // 5) ejecutar movimiento o captura sin validar ruta
+         if (es_diagonal) {
+             Pieza* destino = control[ix][iy];
+             if (destino == nullptr) {
+                 // casilla vacía
+                 alfilR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+             }
+             else if (alfilR2.pieza_comible(casilla_actual, control)) {
+                 // captura enemiga
+                 if (destino->get_color() == true)
+                     comidasB();  // comes pieza blanca
+                 else
+                     comidasR();  // caso excepcional
+                 alfilR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+             }
+             else {
+                 std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
+                 return;
+             }
+         }
+         else {
+             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
+             return;
+         }
+
+         // 6) actualizar y cambiar turno
+         actualizar_matriz_control();
+         movida = true;
+         turno = true;   // ahora juegan las blancas
+         std::cout << "Turno de Blancas\n";
      }
 
     //movimiento caballo blanco1 
