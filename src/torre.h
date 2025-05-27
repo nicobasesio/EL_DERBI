@@ -38,6 +38,7 @@ public:
 	VECTOR2D get_pos() {
 		return posicion_pieza;
 	}
+	bool pieza_comible(VECTOR2D,std::vector<std::vector<Pieza*>>);
 
 
 };

@@ -1,8 +1,4 @@
-#include "freeglut.h"
-#include "ETSIDI.h"
 #include "torre.h"
-#include "mundo.h" 
-#include "pieza.h"
 
 
 void Torre::set_pos_pieza(const VECTOR2D& pos)
@@ -35,4 +31,24 @@ void Torre::muevepieza(double x, double y)
 {
 	posicion_pieza.x = x;
 	posicion_pieza.y = y;
+}
+
+
+bool Torre::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control){
+	int torre_x = casilla_actual.x - 2;
+	int torre_y = casilla_actual.y - 2;
+	for (int dx = 0; dx < 3; ++dx) {  //for para darme las 8 casillas al rededor del rey
+		for (int dy = 0; dy < 3; ++dy) {
+			if (dx == 1 && dy == 1) {
+				continue;
+			}
+			int x = torre_x + dx - 1;
+			int y = torre_y + dy - 1;
+			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
+				if (control[x][y] != nullptr) {
+					return true;
+				}
+			}
+		}
+	}
 }

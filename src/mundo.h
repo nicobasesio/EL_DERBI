@@ -80,8 +80,6 @@ public:
 	int b = 0;      // Se lleva el conteo del numero de piezas blancas comidas
 	int r = 0;      // Se lleva el conteo del numero de piezas negras comidas
 
-	double pos_peonB_comidoX = 6;
-	double pos_peonN_comidoX = 6;
 
 	double pos_comidaB_X = 7.0;
 	double pos_comidaR_X = -7.0;
