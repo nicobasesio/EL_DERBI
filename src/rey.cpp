@@ -27,7 +27,7 @@ void Rey::set_pos(const VECTOR2D& pos)
 		posicion_pieza = pos;
 }
 
-void Rey::mueve(double x, double y)
+void Rey::muevepieza(double x, double y)
 {
 	
 	posicion_pieza.x = x;

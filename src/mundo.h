@@ -8,6 +8,8 @@
 #include <iostream>
 #include "rey.h"
 #include "caballo.h"
+#include "reina.h"
+
 class Mundo
 {
 	Tablero tablero;
@@ -31,6 +33,7 @@ class Mundo
 	Caballo caballoB1, caballoB2;
 	Caballo caballoR1, caballoR2;
 	Rey reyB, reyR;
+	Reina reinaB, reinaR;
 	std::vector<std::vector<Pieza*>> control;
 
 
@@ -79,6 +82,9 @@ public:
 
 	double pos_peonB_comidoX = 6;
 	double pos_peonN_comidoX = 6;
+
+	double pos_comidaB_X = 7.0;
+	double pos_comidaR_X = -7.0;
 
 
 	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
