@@ -33,6 +33,7 @@ void Torre::muevepieza(double x, double y)
 	posicion_pieza.y = y;
 }
 
+
 bool Torre::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control){
 	int torre_x = casilla_actual.x - 2;
 	int torre_y = casilla_actual.y - 2;
