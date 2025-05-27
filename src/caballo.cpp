@@ -88,3 +88,23 @@ std::vector<VECTOR2D> Caballo::get_movimientos_validos(std::vector<std::vector<P
 	return posiciones;
 }
 
+bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>>control)
+{
+	int movimientos[8][2] = {
+		{2,1}, {1,2}, {-1,2}, {-2,1}, {-2,-1}, {-1,-2}, {1,-2}, {2,-1}
+	};
+
+	for (int i = 0; i < 8; ++i)
+	{
+		int x = casilla_actual.x - 1 + movimientos[i][0];
+		int y = casilla_actual.y - 1 + movimientos[i][1];
+
+		if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
+		{
+			if (control[x][y] != nullptr)
+			{
+				return true;
+			}
+		}
+	}
+}
