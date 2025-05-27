@@ -2065,14 +2065,11 @@ void Mundo::mueve()
     if (posicion_central_click_anterior.x == caballoB1.posicion_pieza.x && posicion_central_click_anterior.y == caballoB1.posicion_pieza.y && turno == true)
     {
         int movx = std::abs(caballoB1.posicion_pieza.x - posicion_central_click.x);
-        int movy = std::abs(caballoB1.posicion_pieza.y - posicion_central_click.x);
+        int movy = std::abs(caballoB1.posicion_pieza.y - posicion_central_click.y);
         std::cout << "[DEBUG] movx: " << movx << std::endl;
         std::cout << "[DEBUG] movy: " << movy << std::endl;
 
-        //condicion del movimiento del caballo (movimiento en L)
-        bool movimiento_valido = (movx == 2 && movy == 1) || (movx == 1 && movy == 2);
-
-        if (movimiento_valido)
+        if ((movx == 4 && movy == 2) || (movx == 2 && movy == 4))
         {
             if (caballoB1.pieza_comible(casilla_actual, control) == true)
             {
@@ -2088,6 +2085,7 @@ void Mundo::mueve()
             std::cout << "[DEBUG] Moviendo caballoB1 a: " << posicion_central_click.x << ", " << posicion_central_click.y << std::endl;
 
             caballoB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
             movida = true;
             turno = false;
             std::cout << "Turno de Rojas\n" << std::endl;
@@ -2103,14 +2101,13 @@ void Mundo::mueve()
     if (posicion_central_click_anterior.x == caballoB2.posicion_pieza.x && posicion_central_click_anterior.y == caballoB2.posicion_pieza.y && turno == true)
     {
         int movx = std::abs(caballoB2.posicion_pieza.x - posicion_central_click.x);
-        int movy = std::abs(caballoB2.posicion_pieza.y - posicion_central_click.x);
+        int movy = std::abs(caballoB2.posicion_pieza.y - posicion_central_click.y);
         std::cout << "[DEBUG] movx: " << movx << std::endl;
         std::cout << "[DEBUG] movy: " << movy << std::endl;
 
-        //condicion del movimiento del caballo (movimiento en L)
-        bool movimiento_valido = (movx == 2 && movy == 1) || (movx == 1 && movy == 2);
+       
 
-        if (movimiento_valido)
+        if ((movx == 2 && movy == 4) || (movx == 4 && movy == 2))
         {
             if (caballoB2.pieza_comible(casilla_actual, control) == true)
             {
@@ -2126,6 +2123,7 @@ void Mundo::mueve()
             std::cout << "[DEBUG] Moviendo caballoB2 a: " << posicion_central_click.x << ", " << posicion_central_click.y << std::endl;
 
             caballoB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
             movida = true;
             turno = false;
             std::cout << "Turno de Rojas\n" << std::endl;
