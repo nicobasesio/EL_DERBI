@@ -1955,14 +1955,18 @@ void Mundo::comidasR() { //se añaden las piezas blancas comidas al vector comid
 
     std::cout << "Pieza comida" << std::endl;
 
-    // Añadir la pieza comida al vector
-    comidaR.push_back(control[casilla_actual.x - 1][casilla_actual.y - 1]);
+    // Obtener puntero a la pieza comida
+    Pieza* pieza_comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
 
-    // Mover la pieza a la "zona de piezas comidas"
-    comidaR.back()->muevepieza(pos_comidaR_X, -2);  // Y fijo en -2
-
-    // Desplazar la X para la siguiente pieza
-    pos_comidaR_X += 2.0;
+    // Verificar que no sea nullptr antes de hacer push y moverla
+    if (pieza_comida != nullptr) {
+        comidaR.push_back(pieza_comida);
+        comidaR.back()->muevepieza(pos_comidaB_X, -2); // Mover fuera del tablero
+        pos_comidaR_X += 2.0;
+    }
+    else {
+        std::cerr << "[ERROR] pieza_comida era nullptr" << std::endl;
+    }
 
 }
 
