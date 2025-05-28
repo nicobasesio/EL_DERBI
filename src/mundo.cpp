@@ -1932,69 +1932,64 @@ void Mundo::mueve()
     }
 
      
-     // movimiento alfilB1
-     if (posicion_central_click_anterior.x == alfilB1.posicion_pieza.x && posicion_central_click_anterior.y == alfilB1.posicion_pieza.y && turno == true)  // turno de blancas
-     {
-         // filtro de clic dentro del tablero
-         if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
-             casilla_actual.y < 1 || casilla_actual.y > 8) {
-             return;
-         }
+    if (posicion_central_click_anterior.x == alfilB1.posicion_pieza.x && posicion_central_click_anterior.y == alfilB1.posicion_pieza.y && turno == true)  // turno de blancas
+    {
+        // filtro de clic dentro del tablero
+        if (casilla_actual.x < 1 || casilla_actual.x > 8 ||casilla_actual.y < 1 || casilla_actual.y > 8) {
+            return;
+        }
 
-         // 1) cálculo de desplazamiento
-         int dx = static_cast<int>(posicion_central_click.x - alfilB1.posicion_pieza.x);
-         int dy = static_cast<int>(posicion_central_click.y - alfilB1.posicion_pieza.y);
-         int movx = std::abs(dx);
-         int movy = std::abs(dy);
-         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
+        // 1) cálculo de desplazamiento
+        int dx = static_cast<int>(posicion_central_click.x - alfilB1.posicion_pieza.x);
+        int dy = static_cast<int>(posicion_central_click.y - alfilB1.posicion_pieza.y);
+        int movx = std::abs(dx);
+        int movy = std::abs(dy);
+        std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices destino (0..7)
-         int ix = casilla_actual.x - 1;
-         int iy = casilla_actual.y - 1;
+        // 2) índices destino (0..7)
+        int ix = casilla_actual.x - 1;
+        int iy = casilla_actual.y - 1;
 
-         // 3) comprobación de tablero
-         if (!casillaValida(ix, iy)) {
-             std::cout << "Movimiento inválido: fuera del tablero\n";
-             return;
-         }
+        // 3) comprobación de tablero
+        if (!casillaValida(ix, iy)) {
+            std::cout << "Movimiento inválido: fuera del tablero\n";
+            return;
+        }
 
-         // 4) sólo diagonal estricta (cualquier dirección)
-         bool es_diagonal = (movx == movy && movx > 0);
+        // 4) sólo diagonal estricta (cualquier dirección)
+        bool es_diagonal = (movx == movy && movx > 0);
 
-         // 5) ejecutar movimiento o captura sin validar ruta
-         if (es_diagonal) {
-             Pieza* destino = control[ix][iy];
-             if (destino == nullptr) {
-                 // casilla vacía
-                 alfilB1.muevepieza(posicion_central_click.x,
-                     posicion_central_click.y);
-             }
-             else if (alfilB1.pieza_comible(casilla_actual, control)) {
-                 // captura enemiga
-                 if (destino->get_color() == false)
-                     comidasR();  // comes pieza roja
-                 else
-                     comidasB();  // caso excepcional
-                 alfilB1.muevepieza(posicion_central_click.x,
-                     posicion_central_click.y);
-             }
-             else {
-                 std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
-                 return;
-             }
-         }
-         else {
-             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
-             return;
-         }
+        // 5) ejecutar movimiento o captura sin validar ruta
+        if (es_diagonal) {
+            Pieza* destino = control[ix][iy];
+            if (destino == nullptr) {
+                // casilla vacía
+                alfilB1.muevepieza(posicion_central_click.x,posicion_central_click.y);
+            }
+            else if (alfilB1.pieza_comible(casilla_actual, control)) {
+                // captura enemiga
+                if (destino->get_color() == false)
+                    comidasR();  // comes pieza roja
+                else
+                    comidasB();  // caso excepcional
+                alfilB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no puedes capturar tu propia pieza\n";
+                return;
+            }
+        }
+        else {
+            std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
+            return;
+        }
 
-         // 6) actualizar y cambiar turno
-         actualizar_matriz_control();
-         movida = true;
-         turno = false;  // turno de rojas
-         std::cout << "Turno de Rojas\n";
-     }
-
+        // 6) actualizar y cambiar turno
+        actualizar_matriz_control();
+        movida = true;
+        turno = false;  // turno de rojas
+        std::cout << "Turno de Rojas\n";
+    }
 
      // movimiento alfilB2
      if (posicion_central_click_anterior.x == alfilB2.posicion_pieza.x && posicion_central_click_anterior.y == alfilB2.posicion_pieza.y && turno == true)  // turno de blancas
