@@ -55,10 +55,6 @@ public:
 	void set_casilla_anterior(VECTOR2D& casilla_ant);
 	bool casillaValida(int fila, int columna);
 	void crear_matriz_control();
-	
-	bool caminoLibre(Pieza& pieza, VECTOR2D destino);
-	int coordAMatriz(float coord);
-
 
 
 
