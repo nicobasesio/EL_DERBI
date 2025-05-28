@@ -22,14 +22,14 @@ VECTOR2D Raton::elige_casilla() {
     else { nueva_casilla.x = 0.0; }
 
     // FILAS (y)
-    if (posicion.y > 15.5 && posicion.y < 17.5) { nueva_casilla.y = 8.0; nuevo_centro.y = 16.5; }
-    else if (posicion.y > 13.5 && posicion.y < 15.5) { nueva_casilla.y = 7.0; nuevo_centro.y = 14.5; }
+    if (posicion.y > 15 && posicion.y < 17.5) { nueva_casilla.y = 8.0; nuevo_centro.y = 16.5; }
+    else if (posicion.y > 13 && posicion.y < 15.5) { nueva_casilla.y = 7.0; nuevo_centro.y = 14.5; }
     else if (posicion.y > 11.5 && posicion.y < 13.5) { nueva_casilla.y = 6.0; nuevo_centro.y = 12.5; }
     else if (posicion.y > 9.5 && posicion.y < 11.5) { nueva_casilla.y = 5.0; nuevo_centro.y = 10.5; }
     else if (posicion.y > 7.5 && posicion.y < 9.5) { nueva_casilla.y = 4.0; nuevo_centro.y = 8.5; }
     else if (posicion.y > 5.5 && posicion.y < 7.5) { nueva_casilla.y = 3.0; nuevo_centro.y = 6.5; }
-    else if (posicion.y > 3.5 && posicion.y < 5.5) { nueva_casilla.y = 2.0; nuevo_centro.y = 4.5; }
-    else if (posicion.y > 1.5 && posicion.y < 3.5) { nueva_casilla.y = 1.0; nuevo_centro.y = 2.5; }
+    else if (posicion.y > 4 && posicion.y < 5.5) { nueva_casilla.y = 2.0; nuevo_centro.y = 4.5; }
+    else if (posicion.y > 2 && posicion.y < 4) { nueva_casilla.y = 1.0; nuevo_centro.y = 2.5; }
     else { nueva_casilla.y = 0.0; }
 
     // Si la casilla está fuera del tablero, no hacemos nada
