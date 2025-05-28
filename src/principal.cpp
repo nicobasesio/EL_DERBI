@@ -18,6 +18,8 @@ void OnTimer(int value);
 void OnKeyboardDown(unsigned char key, int x, int y);
 void mouseClick(int button, int state, int x, int y);
 void display();
+bool enMenu = true;
+
 
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
@@ -45,6 +47,8 @@ int main(int argc, char* argv[]) {
 
     // Inicializa mundo
     mundo.inicializa();
+    ETSIDI::playMusica("sonido/musica.mp3", true); // música de fondo del menú
+
     mundo.inicializa_tab();
 
     glutMainLoop();
@@ -54,7 +58,24 @@ void OnDraw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    mundo.dibuja();
+    if (enMenu) {
+        // Dibuja el fondo del menú
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu1.png").id);
+        glDisable(GL_LIGHTING);
+        glBegin(GL_POLYGON);
+        glColor3f(1, 1, 1);
+        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);	// izda abajo
+        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);	// dcha abajo
+        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);	// dcha arriba
+        glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.005);// izda arriba
+        glEnd();
+        glEnable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+    }
+    else {
+        mundo.dibuja();
+    }
 
     glutSwapBuffers();
 }
@@ -77,6 +98,37 @@ void display() {
 
 void mouseClick(int button, int state, int x, int y) {
     static bool pieza_seleccionada = false;
+
+    if (enMenu && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Coordenadas aproximadas del botón START (ajústalas según imagen)
+<<<<<<< Updated upstream
+        
+=======
+
+>>>>>>> Stashed changes
+        float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
+        float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
+
+        std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
+
+        // Área más amplia para detectar clic en el botón START
+        // Ajustado para cubrir más parte visual del botón (basado en la imagen)
+        if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
+
+
+<<<<<<< Updated upstream
+           enMenu = false;
+=======
+            enMenu = false;
+>>>>>>> Stashed changes
+            ETSIDI::stopMusica();
+            ETSIDI::play("sonido/Inicio.mp3");
+            glutPostRedisplay();
+        }
+        return;
+    }
+
+    if (enMenu) return; // Si estamos en el menú, ignorar clics normales
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Transformar coordenadas de pantalla a coordenadas del mundo
