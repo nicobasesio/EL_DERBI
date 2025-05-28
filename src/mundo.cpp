@@ -1181,7 +1181,7 @@ void Mundo::mueve()
     }
 
      //movimiento peonB8
-    if (posicion_central_click_anterior.x == peonB6.posicion_pieza.x && posicion_central_click_anterior.y == peonB8.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
+    if (posicion_central_click_anterior.x == peonB8.posicion_pieza.x && posicion_central_click_anterior.y == peonB8.posicion_pieza.y && turno == true)  // peón blanco seleccionado y es turno de blancas
     {
         // 1) desplazamientos en unidades de casilla
         int dx = static_cast<int>(posicion_central_click.x - peonB8.posicion_pieza.x);
