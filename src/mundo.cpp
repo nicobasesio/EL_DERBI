@@ -2138,6 +2138,83 @@ void Mundo::mueve()
         }
     }
 
+    //movimiento de caballoR1
+    if (posicion_central_click_anterior.x == caballoR1.posicion_pieza.x && posicion_central_click_anterior.y == caballoR1.posicion_pieza.y && turno == false)
+    {
+        int movx = std::abs(caballoR1.posicion_pieza.x - posicion_central_click.x);
+        int movy = std::abs(caballoR1.posicion_pieza.y - posicion_central_click.y);
+        std::cout << "[DEBUG] movx: " << movx << std::endl;
+        std::cout << "[DEBUG] movy: " << movy << std::endl;
+
+        if ((movx == 2 && movy == 4) || (movx == 4 && movy == 2))
+        {
+            if (caballoR1.pieza_comible(casilla_actual, control) == true)
+            {
+                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
+                    control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
+                {
+                    comidasB();
+                }
+                else
+                {
+                    comidasR();
+                }
+            }
+
+            std::cout << "[DEBUG] Moviendo caballoR1 a: " << posicion_central_click.x << ", " << posicion_central_click.y << std::endl;
+
+            caballoR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            movida = true;
+            turno = true;
+            std::cout << "Turno de Blancas\n" << std::endl;
+        }
+        else
+        {
+            std::cout << "\n Movimiento invalido para el caballo\n" << std::endl;
+        }
+    }
+
+    //movimiento de caballoR2
+
+    if (posicion_central_click_anterior.x == caballoR2.posicion_pieza.x &&
+        posicion_central_click_anterior.y == caballoR2.posicion_pieza.y &&
+        turno == false)
+    {
+        int movx = std::abs(caballoR2.posicion_pieza.x - posicion_central_click.x);
+        int movy = std::abs(caballoR2.posicion_pieza.y - posicion_central_click.y);
+        std::cout << "[DEBUG] movx: " << movx << std::endl;
+        std::cout << "[DEBUG] movy: " << movy << std::endl;
+
+        if ((movx == 2 && movy == 4) || (movx == 4 && movy == 2))
+        {
+            if (caballoR2.pieza_comible(casilla_actual, control) == true)
+            {
+                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
+                    control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
+                {
+                    comidasB();
+                }
+                else
+                {
+                    comidasR();
+                }
+            }
+
+            std::cout << "[DEBUG] Moviendo caballoR2 a: " << posicion_central_click.x << ", " << posicion_central_click.y << std::endl;
+
+            caballoR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            movida = true;
+            turno = true;
+            std::cout << "Turno de Blancas\n" << std::endl;
+        }
+        else
+        {
+            std::cout << "\n Movimiento invalido para el caballo\n" << std::endl;
+        }
+    }
+
 
     // Movimiento reinaB
     if (posicion_central_click_anterior.x == reinaB.posicion_pieza.x &&
