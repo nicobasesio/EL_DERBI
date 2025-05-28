@@ -101,7 +101,11 @@ void mouseClick(int button, int state, int x, int y) {
 
     if (enMenu && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Coordenadas aproximadas del botón START (ajústalas según imagen)
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
         float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
         float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
 
@@ -112,7 +116,11 @@ void mouseClick(int button, int state, int x, int y) {
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
 
 
+<<<<<<< Updated upstream
            enMenu = false;
+=======
+            enMenu = false;
+>>>>>>> Stashed changes
             ETSIDI::stopMusica();
             ETSIDI::play("sonido/Inicio.mp3");
             glutPostRedisplay();
