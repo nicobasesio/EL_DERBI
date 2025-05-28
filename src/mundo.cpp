@@ -700,11 +700,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -771,11 +778,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -841,11 +855,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB3.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -911,11 +932,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB4.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -981,11 +1009,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB5.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -1051,11 +1086,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB6.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -1121,11 +1163,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB7.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -1191,11 +1240,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            // registrar la captura
-            if (target->get_color() == false)
-                comidasR();
-            else
-                comidasB();
+            if (target != nullptr) {
+                // registrar la captura
+                if (target->get_color() == false)
+                    comidasR();
+                else
+                    comidasB();
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
             peonB8.muevepieza(posicion_central_click.x, posicion_central_click.y);
         }
         else {
@@ -1267,11 +1323,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1345,11 +1408,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1420,11 +1490,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR3.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1496,11 +1573,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR4.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1572,11 +1656,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR5.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1648,11 +1739,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR6.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1724,11 +1822,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR7.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
@@ -1800,11 +1905,18 @@ void Mundo::mueve()
         }
         else if (captura_diagonal) {
             Pieza* target = control[ix][iy];
-            if (target->get_color() == false)
-                comidasR();  // captura pieza blanca
-            else
-                comidasB();  // caso excepcional
-            peonR8.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            if (target != nullptr) {
+                if (target->get_color() == false)
+                    comidasR();  // captura pieza blanca
+                else
+                    comidasB();  // caso excepcional
+                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+            }
+            else {
+                std::cout << "Movimiento inválido: no hay pieza para capturar\n";
+                return;
+            }
+
         }
         else {
             std::cout << "Movimiento inválido: el peón sólo puede avanzar hacia adelante\n"
