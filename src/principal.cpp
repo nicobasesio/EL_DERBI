@@ -94,10 +94,10 @@ void display() {
     glutSwapBuffers();
 }
 
-
+static bool pieza_seleccionada = false;
 
 void mouseClick(int button, int state, int x, int y) {
-    static bool pieza_seleccionada = false;
+    
 
     if (enMenu && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Coordenadas aproximadas del botón START (ajústalas según imagen)

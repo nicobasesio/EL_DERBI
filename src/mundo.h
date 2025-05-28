@@ -56,12 +56,7 @@ public:
 	bool casillaValida(int fila, int columna);
 	void crear_matriz_control();
 
-
-
-	bool casilla_Jaque(VECTOR2D from, VECTOR2D to, bool colorRey);
 	void actualizar_matriz_control();
-
-
 	void comidasB();
 	void comidasR();
 
