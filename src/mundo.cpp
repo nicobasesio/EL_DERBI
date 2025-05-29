@@ -1404,7 +1404,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR2.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
@@ -1486,7 +1486,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR3.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
@@ -1569,7 +1569,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR4.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
@@ -1652,7 +1652,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR5.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
@@ -1735,7 +1735,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR6.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
@@ -1901,7 +1901,7 @@ void Mundo::mueve()
                     comidasR();  // captura pieza blanca
                 else
                     comidasB();  // caso excepcional
-                peonR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                peonR8.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
                 std::cout << "Movimiento inválido: no hay pieza para capturar\n";
