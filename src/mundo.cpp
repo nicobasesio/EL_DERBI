@@ -2443,7 +2443,7 @@ void Mundo::comidasR() { //se añaden las piezas blancas comidas al vector comid
 void Mundo::actualizar_matriz_control()
 {
     control[casilla_actual.x - 1][casilla_actual.y - 1] = control[casilla_anterior.x - 1][casilla_anterior.y - 1];//actualizan la matriz control en cada movimiento
-    control[casilla_anterior.x - 1][casilla_anterior.y - 1] = {};
+    control[casilla_anterior.x - 1][casilla_anterior.y - 1] = nullptr;
 }
 
 
