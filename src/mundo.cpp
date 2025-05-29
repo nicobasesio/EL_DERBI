@@ -1922,7 +1922,7 @@ void Mundo::mueve()
         std::cout << "Turno de Blancas\n";
     }
 
-     
+     //movimiento alfil b1
     if (posicion_central_click_anterior.x == alfilB1.posicion_pieza.x && posicion_central_click_anterior.y == alfilB1.posicion_pieza.y && turno == true)  // turno de blancas
     {
         // filtro de clic dentro del tablero
@@ -1951,7 +1951,8 @@ void Mundo::mueve()
         bool es_diagonal = (movx == movy && movx > 0);
 
         // 5) ejecutar movimiento o captura sin validar ruta
-        if (es_diagonal) {
+        if (es_diagonal && alfilB1.rutaDiagonalLibre(alfilB1.posicion_pieza.x - 1, alfilB1.posicion_pieza.y - 1, ix, iy, control)) 
+            {
             Pieza* destino = control[ix][iy];
             if (destino == nullptr) {
                 // casilla vacía
@@ -1970,7 +1971,8 @@ void Mundo::mueve()
                 return;
             }
         }
-        else {
+        else 
+        {
             std::cout << "Movimiento inválido: el alfil se mueve solo en diagonal\n";
             return;
         }
@@ -2012,7 +2014,7 @@ void Mundo::mueve()
          bool es_diagonal = (movx == movy && movx > 0);
 
          // 5) ejecutar movimiento o captura sin validar ruta
-         if (es_diagonal) {
+         if  (es_diagonal && alfilB2.rutaDiagonalLibre(alfilB2.posicion_pieza.x - 1, alfilB2.posicion_pieza.y - 1, ix, iy, control)) {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
@@ -2072,7 +2074,7 @@ void Mundo::mueve()
          bool es_diagonal = (movx == movy && movx > 0);
 
          // 5) ejecutar movimiento o captura sin validar ruta
-         if (es_diagonal) {
+         if  (es_diagonal && alfilR1.rutaDiagonalLibre(alfilR1.posicion_pieza.x - 1, alfilR1.posicion_pieza.y - 1, ix, iy, control)) {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
@@ -2103,7 +2105,7 @@ void Mundo::mueve()
          std::cout << "Turno de Blancas\n";
      }
 
-     // movimiento alfilR1 
+     // movimiento alfilR2
      if (posicion_central_click_anterior.x == alfilR2.posicion_pieza.x && posicion_central_click_anterior.y == alfilR2.posicion_pieza.y && turno == false)  // alfil rojo seleccionado y es turno de las rojas
      {
          // filtro de clic dentro del tablero
@@ -2132,7 +2134,7 @@ void Mundo::mueve()
          bool es_diagonal = (movx == movy && movx > 0);
 
          // 5) ejecutar movimiento o captura sin validar ruta
-         if (es_diagonal) {
+         if (es_diagonal && alfilR2.rutaDiagonalLibre(alfilR2.posicion_pieza.x - 1, alfilR2.posicion_pieza.y - 1, ix, iy, control)) {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
