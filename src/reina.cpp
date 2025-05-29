@@ -201,6 +201,28 @@ void Reina::set_color_pieza(bool a)
 	if (a == false)
 		color = false;
 }
+
+bool Reina::caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control) {
+	int dx = destino.x - origen.x;
+	int dy = destino.y - origen.y;
+
+	int paso_x = (dx == 0) ? 0 : (dx > 0 ? 1 : -1);
+	int paso_y = (dy == 0) ? 0 : (dy > 0 ? 1 : -1);
+
+	int x = origen.x + paso_x;
+	int y = origen.y + paso_y;
+
+	while (x != destino.x || y != destino.y) {
+		if (!casillaValida(x, y, control)) return false;
+		if (control[x][y] != nullptr) return false;
+		x += paso_x;
+		y += paso_y;
+	}
+
+	return true;
+}
+
+
 bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control) {
 	int reina_x = casilla_actual.x - 2;
 	int reina_y = casilla_actual.y - 2;

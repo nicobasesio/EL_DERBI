@@ -27,6 +27,8 @@ public:
 	void set_pos_pieza(const VECTOR2D& pos);	// Se introduce la dirección en la que hay una reina
 	void dibuja_pieza();
 	void set_color_pieza(bool a);
+	bool caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control);
+
 	bool get_color() {
 		return color;
 	}
