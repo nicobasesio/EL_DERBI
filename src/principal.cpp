@@ -13,7 +13,7 @@ Tablero tablero;
 VECTOR2D posicion_central_click{};
 VECTOR2D posicion_central_click_anterior{};
 
-//--------------------------------------------------
+
 int tiempo_jugador1; // en segundos
 int tiempo_jugador2;
 bool fin_partida = false;
@@ -25,8 +25,6 @@ EstadoPantalla estado = MENU_START;
 int modoSeleccionado = 0;
 enum Turno { BLANCO, ROJO };
 static bool pieza_seleccionada = false;
-
-//-----------------------------------------------------
 
 
 
@@ -189,7 +187,9 @@ void mouseClick(int button, int state, int x, int y) {
 
 
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Coordenadas aproximadas del botón START 
+        float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
+        float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
+
 
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
             float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
@@ -237,6 +237,47 @@ void mouseClick(int button, int state, int x, int y) {
             }
         }
     }
+
+
+        std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
+        if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
+            estado = MENU_MODOS;
+            ETSIDI::stopMusica();
+            ETSIDI::play("sonido/Inicio.mp3");
+            glutPostRedisplay();
+        }
+        return;
+    }
+
+    if (estado == MENU_MODOS && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
+        float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
+
+        std::cout << "Click en seleccion de modo: (" << x_normal << "," << y_normal << ")\n";
+
+        if (x_normal > -6 && x_normal < 6 && y_normal > 13 && y_normal < 15.5) {
+            modoSeleccionado = 1;
+            estado = JUEGO;
+            mundo.inicializa();
+            return;
+        }
+        if (x_normal > -6 && x_normal < 6 && y_normal > 4 && y_normal < 7) {
+            modoSeleccionado = 2;
+            estado = JUEGO;
+            mundo.inicializa();
+            return;
+        }
+        if (x_normal > -6 && x_normal < 6 && y_normal > 0 && y_normal < 3) {
+            modoSeleccionado = 3;
+            estado = JUEGO;
+            mundo.inicializa();
+            return;
+        }
+
+        return;
+    }
+
+
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Transformar coordenadas de pantalla a coordenadas del mundo
