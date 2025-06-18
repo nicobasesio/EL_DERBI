@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 
     // Registrar callbacks
     glutDisplayFunc(OnDraw);
-    glutTimerFunc(33, OnTimer, 0);
+     glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
     glutMouseFunc(mouseClick);
 
@@ -108,19 +108,48 @@ void OnDraw() {
 
     }
 
+   
     else if (estado == JUEGO) {
         mundo.dibuja();
-        glColor3f(1, 1, 1);
+        float ancho_marcador = 6.0f;
+        float alto_marcador = 2.0f;
+
+        //marcador jugador1
+        glColor3f(0.1f, 0.1f, 0.7f);
+        glBegin(GL_QUADS);
+        glVertex2f(-14, -5);
+        glVertex2f(-14 + ancho_marcador, -5);
+        glVertex2f(-14 + ancho_marcador, -5 + alto_marcador);
+        glVertex2f(-14, -5 + alto_marcador);
+        glEnd();
+
+        //marcador jugador2
+        glColor3f(0.7f, 0.1f, 0.1f);
+        glBegin(GL_QUADS);
+        glVertex2f(8, -5);
+        glVertex2f(8 + ancho_marcador, -5);
+        glVertex2f(8 + ancho_marcador, -5 + alto_marcador);
+        glVertex2f(8, -5 + alto_marcador);
+        glEnd();
+
         char buffer1[20], buffer2[20];
-        sprintf(buffer1, "Jugador 1: %02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
-        sprintf(buffer2, "Jugador 2: %02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
-        ETSIDI::setTextColor(1, 1, 1);
-        ETSIDI::printxy(buffer1, -14, 19);
-        ETSIDI::printxy(buffer2, 5, 19);
+        sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
+        sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
+
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
+        ETSIDI::setTextColor(1, 1, 1); 
+        ETSIDI::printxy(buffer1, -13.0f, -3.8f);
+        ETSIDI::printxy(buffer2, 9.0f, -3.8f);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_LIGHTING);
+
+
+
 
     }
     else if (estado == MENU_FINAL) {
-        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/real_madrid_gana.png" : "imagenes/atletico_gana.png";
+        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madrid_gana.png" : "imagenes/atletico_gana.png";
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_final.c_str()).id);
         glDisable(GL_LIGHTING);
@@ -142,9 +171,10 @@ void OnDraw() {
     glutSwapBuffers();
 
 
+   
 }
 
-void OnTimer(int value) {
+   void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {
@@ -168,6 +198,7 @@ void OnTimer(int value) {
 }
 
 
+
 void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
     if (estado == MENU_FINAL) {
         estado = MENU_START;
@@ -188,84 +219,45 @@ void mouseClick(int button, int state, int x, int y) {
     float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
 
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-      
+        float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
+        float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
 
-
-        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
-            if (estado == MENU_START) {
-                std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
-                if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
-                    estado = MENU_MODOS;
-                    ETSIDI::stopMusica();
-                    ETSIDI::play("sonido/Inicio.mp3");
-                    glutPostRedisplay();
-                }
-                return;
-            }
-
-            if (estado == MENU_MODOS) {
-                std::cout << "Click en selección de modo: (" << x_normal << "," << y_normal << ")\n";
-
-                // Detectar Modo 1
-                if (x_normal > -6 && x_normal < 6 && y_normal > 8 && y_normal < 11) {
-                    modoSeleccionado = 1;
-                    estado = JUEGO;
-                    mundo.inicializa();  // o mundo.inicializaModo1();
-                    return;
-                }
-
-                // Detectar Modo 2
-                if (x_normal > -6 && x_normal < 6 && y_normal > 4 && y_normal < 7) {
-                    modoSeleccionado = 2;
-                    estado = JUEGO;
-                    mundo.inicializa();  // o mundo.inicializaModo2();
-                    return;
-                }
-
-                // Detectar Modo 3
-                if (x_normal > -6 && x_normal < 6 && y_normal > 0 && y_normal < 3) {
-                    modoSeleccionado = 3;
-                    estado = JUEGO;
-                    mundo.inicializa();  // o mundo.inicializaModo3();
-                    return;
-                }
-
-                return;
-            }
+        std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
+        if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
+            estado = MENU_MODOS;
+            ETSIDI::stopMusica();
+            ETSIDI::play("sonido/Inicio.mp3");
+            glutPostRedisplay();
         }
+        return;
     }
-
-
-    std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
-    if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
-        estado = MENU_MODOS;
-        ETSIDI::stopMusica();
-        ETSIDI::play("sonido/Inicio.mp3");
-        glutPostRedisplay();
-    }
-    return;
-
 
     if (estado == MENU_MODOS && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
        
 
         std::cout << "Click en seleccion de modo: (" << x_normal << "," << y_normal << ")\n";
 
-        if (x_normal > -6 && x_normal < 6 && y_normal > 13 && y_normal < 15.5) {
+        //modo1
+        if (x_normal > -8 && x_normal < 8 && y_normal > 13 && y_normal < 15.5) {
             modoSeleccionado = 1;
+            tiempo_jugador1 = tiempo_jugador2 = 60;
             estado = JUEGO;
             mundo.inicializa();
             return;
         }
-        if (x_normal > -6 && x_normal < 6 && y_normal > 4 && y_normal < 7) {
+        //modo2
+        if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11) {
             modoSeleccionado = 2;
+            tiempo_jugador1 = tiempo_jugador2 = 180;
             estado = JUEGO;
             mundo.inicializa();
             return;
         }
-        if (x_normal > -6 && x_normal < 6 && y_normal > 0 && y_normal < 3) {
+
+        //modo3
+        if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5) {
             modoSeleccionado = 3;
+            tiempo_jugador1 = tiempo_jugador2 = 300;
             estado = JUEGO;
             mundo.inicializa();
             return;
