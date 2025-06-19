@@ -148,8 +148,9 @@ void OnDraw() {
 
 
     }
+
     else if (estado == MENU_FINAL) {
-        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madrid_gana.png" : "imagenes/atletico_gana.png";
+        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madridgana.png" : "imagenes/atleticogana.png";
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_final.c_str()).id);
         glDisable(GL_LIGHTING);
@@ -167,7 +168,7 @@ void OnDraw() {
         ETSIDI::printxy(jugador_que_pierde == 1 ? "\u00a1El tiempo del Jugador 1 se ha agotado!" : "\u00a1El tiempo del Jugador 2 se ha agotado!", -10, 17);
         ETSIDI::printxy("Pulsa cualquier tecla para volver al menu", -10, 1);
     }
-
+    
     glutSwapBuffers();
 
 
