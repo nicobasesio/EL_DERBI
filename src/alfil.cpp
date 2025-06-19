@@ -95,19 +95,32 @@ std::vector<VECTOR2D> Alfil::get_movimientos_validos(std::vector<std::vector<Pie
 	}
 	return posiciones;
 }
+
+
 //para que no pueda saltar piezas
 bool Alfil::rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<std::vector<Pieza*>>& control) {
 	int dx = (x2 > x1) ? 1 : -1;
 	int dy = (y2 > y1) ? 1 : -1;
+
 	x1 += dx;
 	y1 += dy;
 
 	while (x1 != x2 && y1 != y2) {
-		if (control[x1][y1] != nullptr) {
-			return false;  // Hay una pieza bloqueando el camino
+		std::cout << "[DEBUG] Evaluando (" << x1 << "," << y1 << ")...\n";
+
+		if (x1 < 0 || x1 >= 8 || y1 < 0 || y1 >= 8) {
+			std::cout << "[ERROR] Coordenada fuera de tablero\n";
+			return false;
 		}
+
+		if (control[x1][y1] != nullptr) {
+			std::cout << "[BLOQUEADO] Hay una pieza en (" << x1 << "," << y1 << ")\n";
+			return false;
+		}
+
 		x1 += dx;
 		y1 += dy;
 	}
+
 	return true;
 }

@@ -1,6 +1,7 @@
 ﻿#include "mundo.h"
 #include "pieza.h"
 #include "freeglut.h"
+#include <cmath> 
 
 
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
@@ -822,8 +823,13 @@ void Mundo::mueve()
         // 4) sólo diagonal estricta (cualquier dirección)
         bool es_diagonal = (movx == movy && movx > 0);
 
+        int origen_x = static_cast<int>(round(alfilB1.posicion_pieza.x)) - 1;
+        int origen_y = static_cast<int>(round(alfilB1.posicion_pieza.y)) - 1;
+
+
+
         // 5) ejecutar movimiento o captura sin validar ruta
-        if (es_diagonal && alfilB1.rutaDiagonalLibre(alfilB1.posicion_pieza.x - 1, alfilB1.posicion_pieza.y - 1, ix, iy, control)) 
+        if (es_diagonal && alfilB1.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
             {
             Pieza* destino = control[ix][iy];
             if (destino == nullptr) {
@@ -885,8 +891,14 @@ void Mundo::mueve()
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
+         int origen_x = static_cast<int>(round(alfilB2.posicion_pieza.x)) - 1;
+         int origen_y = static_cast<int>(round(alfilB2.posicion_pieza.y)) - 1;
+
+
+
          // 5) ejecutar movimiento o captura sin validar ruta
-         if  (es_diagonal && alfilB2.rutaDiagonalLibre(alfilB2.posicion_pieza.x - 1, alfilB2.posicion_pieza.y - 1, ix, iy, control)) {
+         if (es_diagonal && alfilB2.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
+         {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
@@ -945,8 +957,14 @@ void Mundo::mueve()
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
+         int origen_x = static_cast<int>(round(alfilR1.posicion_pieza.x)) - 1;
+         int origen_y = static_cast<int>(round(alfilR1.posicion_pieza.y)) - 1;
+
+
+
          // 5) ejecutar movimiento o captura sin validar ruta
-         if  (es_diagonal && alfilR1.rutaDiagonalLibre(alfilR1.posicion_pieza.x - 1, alfilR1.posicion_pieza.y - 1, ix, iy, control)) {
+         if (es_diagonal && alfilR1.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
+         {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
@@ -1004,9 +1022,14 @@ void Mundo::mueve()
 
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
+         int origen_x = static_cast<int>(round(alfilR2.posicion_pieza.x)) - 1;
+         int origen_y = static_cast<int>(round(alfilR2.posicion_pieza.y)) - 1;
+
+
 
          // 5) ejecutar movimiento o captura sin validar ruta
-         if (es_diagonal && alfilR2.rutaDiagonalLibre(alfilR2.posicion_pieza.x - 1, alfilR2.posicion_pieza.y - 1, ix, iy, control)) {
+         if (es_diagonal && alfilR2.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
+         {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
                  // casilla vacía
