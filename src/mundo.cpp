@@ -823,8 +823,8 @@ void Mundo::mueve()
         // 4) sólo diagonal estricta (cualquier dirección)
         bool es_diagonal = (movx == movy && movx > 0);
 
-        int origen_x = static_cast<int>(round(alfilB1.posicion_pieza.x)) - 1;
-        int origen_y = static_cast<int>(round(alfilB1.posicion_pieza.y)) - 1;
+        int origen_x = static_cast<int>((alfilB1.posicion_pieza.x + 8.0) / 2.0);
+        int origen_y = static_cast<int>((alfilB1.posicion_pieza.y - 1.0) / 2.0);
 
 
 
@@ -891,8 +891,9 @@ void Mundo::mueve()
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
-         int origen_x = static_cast<int>(round(alfilB2.posicion_pieza.x)) - 1;
-         int origen_y = static_cast<int>(round(alfilB2.posicion_pieza.y)) - 1;
+         int origen_x = static_cast<int>((alfilB2.posicion_pieza.x + 8.0) / 2.0);
+         int origen_y = static_cast<int>((alfilB2.posicion_pieza.y - 1.0) / 2.0);
+
 
 
 
@@ -957,8 +958,9 @@ void Mundo::mueve()
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
-         int origen_x = static_cast<int>(round(alfilR1.posicion_pieza.x)) - 1;
-         int origen_y = static_cast<int>(round(alfilR1.posicion_pieza.y)) - 1;
+         int origen_x = static_cast<int>((alfilR1.posicion_pieza.x + 8.0) / 2.0);
+         int origen_y = static_cast<int>((alfilR1.posicion_pieza.y - 1.0) / 2.0);
+
 
 
 
@@ -1022,8 +1024,8 @@ void Mundo::mueve()
 
          // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
-         int origen_x = static_cast<int>(round(alfilR2.posicion_pieza.x)) - 1;
-         int origen_y = static_cast<int>(round(alfilR2.posicion_pieza.y)) - 1;
+         int origen_x = static_cast<int>((alfilR2.posicion_pieza.x + 8.0) / 2.0);
+         int origen_y = static_cast<int>((alfilR2.posicion_pieza.y - 1.0) / 2.0);
 
 
 
