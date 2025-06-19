@@ -1241,7 +1241,7 @@ void Mundo::mueve()
 
         bool movimiento_valido = (dx == 0 || dy == 0 || abs_dx == abs_dy);
 
-        if (movimiento_valido && reinaB.caminoLibre(reinaB.get_pos(), posicion_central_click, control))
+        if (movimiento_valido && reinaR.caminoLibre(reinaR.get_pos(), posicion_central_click, control))
         {
                 if (reinaR.pieza_comible(casilla_actual, control))
                 {
