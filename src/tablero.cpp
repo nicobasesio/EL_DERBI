@@ -31,7 +31,7 @@ void Tablero::dibuja_tablero(int c, int f)
 
 	//Llamamos todas las funciones en dibuja tablero
 	
-
+	dibuja_temporizador();
 	
 
 }
@@ -126,4 +126,19 @@ void Tablero::dibuja_casilla_anterior_tras_movimiento(VECTOR2D posicion_central_
 	glVertex3f(static_cast<float>(posicion_central_click_anterior.x + 1), static_cast<float>(posicion_central_click_anterior.y + 1), 0.0f);//arriba der
 	glVertex3f(static_cast<float>(posicion_central_click_anterior.x + 1), static_cast<float>(posicion_central_click_anterior.y - 1), 0.0f);//abajo der
 	glEnd();
+}
+void Tablero::dibuja_temporizador() {
+	// Temporizador superior (jugador rojo)
+	glPushMatrix();
+	temporizador.setPos(-14.6f, 15.5f);  // más arriba y fuera del tablero
+	glTranslated(0, 0, 0.001);
+	temporizador.draw();
+	glPopMatrix();
+
+	// Temporizador inferior (jugador blanco)
+	glPushMatrix();
+	temporizador2.setPos(-14.6f, -1.5f);  // más abajo y fuera del tablero
+	glTranslated(0, 0, 0.001);
+	temporizador2.draw();
+	glPopMatrix();
 }
