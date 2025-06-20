@@ -264,40 +264,56 @@ bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o
 void Mundo::mueve()
 
 {
-    //movimiento reyB
-    if (posicion_central_click_anterior.x == reyB.posicion_pieza.x && posicion_central_click_anterior.y == reyB.posicion_pieza.y && turno==true) //si seleccionas el rey blanco y es su turno, entonces:
-    {
+    auto capturables = piezas_con_captura();
 
-        int movx = std::abs(reyB.posicion_pieza.x - posicion_central_click.x); // distancia entre la posicion del rey y la del click del movimiento
-        int movy = std::abs(reyB.posicion_pieza.y - posicion_central_click.y);
-        std::cout << "[DEBUG] movx: " << movx << std::endl;
-        std::cout << "[DEBUG] movy: " << movy << std::endl;
+    if (!capturables.empty()) {
+        if (capturables.size() == 1) {
+            Pieza* pieza = capturables[0].first;
+            VECTOR2D origen = capturables[0].second;
 
-
-        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) // si el movimiento es de una casilla
-        {
-            if (reyB.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
-                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
-                {
-
-                    comidasR();
-                }
-                else
-                {
-
-                    comidasB();
-                }
-
-
+            std::cout << "[AUTO] Solo puedes capturar. Se forzará captura con pieza en ("
+                << origen.x << "," << origen.y << ")\n";
+            std::cout << "[AUTO] Solo puedes capturar. Se forzará captura con pieza en (" << origen.x << "," << origen.y << ")\n";
+            forzar_captura(pieza, origen);
+            return;  // termina el turno
+        }
+        else {
+            // Si Hay más de una posible captura → bloquear
+            int i_dest = casilla_actual.x - 1;
+            int j_dest = casilla_actual.y - 1;
+            Pieza* destino = control[i_dest][j_dest];
+            if (destino == nullptr || destino->get_color() == turno) {
+                std::cout << "[REGLA] Tienes varias capturas posibles. Debes mover una pieza que capture.\n";
+                return;
             }
-            std::cout << "[DEBUG] Moviendo reyB a: " << std::endl;
+        }
+    }
+
+
+    // reyB
+    if (posicion_central_click_anterior.x == reyB.posicion_pieza.x &&
+        posicion_central_click_anterior.y == reyB.posicion_pieza.y &&
+        turno == true)
+    {
+        int movx = std::abs(reyB.posicion_pieza.x - posicion_central_click.x);
+        int movy = std::abs(reyB.posicion_pieza.y - posicion_central_click.y);
+
+        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0))
+        {
+            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+            if (comida != nullptr) {
+                if (comida->get_color() == true)
+                    comidasB();
+                else
+                    comidasR();
+            }
+
             reyB.muevepieza(posicion_central_click.x, posicion_central_click.y);
             actualizar_matriz_control();
             movida = true;
             turno = false;
-            std::cout << "Turno de Rojas\n" << std::endl;
+            std::cout << "Turno de Rojas\n";
         }
-
     }
 
         
@@ -307,39 +323,31 @@ void Mundo::mueve()
      
 
     //movimiento reyR
-    if (posicion_central_click_anterior.x == reyR.posicion_pieza.x && posicion_central_click_anterior.y == reyR.posicion_pieza.y && turno == false) //si seleccionas el rey blanco y es su turno, entonces:
+    if (posicion_central_click_anterior.x == reyR.posicion_pieza.x &&
+        posicion_central_click_anterior.y == reyR.posicion_pieza.y &&
+        turno == false)
     {
-
-        int movx = std::abs(reyR.posicion_pieza.x - posicion_central_click.x); // distancia entre la posicion del rey y la del click del movimiento
+        int movx = std::abs(reyR.posicion_pieza.x - posicion_central_click.x);
         int movy = std::abs(reyR.posicion_pieza.y - posicion_central_click.y);
 
-
-        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) // si el movimiento es de una casilla
-        { 
-            if (reyR.pieza_comible(casilla_actual, control) == true) { // si se va a comer una pieza roja
-                if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr && control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
-                {
-
-                    comidasR();
-                }
-                else
-                {
-
+        if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0))
+        {
+            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+            if (comida != nullptr) {
+                if (comida->get_color() == true)
                     comidasB();
-                }
-
-
+                else
+                    comidasR();
             }
 
-            std::cout << "[DEBUG] Moviendo reyR a: " << std::endl;
             reyR.muevepieza(posicion_central_click.x, posicion_central_click.y);
             actualizar_matriz_control();
             movida = true;
             turno = true;
-            std::cout << "Turno de negras\n" << std::endl;
+            std::cout << "Turno de Blancas\n";
         }
-
     }
+
 
     
 
@@ -1271,13 +1279,11 @@ void Mundo::mueve()
 void Mundo::comidasB() {
     std::cout << "Pieza comida" << std::endl;
 
-    // Obtener puntero a la pieza comida
     Pieza* pieza_comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
 
-    // Verificar que no sea nullptr antes de hacer push y moverla
     if (pieza_comida != nullptr) {
         comidaB.push_back(pieza_comida);
-        comidaB.back()->muevepieza(pos_comidaB_X, -2); // Mover fuera del tablero
+        comidaB.back()->muevepieza(pos_comidaB_X, -2);
         pos_comidaB_X -= 2.0;
     }
     else {
@@ -1286,24 +1292,23 @@ void Mundo::comidasB() {
 }
 
 
-void Mundo::comidasR() { //se añaden las piezas blancas comidas al vector comidaB y se ejecuta el movimiento de la pieza comida a la posicion deseada
 
+void Mundo::comidasR() {
     std::cout << "Pieza comida" << std::endl;
 
-    // Obtener puntero a la pieza comida
     Pieza* pieza_comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
 
-    // Verificar que no sea nullptr antes de hacer push y moverla
     if (pieza_comida != nullptr) {
         comidaR.push_back(pieza_comida);
-        comidaR.back()->muevepieza(pos_comidaB_X, -2); // Mover fuera del tablero
+        comidaR.back()->muevepieza(pos_comidaR_X, -2);  // ✅ Corregido aquí
         pos_comidaR_X += 2.0;
     }
     else {
         std::cerr << "[ERROR] pieza_comida era nullptr" << std::endl;
     }
-
 }
+
+
 
 
 
@@ -1312,6 +1317,101 @@ void Mundo::actualizar_matriz_control()
     control[casilla_actual.x - 1][casilla_actual.y - 1] = control[casilla_anterior.x - 1][casilla_anterior.y - 1];//actualizan la matriz control en cada movimiento
     control[casilla_anterior.x - 1][casilla_anterior.y - 1] = nullptr;
 }
+
+
+std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() // una funcion que devuelve dos valores: un puntero a una pieza comible y el un Vector2D que representa la casilla donde esta la pieza
+{ 
+    std::vector<std::pair<Pieza*, VECTOR2D>> lista;
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Pieza* p = control[i][j];
+            if (p != nullptr && p->get_color() == turno) {
+                VECTOR2D pos = { static_cast<float>(i + 1), static_cast<float>(j + 1) };
+                if (p->puede_comer_enemigo(pos, control)) {
+                    std::cout << "[INFO] Pieza en (" << pos.x << "," << pos.y << ") puede capturar\n";
+                    lista.emplace_back(p, pos);
+                }
+            }
+        }
+    }
+    return lista;
+    
+}
+
+VECTOR2D Mundo::buscar_casilla_comible(Pieza* pieza, VECTOR2D origen)
+{
+    int i = origen.x - 1;
+    int j = origen.y - 1;
+
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
+            int ni = i + dx;
+            int nj = j + dy;
+
+            if (casillaValida(ni, nj)) {
+                Pieza* objetivo = control[ni][nj];
+                if (objetivo != nullptr && objetivo->get_color() != pieza->get_color()) {
+                    VECTOR2D destino = { static_cast<float>(ni + 1), static_cast<float>(nj + 1) };
+                    return destino;
+                }
+            }
+        }
+    }
+
+    return origen;  // fallback en caso de no encontrar nada
+}
+
+void Mundo::forzar_captura(Pieza* pieza, VECTOR2D origen) {
+    VECTOR2D destino = buscar_casilla_comible(pieza, origen);
+    posicion_central_click_anterior = origen;
+    posicion_central_click = destino;
+    casilla_anterior = origen;
+    casilla_actual = destino;
+
+    std::cout << "[DEBUG] Captura forzada desde (" << origen.x << ", " << origen.y << ") a ("
+        << destino.x << ", " << destino.y << ")\n";
+    std::cout << "[DEBUG] destino elegido para captura: " << destino.x << "," << destino.y << "\n";
+
+    // Guardamos puntero a la pieza comestible (antes de modificar matriz)
+    Pieza* comida = control[static_cast<int>(destino.x) - 1][static_cast<int>(destino.y) - 1];
+
+    // 1️⃣ Capturamos primero usando ese puntero
+    if (comida != nullptr) {
+        if (comida->get_color())
+            comidasB();  // blanca capturada
+        else
+            comidasR();  // roja capturada
+    }
+    else {
+        std::cout << "[ERROR] pieza_comida era nullptr antes de mover\n";
+    }
+
+    // 2️⃣ Ahora movemos la pieza captora
+    if (pieza->es_rey()) {
+        if (pieza->get_color() == false) {
+            std::cout << "[DEBUG] Es rey rojo → moviendo reyR\n";
+            reyR.muevepieza(destino.x, destino.y);
+        }
+        else {
+            std::cout << "[DEBUG] Es rey blanco → moviendo reyB\n";
+            reyB.muevepieza(destino.x, destino.y);
+        }
+    }
+    else {
+        std::cout << "[DEBUG] Moviendo otra pieza\n";
+        pieza->muevepieza(destino.x, destino.y);
+    }
+
+    // 3️⃣ Actualizamos matriz y cambiamos turno
+    actualizar_matriz_control();
+    movida = true;
+    turno = !turno;
+}
+
+
+
 
 
 
