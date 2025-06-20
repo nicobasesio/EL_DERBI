@@ -73,6 +73,8 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+
+
 void OnDraw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -92,7 +94,7 @@ void OnDraw() {
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
     }
-    else if (estado == MENU_MODOS) {
+    if (estado == MENU_MODOS) {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu2.png").id);
         glDisable(GL_LIGHTING);
@@ -109,7 +111,7 @@ void OnDraw() {
     }
 
    
-    else if (estado == JUEGO) {
+   if (estado == JUEGO) {
         mundo.dibuja();
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
@@ -149,8 +151,8 @@ void OnDraw() {
 
     }
 
-    else if (estado == MENU_FINAL) {
-        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madridgana.png" : "imagenes/atleticogana.png";
+    if (estado == MENU_FINAL) {
+        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/atleticogana.png" :"imagenes/madridgana.png";
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_final.c_str()).id);
         glDisable(GL_LIGHTING);
@@ -175,7 +177,7 @@ void OnDraw() {
    
 }
 
-   void OnTimer(int value) {
+void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {
@@ -183,13 +185,48 @@ void OnDraw() {
                 tiempo_jugador1--;
             else
                 tiempo_jugador2--;
+
             ultimo_tiempo_actualizado = tiempo_actual;
+
+            // Comprobación por tiempo agotado
             if (tiempo_jugador1 <= 0 || tiempo_jugador2 <= 0) {
                 fin_partida = true;
-                jugador_que_pierde = tiempo_jugador1 <= 0 ? 1 : 2;
+                jugador_que_pierde = (tiempo_jugador1 <= 0) ? 1 : 2;
                 estado = MENU_FINAL;
                 ETSIDI::stopMusica();
                 ETSIDI::play("sonido/final.mp3");
+            }
+
+            // Si no se ha terminado por tiempo, comprobamos fichas
+            if (!fin_partida) {
+                int fichas_blancas = 0, fichas_rojas = 0;
+
+                for (int i = 0; i < 8; ++i) {
+                    for (int j = 0; j < 8; ++j) {
+                        if (mundo.getControl()[i][j] != nullptr)
+                        {
+                            if (mundo.getControl()[i][j]->get_color()) // blanco
+                                fichas_blancas++;
+                            else
+                                fichas_rojas++;
+                        }
+                    }
+                }
+
+                if (fichas_blancas == 0) {
+                    jugador_que_pierde = 1;
+                    fin_partida = true;
+                    estado = MENU_FINAL;
+                    ETSIDI::stopMusica();
+                    ETSIDI::play("sonido/final.mp3");
+                }
+                else if (fichas_rojas == 0) {
+                    jugador_que_pierde = 2;
+                    fin_partida = true;
+                    estado = MENU_FINAL;
+                    ETSIDI::stopMusica();
+                    ETSIDI::play("sonido/final.mp3");
+                }
             }
         }
     }
@@ -268,7 +305,7 @@ void mouseClick(int button, int state, int x, int y) {
     }
 
 
-    {
+    
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
             // Transformar coordenadas de pantalla a coordenadas del mundo
             if ((x >= 15 && x <= 400) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
@@ -352,4 +389,4 @@ void mouseClick(int button, int state, int x, int y) {
         }
 
     }
-}
+
