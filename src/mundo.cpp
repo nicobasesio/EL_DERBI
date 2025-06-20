@@ -667,7 +667,11 @@ void Mundo::mueve()
             }
 
             // 4a) avance simple
-            bool avance_simple = (dx == 0 && dy == 2);
+            bool avance_simple = false;
+            if (dx == 0 && dy == 2 && control[ix][iy] == nullptr) {
+                avance_simple = true;
+            }
+
 
             // 4b) doble avance
             bool avance_doble = false;
@@ -743,7 +747,11 @@ void Mundo::mueve()
             }
 
             // 4a) avance simple hacia abajo
-            bool avance_simple = (dx == 0 && dy == -2);
+            bool avance_simple = false;
+            if (dx == 0 && dy == -2 && control[ix][iy] == nullptr) {
+                avance_simple = true;
+            }
+
 
             // 4b) doble avance desde fila 7
             bool avance_doble = false;
