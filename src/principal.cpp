@@ -214,14 +214,14 @@ void OnTimer(int value) {
                 }
 
                 if (fichas_blancas == 0) {
-                    jugador_que_pierde = 1;
+                    jugador_que_pierde = 2;
                     fin_partida = true;
                     estado = MENU_FINAL;
                     ETSIDI::stopMusica();
                     ETSIDI::play("sonido/final.mp3");
                 }
                 else if (fichas_rojas == 0) {
-                    jugador_que_pierde = 2;
+                    jugador_que_pierde = 1;
                     fin_partida = true;
                     estado = MENU_FINAL;
                     ETSIDI::stopMusica();
