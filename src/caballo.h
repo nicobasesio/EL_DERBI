@@ -47,5 +47,8 @@ public:
 	{
 		return haComidoPieza;
 	}
+	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
+	inline bool es_caballo() const override { return true; }
+
 };
 

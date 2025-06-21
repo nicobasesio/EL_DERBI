@@ -124,3 +124,28 @@ bool Alfil::rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<
 
 	return true;
 }
+
+bool Alfil::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
+	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+
+	// Cuatro diagonales
+	int dx[] = { 1, 1, -1, -1 };
+	int dy[] = { 1, -1, 1, -1 };
+
+	for (int dir = 0; dir < 4; ++dir) {
+		int nx = x + dx[dir];
+		int ny = y + dy[dir];
+		while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+			Pieza* objetivo = control[nx][ny];
+			if (objetivo != nullptr) {
+				if (objetivo->get_color() != this->color) return true;
+				else break; // bloqueado por pieza aliada
+			}
+			nx += dx[dir];
+			ny += dy[dir];
+		}
+	}
+
+	return false;
+}

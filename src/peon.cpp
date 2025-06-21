@@ -97,3 +97,24 @@ std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Piez
 	}
 	return posiciones;
 }
+
+bool Peon::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
+	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+
+	int dx[] = { -1, 1 };
+	int dy = (color ? 1 : -1);  // blanco sube, rojo baja
+
+	for (int i = 0; i < 2; ++i) {
+		int nx = x + dx[i];
+		int ny = y + dy;
+
+		if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+			Pieza* objetivo = control[nx][ny];
+			if (objetivo != nullptr && objetivo->get_color() != color) {
+				return true;
+			}
+		}
+	}
+	return false;
+}

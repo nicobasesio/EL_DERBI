@@ -36,8 +36,8 @@ class Mundo
 	Reina reinaB, reinaR;
 	std::vector<std::vector<Pieza*>> control;
 
-
-
+	
+	
 
 
 public:
@@ -59,6 +59,7 @@ public:
 	void actualizar_matriz_control();
 	void comidasB();
 	void comidasR();
+
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
 	int columnas;
@@ -82,6 +83,22 @@ public:
 
 	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
 	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
+	
+	std::vector<VECTOR2D> posiciones_comidas_rojas = {
+		{7.0, -2.0}, {6.0, -2.0}, {5.0, -2.0}, {4.0, -2.0}, {3.0, -2.0}, {2.0, -2.0}, {1.0, -2.0}, {0.0, -2.0}
+	};
+
+	std::vector<VECTOR2D> posiciones_comidas_blancas = {
+		{-7.0, 17.0}, {-6.0, 17.0}, {-5.0, 17.0}, {-4.0, 17.0}, {-3.0, 17.0}, {-2.0, 17.0}, {-1.0, 17.0}, {0.0, 17.0}
+	};
+	std::vector<std::pair<Pieza*, VECTOR2D>> piezas_con_captura();
+	std::vector<std::pair<VECTOR2D, VECTOR2D>> capturas_posibles;
+	std::vector<VECTOR2D> obtener_destinos_comibles(Pieza* pieza);
+
+	std::vector<VECTOR2D> destinos_validos;
+	
+
+	VECTOR2D buscar_casilla_comible(Pieza* pieza, VECTOR2D origen);
 };
 
 

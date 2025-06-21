@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 
     // Registrar callbacks
     glutDisplayFunc(OnDraw);
-     glutTimerFunc(33, OnTimer, 0);
+    glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
     glutMouseFunc(mouseClick);
 
@@ -110,8 +110,8 @@ void OnDraw() {
 
     }
 
-   
-   if (estado == JUEGO) {
+
+    if (estado == JUEGO) {
         mundo.dibuja();
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
@@ -140,7 +140,7 @@ void OnDraw() {
 
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
-        ETSIDI::setTextColor(1, 1, 1); 
+        ETSIDI::setTextColor(1, 1, 1);
         ETSIDI::printxy(buffer1, -13.0f, -3.8f);
         ETSIDI::printxy(buffer2, 9.0f, -3.8f);
         glDisable(GL_TEXTURE_2D);
@@ -152,7 +152,7 @@ void OnDraw() {
     }
 
     if (estado == MENU_FINAL) {
-        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/atleticogana.png" :"imagenes/madridgana.png";
+        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/atleticogana.png" : "imagenes/madridgana.png";
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_final.c_str()).id);
         glDisable(GL_LIGHTING);
@@ -170,11 +170,11 @@ void OnDraw() {
         ETSIDI::printxy(jugador_que_pierde == 1 ? "\u00a1El tiempo del Jugador 1 se ha agotado!" : "\u00a1El tiempo del Jugador 2 se ha agotado!", -10, 17);
         ETSIDI::printxy("Pulsa cualquier tecla para volver al menu", -10, 1);
     }
-    
+
     glutSwapBuffers();
 
 
-   
+
 }
 
 void OnTimer(int value) {
@@ -252,6 +252,13 @@ void display() {
     glutSwapBuffers();
 }
 
+bool es_pieza_con_captura(Pieza* pieza, const std::vector<std::pair<Pieza*, VECTOR2D>>& capturables) {
+    for (const auto& par : capturables) {
+        if (par.first == pieza) return true;
+    }
+    return false;
+}
+
 void mouseClick(int button, int state, int x, int y) {
     float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
     float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
@@ -271,7 +278,7 @@ void mouseClick(int button, int state, int x, int y) {
     }
 
     if (estado == MENU_MODOS && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-       
+
 
         std::cout << "Click en seleccion de modo: (" << x_normal << "," << y_normal << ")\n";
 
@@ -305,88 +312,108 @@ void mouseClick(int button, int state, int x, int y) {
     }
 
 
-    
-        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-            // Transformar coordenadas de pantalla a coordenadas del mundo
-            if ((x >= 15 && x <= 400) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-                raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
-                raton.posicion.y = ((-18.0 * y) + (575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
-            }
-            else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-                raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
-                raton.posicion.y = ((-18.0 * y + 575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
-            }
-            else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-                raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
-                raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
-            }
-            else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-                raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
-                raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
-            }
-            else {
-                mundo.casilla_seleccionada = false;
-                return;
-            }
 
-            VECTOR2D centro = raton.elige_casilla();
-            int i = static_cast<int>(raton.casilla.x) - 1;
-            int j = static_cast<int>(raton.casilla.y) - 1;
-
-            // Verificar si la casilla es válida
-            if (!mundo.casillaValida(i, j)) {
-                std::cout << "[INFO] Casilla vacía o inválida, no se puede seleccionar\n";
-                return;
-            }
-
-            if (!pieza_seleccionada) {
-                // Primer clic: seleccionar pieza
-                if (mundo.getControl()[i][j] == nullptr) {
-                    std::cout << "[INFO] Casilla vacía, no se puede seleccionar\n";
-                    return;
-                }
-
-                if (mundo.getControl()[i][j]->get_color() != mundo.turno) {
-                    std::cout << "[INFO] No puedes mover piezas del otro color\n";
-                    return;
-                }
-
-                // Selección válida
-                posicion_central_click = centro;
-                posicion_central_click_anterior = centro;
-                mundo.set_posicion_central_click(centro);
-                mundo.set_posicion_central_click_anterior(centro);
-                mundo.casilla_seleccionada = true;
-                pieza_seleccionada = true;
-            }
-            else {
-                // Segundo clic: intentar mover
-                posicion_central_click = centro;
-
-                if (posicion_central_click.x == posicion_central_click_anterior.x &&
-                    posicion_central_click.y == posicion_central_click_anterior.y) {
-                    std::cout << "[INFO] Casilla deseleccionada\n";
-                    mundo.casilla_seleccionada = false;
-                    pieza_seleccionada = false;
-                    return;
-                }
-
-                mundo.set_posicion_central_click(posicion_central_click);
-                mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
-                mundo.set_casilla_actual(raton.casilla);
-                mundo.set_casilla_anterior(raton.casilla_anterior);
-
-                if (!mundo.casilla_seleccionada) {
-                    std::cout << "[INFO] No hay casilla seleccionada, no se puede mover\n";
-                    pieza_seleccionada = false;
-                    return;
-                }
-
-                mundo.casilla_seleccionada = true;
-                mundo.mueve();
-                pieza_seleccionada = false;
-            }
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Transformar coordenadas de pantalla a coordenadas del mundo
+        if ((x >= 15 && x <= 400) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
+            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
+            raton.posicion.y = ((-18.0 * y) + (575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
+        }
+        else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
+            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
+            raton.posicion.y = ((-18.0 * y + 575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
+        }
+        else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
+            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
+        }
+        else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
+            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
+            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
+        }
+        else {
+            mundo.casilla_seleccionada = false;
+            return;
         }
 
+        VECTOR2D centro = raton.elige_casilla();
+        int i = static_cast<int>(raton.casilla.x) - 1;
+        int j = static_cast<int>(raton.casilla.y) - 1;
+
+        // Verificar si la casilla es válida
+        if (!mundo.casillaValida(i, j)) {
+            std::cout << "[INFO] Casilla vacía o inválida, no se puede seleccionar\n";
+            return;
+        }
+
+        if (!pieza_seleccionada) {
+            Pieza* p = mundo.getControl()[i][j];
+            if (p == nullptr) {
+                std::cout << "[INFO] Casilla vacía, no se puede seleccionar\n";
+                return;
+            }
+
+            if (p->get_color() != mundo.turno) {
+                std::cout << "[INFO] No puedes mover piezas del otro color\n";
+                return;
+            }
+
+            // ⚠️ Verifica si hay capturas obligatorias
+            auto capturables = mundo.piezas_con_captura();
+            if (!capturables.empty() && !es_pieza_con_captura(p, capturables)) {
+                std::cout << "[INFO] Debes seleccionar una pieza que pueda capturar\n";
+                return;
+            }
+
+            // ✅ Selección válida
+            posicion_central_click = centro;
+            posicion_central_click_anterior = centro;
+            mundo.set_posicion_central_click(centro);
+            mundo.set_posicion_central_click_anterior(centro);
+            mundo.casilla_seleccionada = true;
+            pieza_seleccionada = true;
+        }
+
+        else {
+            // Segundo clic: intentar mover
+            posicion_central_click = centro;
+
+            if (posicion_central_click.x == posicion_central_click_anterior.x &&
+                posicion_central_click.y == posicion_central_click_anterior.y) {
+                std::cout << "[INFO] Casilla deseleccionada\n";
+                mundo.casilla_seleccionada = false;
+                pieza_seleccionada = false;
+                return;
+            }
+
+            mundo.set_posicion_central_click(posicion_central_click);
+            mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
+            mundo.set_casilla_actual(raton.casilla);
+            mundo.set_casilla_anterior(raton.casilla_anterior);
+
+            if (!mundo.casilla_seleccionada) {
+                std::cout << "[INFO] No hay casilla seleccionada, no se puede mover\n";
+                pieza_seleccionada = false;
+                return;
+            }
+
+            // Si hay capturas obligatorias, solo puedes moverte a una casilla con enemigo
+            auto capturables = mundo.piezas_con_captura();
+            if (!capturables.empty()) {
+                Pieza* destino = mundo.getControl()[i][j];
+                if (destino == nullptr || destino->get_color() == mundo.turno) {
+                    std::cout << "[INFO] Debes capturar una pieza enemiga\n";
+                    pieza_seleccionada = false;
+                    return;
+                }
+            }
+
+
+            mundo.casilla_seleccionada = true;
+            mundo.mueve();
+            pieza_seleccionada = false;
+        }
     }
+
+}
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <iostream>
 #include "VECTOR2D.h"
 #include "raton.h"
 #include "ETSIDI.h"
@@ -8,8 +9,7 @@
 class Rey :public Pieza // Rey hereda de Pieza
 {
 	Raton r;
-	bool color;
-	bool haComidoPieza;
+	
 	ETSIDI::SpriteSequence sprite{ "imagenes/reyB.png", 1 };
 	ETSIDI::SpriteSequence sprite2{ "imagenes/reyR.png", 1 };
 public:
@@ -38,7 +38,13 @@ public:
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>> );
 	//bool piezaAtrapada(std::vector<VECTOR2D> posiciones);
 	//std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos);
-	//bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  
+	//bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control); 
+	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
+	inline bool es_rey() const override { return true; }
+	std::string nombre() const override { return "rey_rojo"; }  // o "rey_blanco" si es reyB
+
+		
+
 
 };
 

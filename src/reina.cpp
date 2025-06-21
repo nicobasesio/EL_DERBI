@@ -245,3 +245,28 @@ bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 		}
 	}
 }
+
+bool Reina::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
+	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+
+	// Ocho direcciones: líneas + diagonales
+	int dx[] = { 1, 1, -1, -1, 0, 0, -1, 1 };
+	int dy[] = { 1, -1, 1, -1, -1, 1, 0, 0 };
+
+	for (int dir = 0; dir < 8; ++dir) {
+		int nx = x + dx[dir];
+		int ny = y + dy[dir];
+		while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+			Pieza* objetivo = control[nx][ny];
+			if (objetivo != nullptr) {
+				if (objetivo->get_color() != this->color) return true;
+				else break;
+			}
+			nx += dx[dir];
+			ny += dy[dir];
+		}
+	}
+
+	return false;
+}

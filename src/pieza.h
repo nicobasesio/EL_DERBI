@@ -1,5 +1,6 @@
 #pragma once
 #include "VECTOR2D.h"
+#include <iostream>
 #include "raton.h"
 #include "freeglut.h"
 #include "ETSIDI.h"
@@ -16,7 +17,7 @@ public:
 
 	VECTOR2D posicion_pieza{}; // comun a todas las piezas
 	Pieza* pieza_comible = nullptr;
-	virtual void muevepieza(double x, double y){}
+	virtual void muevepieza(double x, double y) = 0;
 	virtual ~Pieza() {}
 	virtual void set_pos_pieza(const VECTOR2D& pos) {} // Se introduce la dirección en la que hay una pieza
 	virtual void dibuja_pieza() {}
@@ -54,5 +55,22 @@ public:
 
 		return posiciones;
 	}
+
+
+	virtual bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+		return false;
+	}
+
+	virtual std::string nombre() const { return "pieza"; }
+	virtual bool es_rey() const { return false; }
+	virtual bool es_peon() const { return false; }
+	virtual bool es_caballo()const {return false;}
+	virtual bool es_torre() const { return false; }
+	virtual bool es_alfil() const { return false; }
+	virtual bool es_reina() const { return false; }
+
+
+	
+	
 };
 

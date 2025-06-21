@@ -105,3 +105,24 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 
 	return false;
 }
+
+bool Caballo::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
+	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+
+	int dx[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+	int dy[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+
+	for (int i = 0; i < 8; ++i) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+
+		if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+			Pieza* objetivo = control[nx][ny];
+			if (objetivo != nullptr && objetivo->get_color() != color) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
