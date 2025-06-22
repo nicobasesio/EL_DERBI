@@ -20,7 +20,7 @@ bool fin_partida = false;
 unsigned int ultimo_tiempo_actualizado = 0;
 int jugador_que_pierde = 0;
 
-enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL };
+enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL, MENU_INFO};
 EstadoPantalla estado = MENU_START;
 int modoSeleccionado = 0;
 enum Turno { BLANCO, ROJO };
@@ -153,6 +153,22 @@ void OnDraw() {
 
 
     }
+
+    if (estado == MENU_INFO) {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu3.png").id);
+        glDisable(GL_LIGHTING);
+        glBegin(GL_POLYGON);
+        glColor3f(1, 1, 1);
+        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);
+        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);
+        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);
+        glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.005);
+        glEnd();
+        glEnable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+    }
+
 
     if (estado == MENU_FINAL) {
         std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madridgana.png" : "imagenes/atleticogana.png";
@@ -311,7 +327,24 @@ void mouseClick(int button, int state, int x, int y) {
             return;
         }
 
+        // Clic sobre el icono "i" 
+        if (x_normal > 11 && x_normal < 13.5 && y_normal > -2 && y_normal < 0.5) {
+            estado = MENU_INFO;
+            glutPostRedisplay();
+            return;
+        }
+
+
         return;
+    }
+
+    if (estado == MENU_INFO && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Botón de retroceso en la esquina superior izquierda
+        if (x_normal > -14 && x_normal < -11.5 && y_normal > 16 && y_normal < 18.5) {
+            estado = MENU_MODOS;
+            glutPostRedisplay();
+            return;
+        }
     }
 
 
