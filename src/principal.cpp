@@ -138,21 +138,24 @@ void OnDraw() {
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
         sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
 
+        //temporizadores
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
         ETSIDI::setTextColor(1, 1, 1);
-        ETSIDI::printxy(buffer1, -13.0f, -3.8f);
-        ETSIDI::printxy(buffer2, 9.0f, -3.8f);
+
+        ETSIDI::printxy(buffer1, -15.0f, -4.0f);
+        ETSIDI::printxy(buffer2, 9.3f, -4.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
-
+        ETSIDI::setTextColor(1, 1, 0);  // Amarillo brillante
+        ETSIDI::printxy("PRUEBA DE TEXTO", -5, 0);
 
 
     }
 
     if (estado == MENU_FINAL) {
-        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/atleticogana.png" : "imagenes/madridgana.png";
+        std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madridgana.png" : "imagenes/atleticogana.png";
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_final.c_str()).id);
         glDisable(GL_LIGHTING);
