@@ -37,7 +37,7 @@ public:
 		return haComidoPieza;
 	}
 
-	bool piezaAhogada(std::vector<VECTOR2D> posiciones);
+
 	std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos);
 	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 	bool rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<std::vector<Pieza*>>& control);

@@ -14,13 +14,6 @@ void Caballo::muevepieza(double x, double y)
 
 }
 
-bool Caballo::piezaAhogada(std::vector<VECTOR2D> posiciones)
-{
-	if (posiciones.size() == 0)
-		return true;
-	else
-		return false;
-}
 
 bool Caballo::casillaValida(int i, int j, std::vector<std::vector<Pieza*>>control)
 {

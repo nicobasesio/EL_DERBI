@@ -11,14 +11,6 @@ void Reina::muevepieza(double x, double y)
 	posicion_pieza.y = y;
 }
 
-bool Reina::piezaAhogada(std::vector<VECTOR2D> posiciones)
-{
-	if (posiciones.size() == 0)
-		return true;
-	else
-		return false;
-}
-
 
 bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 	if (i >= 0 && i < control.size() && j >= 0 && j < control[0].size())

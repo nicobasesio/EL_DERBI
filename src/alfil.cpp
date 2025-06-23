@@ -59,13 +59,6 @@ bool Alfil::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 	}
 }
 
-bool Alfil::piezaAhogada(std::vector<VECTOR2D> posiciones)
-{
-	if (posiciones.size() == 0)
-		return true;
-	else
-		return false;
-}
 
 bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
