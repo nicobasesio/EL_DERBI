@@ -64,29 +64,37 @@ bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
-std::vector<VECTOR2D> Alfil::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa el peon en nuestra matriz de control
-	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
-	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
-	//un peon negro solo puede ir hacia abajo
-	if (casillaValida(pos.x, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x][pos.y - 1] == nullptr) {
-			posiciones.push_back({ static_cast<double>(pos.x), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde el peon puede moverse
-			//haComidoPieza = false;
-		}
-	}
-	if (casillaValida(pos.x + 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x + 1][pos.y - 1] != nullptr && control[pos.x + 1][pos.y - 1]->get_color() == true) { //come hacia abajo derecha una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x + 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
-			haComidoPieza = true;
-		}
-	}
-	if (casillaValida(pos.x - 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x - 1][pos.y - 1] != nullptr && control[pos.x - 1][pos.y - 1]->get_color() == true) { //come hacia abajo izda una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x - 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde la torre puede moverse
-			haComidoPieza = true;
-		}
-	}
-	return posiciones;
+std::vector<VECTOR2D> Alfil::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
+    std::vector<VECTOR2D> posiciones;
+    haComidoPieza = false;
+
+    int x = static_cast<int>(pos.x);
+    int y = static_cast<int>(pos.y);
+
+    int dx[] = { 1, 1, -1, -1 };
+    int dy[] = { 1, -1, 1, -1 };
+
+    for (int dir = 0; dir < 4; ++dir) {
+        int nx = x + dx[dir];
+        int ny = y + dy[dir];
+
+        while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+            Pieza* p = control[nx][ny];
+
+            if (p == nullptr) {
+                posiciones.push_back({ static_cast<double>(nx), static_cast<double>(ny) });  // Casilla libre
+            } else {
+                posiciones.push_back({ static_cast<double>(nx), static_cast<double>(ny) });  // Siempre puede comer
+                haComidoPieza = true;
+                break;  // No puede saltar
+            }
+
+            nx += dx[dir];
+            ny += dy[dir];
+        }
+    }
+
+    return posiciones;
 }
 
 
