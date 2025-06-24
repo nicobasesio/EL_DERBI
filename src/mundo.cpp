@@ -209,7 +209,6 @@ void Mundo::inicializa() {
 void Mundo::inicializa_tab() {
     columnas = 8;
     filas = 8;
-    // Asegúrate de que las coordenadas estén configuradas correctamente
     tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 3.0 });
 }
 void Mundo::dibuja() {
@@ -258,7 +257,7 @@ void Mundo::dibuja() {
 
 }
 
-bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o de la matriz control al comprobar si es jaque o no
+bool Mundo::casillaValida(int i, int j) {   
     return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
@@ -272,7 +271,7 @@ void Mundo::mueve()
             Pieza* pieza = capturables[0].first;
             VECTOR2D origen = capturables[0].second;
 
-            // Si es REY → movimiento automático al destino clicado
+            
             if (pieza->es_rey()) {
                 std::cout << "[AUTO] Captura única con rey.\n";
                 Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
@@ -288,7 +287,7 @@ void Mundo::mueve()
                 return;
             }
 
-            // Si es PEÓN → lo mismo: captura directa
+         
             if (pieza->es_peon()) {
                 std::cout << "[AUTO] Captura única con peón.\n";
                 Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
@@ -304,7 +303,6 @@ void Mundo::mueve()
                 return;
             }
 
-            // Si es caballo
 
             if (pieza->es_caballo()) {
                 std::cout << "[AUTO] Captura única con caballo.\n";
@@ -330,7 +328,7 @@ void Mundo::mueve()
                 int dx[] = { 0, 0, -1, 1 };
                 int dy[] = { -1, 1, 0, 0 };
 
-                // 🔧 Aquí defines la variable que no existía
+                
                 std::vector<VECTOR2D> posibles_destinos;
 
                 for (int dir = 0; dir < 4; ++dir) {
@@ -355,7 +353,7 @@ void Mundo::mueve()
                     }
                 }
 
-                // Validar si el clic está en uno de esos destinos válidos
+                // Miramos si clic está en uno de esos destinos válidos
                 for (const auto& destino : posibles_destinos) {
                     if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
                         std::abs(destino.y - posicion_central_click.y) < 0.1) {
@@ -517,7 +515,7 @@ void Mundo::mueve()
 
 
 
-    // reyB
+    // Movimiento reyB
     if (posicion_central_click_anterior.x == reyB.posicion_pieza.x &&
         posicion_central_click_anterior.y == reyB.posicion_pieza.y &&
         turno == true)
@@ -590,17 +588,17 @@ void Mundo::mueve()
         int movx = std::abs(dx);
         int movy = std::abs(dy);
 
-        // Conversión de coordenadas del mundo (-7, ..., 7 y 2.5, ..., 16.5) a índices 0-7
+        // Conversión de coordenadas
         int ix1 = static_cast<int>((torreB1.posicion_pieza.x + 8.0) / 2.0);
         int iy1 = static_cast<int>((torreB1.posicion_pieza.y - 1.0) / 2.0);
         int ix2 = static_cast<int>((posicion_central_click.x + 8.0) / 2.0);
         int iy2 = static_cast<int>((posicion_central_click.y - 1.0) / 2.0);
 
-        // Validación de rango antes de usar
+        // Validación de rango 
         if (ix1 < 0 || ix1 > 7 || iy1 < 0 || iy1 > 7 ||
             ix2 < 0 || ix2 > 7 || iy2 < 0 || iy2 > 7)
         {
-            std::cout << "[ERROR] Movimiento fuera del tablero (índices inválidos)\n";
+            std::cout << "[ERROR] Movimiento fuera del tablero\n";
             return;
         }
 
@@ -880,34 +878,31 @@ void Mundo::mueve()
 
     //PEONES BLANCOS
     for (Peon* peon : peones) {
-        // 0) solo actúa si el peón que hizo click coincide y es turno de blancas
+        // solo si el peón que hizo click coincide y es turno de blancas
         if (posicion_central_click_anterior.x == peon->posicion_pieza.x && posicion_central_click_anterior.y == peon->posicion_pieza.y && turno == true)
         {
-            // 1) calcular desplazamientos en casillas
+            // desplazamientos en casillas
             int dx = static_cast<int>(posicion_central_click.x - peon->posicion_pieza.x);
             int dy = static_cast<int>(posicion_central_click.y - peon->posicion_pieza.y);
             int movx = std::abs(dx), movy = std::abs(dy);
             std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-            // 2) índices destino en la matriz (0..7)
+            
             int ix = casilla_actual.x - 1;
             int iy = casilla_actual.y - 1;
-            int srcY = casilla_anterior.y;  // fila origen 0..7
+            int srcY = casilla_anterior.y;  
 
-            // 3) validar dentro del tablero
+            
             if (!casillaValida(ix, iy)) {
                 std::cout << "Movimiento inválido: fuera del tablero\n";
                 return;
             }
 
-            // 4a) avance simple
             bool avance_simple = false;
             if (dx == 0 && dy == 2 && control[ix][iy] == nullptr) {
                 avance_simple = true;
             }
 
-
-            // 4b) doble avance
             bool avance_doble = false;
             if (dx == 0 && dy == 4 && srcY == 2) {
                 int iy_inter = iy - 1;
@@ -917,14 +912,14 @@ void Mundo::mueve()
                 }
 
             }
-            // 4c) captura diagonal
+           
             bool captura_diagonal = false;
             if ((dx == 2 || dx == -2) && dy == 2) {
                 if (peon->pieza_comible(casilla_actual, control)) {
                     captura_diagonal = true;
                 }
             }
-            // 5) ejecutar jugada
+            // jugada
             if (avance_simple || avance_doble) {
                 peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
@@ -948,10 +943,10 @@ void Mundo::mueve()
                     "o capturar en diagonal adelante (derecha o izquierda)\n";
                 return;
             }
-            // 6) actualizar estado global
+           
             actualizar_matriz_control();
             movida = true;
-            turno = false;  // ahora es turno de las rojas
+            turno = false;  //  turno de las rojas
             std::cout << "Turno de Rojas\n";
         }
 
@@ -960,44 +955,40 @@ void Mundo::mueve()
 
     //PEONES ROJOS
     for (Peon* peon : peones) {
-        // 0) solo actúa si el peón clicado coincide y es turno de rojas
+        // solo si el peón clicado coincide y es turno de rojas
         if (posicion_central_click_anterior.x == peon->posicion_pieza.x && posicion_central_click_anterior.y == peon->posicion_pieza.y && turno == false)
         {
-            // 1) calcular desplazamientos en casillas
+            // desplazamientos en casillas
             int dx = static_cast<int>(posicion_central_click.x - peon->posicion_pieza.x);
             int dy = static_cast<int>(posicion_central_click.y - peon->posicion_pieza.y);
             int movx = std::abs(dx), movy = std::abs(dy);
             std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-            // 2) índices destino en la matriz (0..7)
+            
             int ix = casilla_actual.x - 1;
             int iy = casilla_actual.y - 1;
-            int srcY = casilla_anterior.y;  // fila origen (1..8)
+            int srcY = casilla_anterior.y;  
 
-            // 3) validar dentro del tablero
+          
             if (!casillaValida(ix, iy)) {
                 std::cout << "Movimiento inválido: fuera del tablero\n";
                 return;
             }
 
-            // 4a) avance simple hacia abajo
             bool avance_simple = false;
             if (dx == 0 && dy == -2 && control[ix][iy] == nullptr) {
                 avance_simple = true;
             }
 
-
-            // 4b) doble avance desde fila 7
             bool avance_doble = false;
             if (dx == 0 && dy == -4 && srcY == 7) {
-                int iy_inter = iy + 1;  // casilla intermedia
+                int iy_inter = iy + 1;  
                 if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
                 {
                     avance_doble = true;
                 }
             }
 
-            // 4c) captura diagonal hacia abajo
             bool captura_diagonal = false;
             if ((dx == 2 || dx == -2) && dy == -2) {
                 if (peon->pieza_comible(casilla_actual, control)) {
@@ -1005,14 +996,13 @@ void Mundo::mueve()
                 }
             }
 
-            // 5) ejecutar jugada
             if (avance_simple || avance_doble) {
                 peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else if (captura_diagonal) {
                 Pieza* target = control[ix][iy];
                 if (target != nullptr) {
-                    // registrar captura (las rojas comen blancas)
+                   
                     if (target->get_color() == true)
                         comidasB();
                     else
@@ -1030,39 +1020,38 @@ void Mundo::mueve()
                 return;
             }
 
-            // 6) actualizar estado global
             actualizar_matriz_control();
             movida = true;
-            turno = true;  // ahora es turno de las blancas
+            turno = true;  //  turno de las blancas
             std::cout << "Turno de Blancas\n";
         }
     }
      //movimiento alfil b1
     if (posicion_central_click_anterior.x == alfilB1.posicion_pieza.x && posicion_central_click_anterior.y == alfilB1.posicion_pieza.y && turno == true)  // turno de blancas
     {
-        // filtro de clic dentro del tablero
+        // clic dentro del tablero
         if (casilla_actual.x < 1 || casilla_actual.x > 8 ||casilla_actual.y < 1 || casilla_actual.y > 8) {
             return;
         }
 
-        // 1) cálculo de desplazamiento
+        //  desplazamiento
         int dx = static_cast<int>(posicion_central_click.x - alfilB1.posicion_pieza.x);
         int dy = static_cast<int>(posicion_central_click.y - alfilB1.posicion_pieza.y);
         int movx = std::abs(dx);
         int movy = std::abs(dy);
         std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-        // 2) índices destino (0..7)
+    
         int ix = casilla_actual.x - 1;
         int iy = casilla_actual.y - 1;
 
-        // 3) comprobación de tablero
+      
         if (!casillaValida(ix, iy)) {
             std::cout << "Movimiento inválido: fuera del tablero\n";
             return;
         }
 
-        // 4) sólo diagonal estricta (cualquier dirección)
+      
         bool es_diagonal = (movx == movy && movx > 0);
 
         int origen_x = static_cast<int>((alfilB1.posicion_pieza.x + 8.0) / 2.0);
@@ -1070,20 +1059,20 @@ void Mundo::mueve()
 
 
 
-        // 5) ejecutar movimiento o captura sin validar ruta
+      
         if (es_diagonal && alfilB1.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
             {
             Pieza* destino = control[ix][iy];
             if (destino == nullptr) {
-                // casilla vacía
+        
                 alfilB1.muevepieza(posicion_central_click.x,posicion_central_click.y);
             }
             else if (alfilB1.pieza_comible(casilla_actual, control)) {
-                // captura enemiga
+          
                 if (destino->get_color() == false)
-                    comidasR();  // comes pieza roja
+                    comidasR();  
                 else
-                    comidasB();  // caso excepcional
+                    comidasB();  
                 alfilB1.muevepieza(posicion_central_click.x, posicion_central_click.y);
             }
             else {
@@ -1097,7 +1086,7 @@ void Mundo::mueve()
             return;
         }
 
-        // 6) actualizar y cambiar turno
+     
         actualizar_matriz_control();
         movida = true;
         turno = false;  // turno de rojas
@@ -1107,52 +1096,47 @@ void Mundo::mueve()
      // movimiento alfilB2
      if (posicion_central_click_anterior.x == alfilB2.posicion_pieza.x && posicion_central_click_anterior.y == alfilB2.posicion_pieza.y && turno == true)  // turno de blancas
      {
-         // filtro de clic dentro del tablero
+        
          if (casilla_actual.x < 1 || casilla_actual.x > 8 ||
              casilla_actual.y < 1 || casilla_actual.y > 8) {
              return;
          }
 
-         // 1) cálculo de desplazamiento
+         //  desplazamiento
          int dx = static_cast<int>(posicion_central_click.x - alfilB2.posicion_pieza.x);
          int dy = static_cast<int>(posicion_central_click.y - alfilB2.posicion_pieza.y);
          int movx = std::abs(dx);
          int movy = std::abs(dy);
          std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices destino (0..7)
          int ix = casilla_actual.x - 1;
          int iy = casilla_actual.y - 1;
 
-         // 3) comprobación de tablero
+        
          if (!casillaValida(ix, iy)) {
              std::cout << "Movimiento inválido: fuera del tablero\n";
              return;
          }
 
-         // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
          int origen_x = static_cast<int>((alfilB2.posicion_pieza.x + 8.0) / 2.0);
          int origen_y = static_cast<int>((alfilB2.posicion_pieza.y - 1.0) / 2.0);
 
 
-
-
-         // 5) ejecutar movimiento o captura sin validar ruta
          if (es_diagonal && alfilB2.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
          {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
-                 // casilla vacía
+           
                  alfilB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
              else if (alfilB2.pieza_comible(casilla_actual, control)) {
-                 // captura enemiga
+          
                  if (destino->get_color() == false)
-                     comidasR();  // comes pieza roja
+                     comidasR();  
                  else
-                     comidasB();  // caso excepcional
+                     comidasB();  
                  alfilB2.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
              else {
@@ -1165,61 +1149,54 @@ void Mundo::mueve()
              return;
          }
 
-         // 6) actualizar y cambiar turno
+         
          actualizar_matriz_control();
          movida = true;
-         turno = false;  // turno de rojas
+         turno = false;  
          std::cout << "Turno de Rojas\n";
      }
      
      // movimiento alfilR1 
      if (posicion_central_click_anterior.x == alfilR1.posicion_pieza.x && posicion_central_click_anterior.y == alfilR1.posicion_pieza.y && turno == false)  // alfil rojo seleccionado y es turno de las rojas
      {
-         // filtro de clic dentro del tablero
+        
          if (casilla_actual.x < 1 || casilla_actual.x > 8 ||casilla_actual.y < 1 || casilla_actual.y > 8) {
              return;
          }
 
-         // 1) cálculo de desplazamiento
+         //  desplazamiento
          int dx = static_cast<int>(posicion_central_click.x - alfilR1.posicion_pieza.x);
          int dy = static_cast<int>(posicion_central_click.y - alfilR1.posicion_pieza.y);
          int movx = std::abs(dx);
          int movy = std::abs(dy);
          std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices destino (0..7)
          int ix = casilla_actual.x - 1;
          int iy = casilla_actual.y - 1;
 
-         // 3) comprobación de tablero
          if (!casillaValida(ix, iy)) {
              std::cout << "Movimiento inválido: fuera del tablero\n";
              return;
          }
 
-         // 4) sólo diagonal estricta (cualquier dirección)
          bool es_diagonal = (movx == movy && movx > 0);
 
          int origen_x = static_cast<int>((alfilR1.posicion_pieza.x + 8.0) / 2.0);
          int origen_y = static_cast<int>((alfilR1.posicion_pieza.y - 1.0) / 2.0);
 
 
-
-
-         // 5) ejecutar movimiento o captura sin validar ruta
          if (es_diagonal && alfilR1.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
          {
              Pieza* destino = control[ix][iy];
              if (destino == nullptr) {
-                 // casilla vacía
-                 alfilR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
+                  alfilR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
              else if (alfilR1.pieza_comible(casilla_actual, control)) {
-                 // captura enemiga
+                 
                  if (destino->get_color() == true)
-                     comidasB();  // comes pieza blanca
+                     comidasB();  
                  else
-                     comidasR();  // caso excepcional
+                     comidasR(); 
                  alfilR1.muevepieza(posicion_central_click.x, posicion_central_click.y);
              }
              else {
@@ -1232,7 +1209,6 @@ void Mundo::mueve()
              return;
          }
 
-         // 6) actualizar y cambiar turno
          actualizar_matriz_control();
          movida = true;
          turno = true;   // ahora juegan las blancas
@@ -1242,36 +1218,31 @@ void Mundo::mueve()
      // movimiento alfilR2
      if (posicion_central_click_anterior.x == alfilR2.posicion_pieza.x && posicion_central_click_anterior.y == alfilR2.posicion_pieza.y && turno == false)  // alfil rojo seleccionado y es turno de las rojas
      {
-         // filtro de clic dentro del tablero
          if (casilla_actual.x < 1 || casilla_actual.x > 8 || casilla_actual.y < 1 || casilla_actual.y > 8) {
              return;
          }
 
-         // 1) cálculo de desplazamiento
+         //desplazamiento
          int dx = static_cast<int>(posicion_central_click.x - alfilR2.posicion_pieza.x);
          int dy = static_cast<int>(posicion_central_click.y - alfilR2.posicion_pieza.y);
          int movx = std::abs(dx);
          int movy = std::abs(dy);
          std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
-         // 2) índices destino (0..7)
          int ix = casilla_actual.x - 1;
          int iy = casilla_actual.y - 1;
 
-         // 3) comprobación de tablero
+     
          if (!casillaValida(ix, iy)) {
              std::cout << "Movimiento inválido: fuera del tablero\n";
              return;
          }
 
-         // 4) sólo diagonal estricta (cualquier dirección)
+        
          bool es_diagonal = (movx == movy && movx > 0);
          int origen_x = static_cast<int>((alfilR2.posicion_pieza.x + 8.0) / 2.0);
          int origen_y = static_cast<int>((alfilR2.posicion_pieza.y - 1.0) / 2.0);
 
-
-
-         // 5) ejecutar movimiento o captura sin validar ruta
          if (es_diagonal && alfilR2.rutaDiagonalLibre(origen_x, origen_y, ix, iy, control))
          {
              Pieza* destino = control[ix][iy];
@@ -1297,10 +1268,10 @@ void Mundo::mueve()
              return;
          }
 
-         // 6) actualizar y cambiar turno
+        
          actualizar_matriz_control();
          movida = true;
-         turno = true;   // ahora juegan las blancas
+         turno = true;   
          std::cout << "Turno de Blancas\n";
      }
 
@@ -1559,7 +1530,7 @@ void Mundo::comidasR() {
 
     if (pieza_comida != nullptr) {
         comidaR.push_back(pieza_comida);
-        comidaR.back()->muevepieza(pos_comidaR_X, -2);  // ✅ Corregido aquí
+        comidaR.back()->muevepieza(pos_comidaR_X, -2);  
         pos_comidaR_X += 2.0;
     }
     else {
