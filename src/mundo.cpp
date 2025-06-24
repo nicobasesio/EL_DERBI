@@ -352,11 +352,11 @@ void Mundo::mueve()
                 
             std::vector<VECTOR2D> posibles_destinos;
 
-            for (int dir = 0; dir < 4; ++dir) {
+            for (int dir = 0; dir < 4; ++dir) { // evalua todas las direcciones horizontales y verticales
                 int nx = x + dx[dir];
                 int ny = y + dy[dir];
-                while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-                    Pieza* objetivo = control[nx][ny];
+                while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) { // mientras que no se salga del tablero continua
+                    Pieza* objetivo = control[nx][ny]; 
                     if (objetivo != nullptr) {
                         if (objetivo->get_color() != pieza->get_color()) {
                             float x_mundo = nx * 2.0f - 7.0f;
