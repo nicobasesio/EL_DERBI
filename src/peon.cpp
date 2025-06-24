@@ -66,30 +66,6 @@ bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control)
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
-std::vector<VECTOR2D> Peon::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // pos es la casilla que ocupa el peon en nuestra matriz de control
-	haComidoPieza = false; // por defecto no come pieza. En caso de que tenga la posibilidad de hacerlo, su valor cambiará a true
-	std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas rojas 
-	//un peon rojo solo puede ir hacia abajo
-	if (casillaValida(pos.x, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x][pos.y - 1] == nullptr) { //comprueba si la casilla justo de delante del peón está vacía
-			posiciones.push_back({ static_cast<double>(pos.x), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde el peon puede moverse
-		}
-	}
-	if (casillaValida(pos.x + 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x + 1][pos.y - 1] != nullptr && control[pos.x + 1][pos.y - 1]->get_color() == true) { //come hacia abajo derecha una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x + 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde el peon puede moverse
-			haComidoPieza = true;
-		}
-	}
-	if (casillaValida(pos.x - 1, pos.y - 1, control)) { // se comprueba que no se salga del rango de la matriz
-		if (control[pos.x - 1][pos.y - 1] != nullptr && control[pos.x - 1][pos.y - 1]->get_color() == true) { //come hacia abajo izda una pieza blanca
-			posiciones.push_back({ static_cast<double>(pos.x - 1), static_cast<double>(pos.y - 1) }); // se añade al vector las posiciones donde el peon puede moverse
-			haComidoPieza = true;
-		}
-	}
-	return posiciones;
-}
-
 bool Peon::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
 	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));

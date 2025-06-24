@@ -5,6 +5,8 @@
 #include "mundo.h" 
 #include "pieza.h"
 
+
+
 void Alfil::muevepieza(double x, double y)
 {
 	posicion_pieza.x = x;
@@ -25,7 +27,6 @@ void Alfil::dibuja_pieza()
 		sprite2.draw();			//rojas
 	if (color == 1)
 		sprite.draw();		// blancas
-	//fin del codigo incluido
 	glPopMatrix();
 	glFlush();
 }
@@ -63,40 +64,6 @@ bool Alfil::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
-
-std::vector<VECTOR2D> Alfil::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
-    std::vector<VECTOR2D> posiciones;
-    haComidoPieza = false;
-
-    int x = static_cast<int>(pos.x);
-    int y = static_cast<int>(pos.y);
-
-    int dx[] = { 1, 1, -1, -1 };
-    int dy[] = { 1, -1, 1, -1 };
-
-    for (int dir = 0; dir < 4; ++dir) {
-        int nx = x + dx[dir];
-        int ny = y + dy[dir];
-
-        while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-            Pieza* p = control[nx][ny];
-
-            if (p == nullptr) {
-                posiciones.push_back({ static_cast<double>(nx), static_cast<double>(ny) });  // Casilla libre
-            } else {
-                posiciones.push_back({ static_cast<double>(nx), static_cast<double>(ny) });  // Siempre puede comer
-                haComidoPieza = true;
-                break;  // No puede saltar
-            }
-
-            nx += dx[dir];
-            ny += dy[dir];
-        }
-    }
-
-    return posiciones;
-}
-
 
 //para que no pueda saltar piezas
 bool Alfil::rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<std::vector<Pieza*>>& control) {
