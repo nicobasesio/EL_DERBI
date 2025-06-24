@@ -258,7 +258,7 @@ void Mundo::dibuja() {
 
 }
 
-bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tama�o de la matriz control al comprobar si es jaque o no
+bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tamaño de la matriz control 
     return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
@@ -268,252 +268,253 @@ void Mundo::mueve()
     auto capturables = piezas_con_captura();
 
     if (!capturables.empty()) {
-        if (capturables.size() == 1) {
-            Pieza* pieza = capturables[0].first;
-            VECTOR2D origen = capturables[0].second;
+        
+        Pieza* pieza_seleccionada = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
+        VECTOR2D origen = posicion_central_click_anterior;
 
-            // Si es REY → movimiento automático al destino clicado
-            if (pieza->es_rey()) {
-                std::cout << "[AUTO] Captura única con rey.\n";
-                Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                if (comida) {
-                    if (comida->get_color())
-                        comidasB();
-                    else
-                        comidasR();
-                }
-                pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                actualizar_matriz_control();
-                turno = !turno;
-                return;
+        // Verificamos si la pieza seleccionada está entre las obligadas a capturar
+        bool es_pieza_capturable = false;
+        for (const auto& par : capturables) {
+            if (par.first == pieza_seleccionada) {
+                es_pieza_capturable = true;
+                break;
             }
-
-            // Si es PEÓN → lo mismo: captura directa
-            if (pieza->es_peon()) {
-                std::cout << "[AUTO] Captura única con peón.\n";
-                Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                if (comida) {
-                    if (comida->get_color())
-                        comidasB();
-                    else
-                        comidasR();
-                }
-                pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                actualizar_matriz_control();
-                turno = !turno;
-                return;
-            }
-
-            // Si es caballo
-
-            if (pieza->es_caballo()) {
-                std::cout << "[AUTO] Captura única con caballo.\n";
-                Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                if (comida) {
-                    if (comida->get_color())
-                        comidasB();
-                    else
-                        comidasR();
-                }
-                pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                actualizar_matriz_control();
-                turno = !turno;
-                return;
-            }
-
-            if (pieza->es_torre()) {
-                std::cout << "[AUTO] Captura única con torre.\n";
-
-                int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
-                int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
-
-                int dx[] = { 0, 0, -1, 1 };
-                int dy[] = { -1, 1, 0, 0 };
-
-                // 🔧 Aquí defines la variable que no existía
-                std::vector<VECTOR2D> posibles_destinos;
-
-                for (int dir = 0; dir < 4; ++dir) {
-                    int nx = x + dx[dir];
-                    int ny = y + dy[dir];
-                    while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-                        Pieza* objetivo = control[nx][ny];
-                        if (objetivo != nullptr) {
-                            if (objetivo->get_color() != pieza->get_color()) {
-                                float x_mundo = nx * 2.0f - 7.0f;
-                                float y_mundo = ny * 2.0f + 2.5f;
-                                VECTOR2D destino;
-                                destino.x = x_mundo;
-                                destino.y = y_mundo;
-                                posibles_destinos.push_back(destino);
-                                
-                            }
-                            break;
-                        }
-                        nx += dx[dir];
-                        ny += dy[dir];
-                    }
-                }
-
-                // Validar si el clic está en uno de esos destinos válidos
-                for (const auto& destino : posibles_destinos) {
-                    if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
-                        std::abs(destino.y - posicion_central_click.y) < 0.1) {
-
-                        Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                        if (comida) {
-                            if (comida->get_color())
-                                comidasB();
-                            else
-                                comidasR();
-                        }
-
-                        pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                        actualizar_matriz_control();
-                        turno = !turno;
-                        return;
-                    }
-                }
-
-                std::cout << "[REGLA] Movimiento no válido para la torre.\n";
-                return;
-            }
-
-            if (pieza->es_alfil()) {
-                std::cout << "[AUTO] Captura única con alfil.\n";
-
-                int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
-                int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
-
-                int dx[] = { -1, -1, 1, 1 };
-                int dy[] = { -1, 1, -1, 1 };
-
-                std::vector<VECTOR2D> posibles_destinos;
-
-                for (int dir = 0; dir < 4; ++dir) {
-                    int nx = x + dx[dir];
-                    int ny = y + dy[dir];
-                    while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-                        Pieza* objetivo = control[nx][ny];
-                        if (objetivo != nullptr) {
-                            if (objetivo->get_color() != pieza->get_color()) {
-                                float x_mundo = nx * 2.0f - 7.0f;
-                                float y_mundo = ny * 2.0f + 2.5f;
-                                VECTOR2D destino;
-                                destino.x = x_mundo;
-                                destino.y = y_mundo;
-                                posibles_destinos.push_back(destino);
-                            }
-                            break;
-                        }
-                        nx += dx[dir];
-                        ny += dy[dir];
-                    }
-                }
-
-                for (const auto& destino : posibles_destinos) {
-                    if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
-                        std::abs(destino.y - posicion_central_click.y) < 0.1) {
-
-                        Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                        if (comida) {
-                            if (comida->get_color())
-                                comidasB();
-                            else
-                                comidasR();
-                        }
-
-                        pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                        actualizar_matriz_control();
-                        turno = !turno;
-                        return;
-                    }
-                }
-
-                std::cout << "[REGLA] Movimiento no válido para el alfil.\n";
-                return;
-            }
-
-
-            if (pieza->es_reina()) {
-                std::cout << "[AUTO] Captura única con reina.\n";
-
-                int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
-                int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
-
-                int dx[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
-                int dy[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
-
-                std::vector<VECTOR2D> posibles_destinos;
-
-                for (int dir = 0; dir < 8; ++dir) {
-                    int nx = x + dx[dir];
-                    int ny = y + dy[dir];
-                    while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-                        Pieza* objetivo = control[nx][ny];
-                        if (objetivo != nullptr) {
-                            if (objetivo->get_color() != pieza->get_color()) {
-                                float x_mundo = nx * 2.0f - 7.0f;
-                                float y_mundo = ny * 2.0f + 2.5f;
-                                VECTOR2D destino;
-                                destino.x = x_mundo;
-                                destino.y = y_mundo;
-                                posibles_destinos.push_back(destino);
-                            }
-                            break;
-                        }
-                        nx += dx[dir];
-                        ny += dy[dir];
-                    }
-                }
-
-                for (const auto& destino : posibles_destinos) {
-                    if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
-                        std::abs(destino.y - posicion_central_click.y) < 0.1) {
-
-                        Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-                        if (comida) {
-                            if (comida->get_color())
-                                comidasB();
-                            else
-                                comidasR();
-                        }
-
-                        pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                        actualizar_matriz_control();
-                        turno = !turno;
-                        return;
-                    }
-                }
-
-                std::cout << "[REGLA] Movimiento no válido para la reina.\n";
-                return;
-            }
-
         }
 
-        if (capturables.size() > 1) {
-            bool destino_valido = false;
-            for (const auto& par : capturables) {
-                Pieza* pieza = par.first;
-                VECTOR2D origen = par.second;
-                std::vector<VECTOR2D> destinos = obtener_destinos_comibles(pieza);
-                for (const auto& d : destinos) {
-                    if (std::abs(d.x - posicion_central_click.x) < 0.1 &&
-                        std::abs(d.y - posicion_central_click.y) < 0.1) {
-                        destino_valido = true;
+        if (!es_pieza_capturable) {
+            std::cout << "[REGLA] Debes mover una de las piezas obligadas a capturar.\n";
+            return;
+        }
+
+        // Ahora usamos la pieza seleccionada normalmente
+        Pieza* pieza = pieza_seleccionada;
+
+        std::vector<VECTOR2D> destinos;
+
+        // Si es REY movimiento automático al destino clicado
+        if (pieza->es_rey()) {
+            std::cout << "[AUTO] Captura única con rey.\n";
+            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+            if (comida) {
+                if (comida->get_color())
+                    comidasB();
+                else
+                    comidasR();
+            }
+            pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            turno = !turno;
+            return;
+        }
+
+        // Si es PEÓN lo mismo: captura directa
+        if (pieza->es_peon()) {
+            std::cout << "[AUTO] Captura única con peón.\n";
+            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+            if (comida) {
+                if (comida->get_color())
+                    comidasB();
+                else
+                    comidasR();
+            }
+            pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            turno = !turno;
+            return;
+        }
+
+        // Si es caballo
+
+        if (pieza->es_caballo()) {
+            std::cout << "[AUTO] Captura única con caballo.\n";
+            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+            if (comida) {
+                if (comida->get_color())
+                    comidasB();
+                else
+                    comidasR();
+            }
+            pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+            actualizar_matriz_control();
+            turno = !turno;
+            return;
+        }
+
+        if (pieza->es_torre()) {
+            std::cout << "[AUTO] Captura única con torre.\n";
+
+            int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
+            int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
+
+            int dx[] = { 0, 0, -1, 1 };
+            int dy[] = { -1, 1, 0, 0 };
+
+                
+            std::vector<VECTOR2D> posibles_destinos;
+
+            for (int dir = 0; dir < 4; ++dir) {
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+                while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+                    Pieza* objetivo = control[nx][ny];
+                    if (objetivo != nullptr) {
+                        if (objetivo->get_color() != pieza->get_color()) {
+                            float x_mundo = nx * 2.0f - 7.0f;
+                            float y_mundo = ny * 2.0f + 2.5f;
+                            VECTOR2D destino;
+                            destino.x = x_mundo;
+                            destino.y = y_mundo;
+                            posibles_destinos.push_back(destino);
+                                
+                        }
                         break;
                     }
+                    nx += dx[dir];
+                    ny += dy[dir];
                 }
-                if (destino_valido) break;
             }
 
-            if (!destino_valido) {
-                std::cout << "[REGLA] Debes elegir una de las casillas con pieza enemiga comible.\n";
-                return;
+            // Validar si el clic está en uno de esos destinos válidos
+            for (const auto& destino : posibles_destinos) {
+                if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
+                    std::abs(destino.y - posicion_central_click.y) < 0.1) {
+
+                    Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+                    if (comida) {
+                        if (comida->get_color())
+                            comidasB();
+                        else
+                            comidasR();
+                    }
+
+                    pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+                    actualizar_matriz_control();
+                    turno = !turno;
+                    return;
+                }
             }
+
+            std::cout << "[REGLA] Movimiento no válido para la torre.\n";
+            return;
         }
+
+        if (pieza->es_alfil()) {
+            std::cout << "[AUTO] Captura única con alfil.\n";
+
+            int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
+            int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
+
+            int dx[] = { -1, -1, 1, 1 };
+            int dy[] = { -1, 1, -1, 1 };
+
+            std::vector<VECTOR2D> posibles_destinos;
+
+            for (int dir = 0; dir < 4; ++dir) {
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+                while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+                    Pieza* objetivo = control[nx][ny];
+                    if (objetivo != nullptr) {
+                        if (objetivo->get_color() != pieza->get_color()) {
+                            float x_mundo = nx * 2.0f - 7.0f;
+                            float y_mundo = ny * 2.0f + 2.5f;
+                            VECTOR2D destino;
+                            destino.x = x_mundo;
+                            destino.y = y_mundo;
+                            posibles_destinos.push_back(destino);
+                        }
+                        break;
+                    }
+                    nx += dx[dir];
+                    ny += dy[dir];
+                }
+            }
+
+            for (const auto& destino : posibles_destinos) {
+                if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
+                    std::abs(destino.y - posicion_central_click.y) < 0.1) {
+
+                    Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+                    if (comida) {
+                        if (comida->get_color())
+                            comidasB();
+                        else
+                            comidasR();
+                    }
+
+                    pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+                    actualizar_matriz_control();
+                    turno = !turno;
+                    return;
+                }
+            }
+
+            std::cout << "[REGLA] Movimiento no válido para el alfil.\n";
+            return;
+        }
+
+
+        if (pieza->es_reina()) {
+            std::cout << "[AUTO] Captura única con reina.\n";
+
+            int x = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
+            int y = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
+
+            int dx[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
+            int dy[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+            std::vector<VECTOR2D> posibles_destinos;
+
+            for (int dir = 0; dir < 8; ++dir) {
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+                while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+                    Pieza* objetivo = control[nx][ny];
+                    if (objetivo != nullptr) {
+                        if (objetivo->get_color() != pieza->get_color()) {
+                            float x_mundo = nx * 2.0f - 7.0f;
+                            float y_mundo = ny * 2.0f + 2.5f;
+                            VECTOR2D destino;
+                            destino.x = x_mundo;
+                            destino.y = y_mundo;
+                            posibles_destinos.push_back(destino);
+                        }
+                        break;
+                    }
+                    nx += dx[dir];
+                    ny += dy[dir];
+                }
+            }
+
+            for (const auto& destino : posibles_destinos) {
+                if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
+                    std::abs(destino.y - posicion_central_click.y) < 0.1) {
+
+                    Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
+                    if (comida) {
+                        if (comida->get_color())
+                            comidasB();
+                        else
+                            comidasR();
+                    }
+
+                    pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+                    actualizar_matriz_control();
+                    turno = !turno;
+                    return;
+                }
+            }
+
+            std::cout << "[REGLA] Movimiento no válido para la reina.\n";
+            return;
+        }
+
     }
+
+
+
+
+
 
 
 
@@ -545,10 +546,6 @@ void Mundo::mueve()
 
         
             
-    
-    
-     
-
     //movimiento reyR
     if (posicion_central_click_anterior.x == reyR.posicion_pieza.x &&
         posicion_central_click_anterior.y == reyR.posicion_pieza.y &&
@@ -1578,17 +1575,22 @@ void Mundo::actualizar_matriz_control()
 }
 
 
-std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() {
+
+// La función devuelve por lo tanto un vector con el nombre de cada pieza que pueda comer y la posicion de esta pieza.  
+// esta funcion recorre todo el tablero, mira si hay una pieza en cada casilla y si es del color del jugador, si esa pieza captura a alguein, la añade al vector. 
+
+
+std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() { // el pair es para empaquetar dos valores, se podria hacer con un struct si no
     std::vector<std::pair<Pieza*, VECTOR2D>> lista;
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Pieza* p = control[i][j];
-            if (p != nullptr && p->get_color() == turno) {
-                VECTOR2D pos = p->posicion_pieza;  // usamos posición real
-                if (p->puede_comer_enemigo(pos, control)) {
+            if (p != nullptr && p->get_color() == turno) { // si hay pieza y la pizea que hay es del color adecuado
+                VECTOR2D pos = p->posicion_pieza;  // posicion de la pieza
+                if (p->puede_comer_enemigo(pos, control)) {  //funcion interna de cada pieza para ver si hay un enemigo comible, si lo hay devuelve true, se pasa control para saber las posiciones de las piezas en el tablero
                     std::cout << "[INFO] Pieza en coordenadas físicas (" << pos.x << "," << pos.y << ") puede capturar\n";
-                    lista.emplace_back(p, pos);
+                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector
                 }
             }
         }
@@ -1596,68 +1598,8 @@ std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() {
     return lista;
 }
 
-VECTOR2D Mundo::buscar_casilla_comible(Pieza* pieza, VECTOR2D origen) {
-    
-    int i = static_cast<int>(((origen.x + 7.0f) / 2.0f));
-    int j = static_cast<int>(((origen.y - 2.5f) / 2.0f));
-
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
-
-            int ni = i + dx;
-            int nj = j + dy;
-
-            if (casillaValida(ni, nj)) {
-                Pieza* objetivo = control[ni][nj];
-                if (objetivo != nullptr && objetivo->get_color() != pieza->get_color()) {
-                    
-                    float x_destino = -7.0f + 2.0f * ni;
-                    float y_destino = 2.5f + 2.0f * nj;
 
 
-                    std::cout << "[BUSCAR] Enemigo detectado en matriz (" << ni << "," << nj
-                        << ") -> coordenadas físicas (" << x_destino << "," << y_destino << ")\n";
-
-                    return { x_destino, y_destino };
-                }
-            }
-        }
-    }
-
-    std::cout << "[BUSCAR] Ninguna casilla comible encontrada. Retornando origen.\n";
-    return origen;  // fallback
-}
-
-
-
-
-std::vector<VECTOR2D> Mundo::obtener_destinos_comibles(Pieza* pieza) {
-    std::vector<VECTOR2D> destinos;
-
-    int i = static_cast<int>(round((pieza->posicion_pieza.x + 7.0f) / 2.0f));
-    int j = static_cast<int>(round((pieza->posicion_pieza.y - 2.5f) / 2.0f));
-
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
-
-            int ni = i + dx;
-            int nj = j + dy;
-
-            if (casillaValida(ni, nj)) {
-                Pieza* objetivo = control[ni][nj];
-                if (objetivo && objetivo->get_color() != pieza->get_color()) {
-                    float x = -7.0f + 2.0f * ni;
-                    float y = 2.5f + 2.0f * nj;
-                    destinos.push_back({ x, y });
-                }
-            }
-        }
-    }
-
-    return destinos;
-}
 
 
 
