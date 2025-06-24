@@ -200,7 +200,7 @@ void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {
-            if (mundo.turno == BLANCO)
+            if (mundo.get_turno() == BLANCO)
                 tiempo_jugador1--;
             else
                 tiempo_jugador2--;
@@ -389,7 +389,7 @@ void mouseClick(int button, int state, int x, int y) {
                 return;
             }
 
-            if (p->get_color() != mundo.turno) {
+            if (p->get_color() != mundo.get_turno()) {
                 std::cout << "[INFO] No puedes mover piezas del otro color\n";
                 return;
             }
@@ -437,7 +437,7 @@ void mouseClick(int button, int state, int x, int y) {
             auto capturables = mundo.piezas_con_captura();
             if (!capturables.empty()) {
                 Pieza* destino = mundo.getControl()[i][j];
-                if (destino == nullptr || destino->get_color() == mundo.turno) {
+                if (destino == nullptr || destino->get_color() == mundo.get_turno()) {
                     std::cout << "[INFO] Debes capturar una pieza enemiga\n";
                     pieza_seleccionada = false;
                     return;

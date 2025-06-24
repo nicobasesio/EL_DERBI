@@ -3,7 +3,6 @@
 #include "tablero.h"
 #include "peon.h"
 #include "alfil.h"
-#include "rey.h"
 #include <vector>
 #include <iostream>
 #include "rey.h"
@@ -36,13 +35,32 @@ class Mundo
 	Reina reinaB, reinaR;
 	std::vector<std::vector<Pieza*>> control;
 
-	
-	
+	double pos_comidaB_X = 7.0;
+	double pos_comidaR_X = -7.0;
 
 
+	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
+	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
+
+	std::vector<VECTOR2D> posiciones_comidas_rojas = {
+		{7.0, -2.0}, {6.0, -2.0}, {5.0, -2.0}, {4.0, -2.0}, {3.0, -2.0}, {2.0, -2.0}, {1.0, -2.0}, {0.0, -2.0}
+	};
+
+	std::vector<VECTOR2D> posiciones_comidas_blancas = {
+		{-7.0, 17.0}, {-6.0, 17.0}, {-5.0, 17.0}, {-4.0, 17.0}, {-3.0, 17.0}, {-2.0, 17.0}, {-1.0, 17.0}, {0.0, 17.0}
+	};
+
+	bool turno = true; //true: turno de blancos, false: turno de rojas
+	int columnas;
+	int filas;
+	
+
+	bool movida = false; //será true cuando se haya movido una pieza
+
+	
 public:
 	Mundo();
-	bool turno = true; //true: turno de blancos, false: turno de rojas
+	
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
@@ -60,45 +78,14 @@ public:
 	void comidasB();
 	void comidasR();
 
+	inline bool get_turno() { return turno; }
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
-	int columnas;
-	int filas;
 	bool casilla_seleccionada = false; //será true cuando se haya movido una pieza
-
-	bool movida = false; //será true cuando se haya movido una pieza
-
-	//las siguientes variables son para el tema de las piezas comidas
-	int material_rojo = 0; //contador de puntos de piezas comidas
-	int material_blanco = 0;
-	int dif_material_int;
-
-	int b = 0;      // Se lleva el conteo del numero de piezas blancas comidas
-	int r = 0;      // Se lleva el conteo del numero de piezas negras comidas
-
-
-	double pos_comidaB_X = 7.0;
-	double pos_comidaR_X = -7.0;
-
-
-	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
-	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
 	
-	std::vector<VECTOR2D> posiciones_comidas_rojas = {
-		{7.0, -2.0}, {6.0, -2.0}, {5.0, -2.0}, {4.0, -2.0}, {3.0, -2.0}, {2.0, -2.0}, {1.0, -2.0}, {0.0, -2.0}
-	};
-
-	std::vector<VECTOR2D> posiciones_comidas_blancas = {
-		{-7.0, 17.0}, {-6.0, 17.0}, {-5.0, 17.0}, {-4.0, 17.0}, {-3.0, 17.0}, {-2.0, 17.0}, {-1.0, 17.0}, {0.0, 17.0}
-	};
 	std::vector<std::pair<Pieza*, VECTOR2D>> piezas_con_captura();
-	std::vector<std::pair<VECTOR2D, VECTOR2D>> capturas_posibles;
-	std::vector<VECTOR2D> obtener_destinos_comibles(Pieza* pieza);
-
-	std::vector<VECTOR2D> destinos_validos;
 	
-
-	VECTOR2D buscar_casilla_comible(Pieza* pieza, VECTOR2D origen);
+	
 };
 
 
