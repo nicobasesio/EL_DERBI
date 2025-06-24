@@ -85,12 +85,10 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 		int x = casilla_actual.x + movimientos[i][0];
 		int y = casilla_actual.y + movimientos[i][1];
 
-		// Verifica que esté dentro del tablero (asumiendo un tablero 8x8 indexado 0-7)
+		
 		if (x >= 0 && x < 8 && y >= 0 && y < 8) {
 			if (control[x][y] != nullptr) {
-				// Puedes agregar aquí una condición para asegurarte de que sea del equipo contrario
-				// Por ejemplo:
-				// if (control[x][y]->get_color() != this->get_color())
+				
 				return true;
 			}
 		}

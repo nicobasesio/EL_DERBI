@@ -38,8 +38,7 @@ public:
 	}
 
 	std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos);
-	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
-
+	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>>);
 
 	bool get_haComidoPieza()

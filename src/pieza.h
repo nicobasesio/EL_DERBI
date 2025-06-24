@@ -49,7 +49,7 @@ public:
 		return false;
 	}
 
-	virtual std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { // 
+	virtual std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) { 
 		std::vector<VECTOR2D> posiciones; // se almacenan las posiciones de control de todas las piezas de color negro
 
 
