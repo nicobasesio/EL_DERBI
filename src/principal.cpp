@@ -112,24 +112,6 @@ void OnDraw() {
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
 
-        //marcador jugador1
-        glColor3f(0.1f, 0.1f, 0.7f);
-        glBegin(GL_QUADS);
-        glVertex2f(-14, -5);
-        glVertex2f(-14 + ancho_marcador, -5);
-        glVertex2f(-14 + ancho_marcador, -5 + alto_marcador);
-        glVertex2f(-14, -5 + alto_marcador);
-        glEnd();
-
-        //marcador jugador2
-        glColor3f(0.7f, 0.1f, 0.1f);
-        glBegin(GL_QUADS);
-        glVertex2f(8, -5);
-        glVertex2f(8 + ancho_marcador, -5);
-        glVertex2f(8 + ancho_marcador, -5 + alto_marcador);
-        glVertex2f(8, -5 + alto_marcador);
-        glEnd();
-
         char buffer1[20], buffer2[20];
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
         sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
