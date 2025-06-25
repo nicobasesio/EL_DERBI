@@ -9,7 +9,7 @@ class Torre : public Pieza
 {
 private:
 	Raton r;
-	bool color; // FALSE es negro. TRUE es blanco
+	bool color; // FALSE es rojo. TRUE es blanco
 	bool haComidoPieza;
 	ETSIDI::SpriteSequence sprite{ "imagenes/torreB.png", 1 };
 	ETSIDI::SpriteSequence sprite2{ "imagenes/torreR.png", 1 };

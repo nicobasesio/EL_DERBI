@@ -40,7 +40,6 @@ inline  VECTOR2D  VECTOR2D::operator + (const  VECTOR2D& v) const
 {
 	return { x + v.x , y + v.y };
 }
-//EJERCICIO : Completar las operaciones de producto escalar de vectores y producto por un escalar
 inline double  VECTOR2D::operator *(const  VECTOR2D& v) const
 {
 	double producto_escalar;
