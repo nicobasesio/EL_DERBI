@@ -39,20 +39,19 @@ void Alfil::set_color_pieza(bool a)
 		color = FALSE;
 }
 
-bool Alfil::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control) { //Detecta si hay pieza que se puede comer el peon
+bool Alfil::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control) { 
 	int alfil_X = casilla_actual.x - 2;
 	int alfil_y = casilla_actual.y - 2;
 
-	for (int dx = 0; dx < 3; ++dx) {  //for para darme las 8 casillas al rededor del peon
+	for (int dx = 0; dx < 3; ++dx) {  
 		for (int dy = 0; dy < 3; ++dy) {
 			if (dx == 1 && dy == 1) {
 				continue;
 			}
 			int x = alfil_X + dx - 1;
 			int y = alfil_y + dy - 1;
-			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
+			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  
 				if (control[x][y] != nullptr) {
-					//std::cout << "Hay pieza comible para el rey en control[" << x << "," << y << "]\n";
 					return true;
 				}
 			}
@@ -61,7 +60,7 @@ bool Alfil::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 }
 
 
-bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
+bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {  
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 

@@ -44,7 +44,7 @@ bool Peon::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*
 	int peon_X = casilla_actual.x - 2;
 	int peon_y = casilla_actual.y - 2;
 
-	for (int dx = 0; dx < 3; ++dx) {  //for para darme las 8 casillas al rededor del peon
+	for (int dx = 0; dx < 3; ++dx) {  //for para darme las 8 casillas alrededor del peon
 		for (int dy = 0; dy < 3; ++dy) {
 			if (dx == 1 && dy == 1) {
 				continue;
@@ -53,7 +53,6 @@ bool Peon::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*
 			int y = peon_y + dy - 1;
 			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
 				if (control[x][y] != nullptr) {
-					//std::cout << "Hay pieza comible para el rey en control[" << x << "," << y << "]\n";
 					return true;
 				}
 			}

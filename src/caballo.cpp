@@ -47,32 +47,6 @@ void Caballo::set_color_pieza(bool a)
 		color = FALSE;
 }
 
-std::vector<VECTOR2D> Caballo::get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos)
-{
-	std::vector<VECTOR2D> posiciones;
-
-	// Todos los movimientos posibles del caballo en forma de L
-	int movimientos[8][2] = {
-		{2, 1}, {1, 2}, {-1, 2}, {-2, 1},
-		{-2, -1}, {-1, -2}, {1, -2}, {2, -1}
-	};
-
-	for (int i = 0; i < 8; ++i)
-	{
-		int x = pos.x - 1 + movimientos[i][0];
-		int y = pos.y - 1 + movimientos[i][1];
-
-		if (casillaValida(x, y, control))
-		{
-			// Permitir moverse a cualquier casilla, incluso si hay pieza del mismo color
-			posiciones.push_back({ static_cast<double>(x + 1), static_cast<double>(y + 1) });
-		}
-	}
-
-	return posiciones;
-}
-
-
 
 bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>> control) {
 	// Movimientos posibles del caballo
@@ -85,12 +59,10 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 		int x = casilla_actual.x + movimientos[i][0];
 		int y = casilla_actual.y + movimientos[i][1];
 
-		// Verifica que esté dentro del tablero (asumiendo un tablero 8x8 indexado 0-7)
+		// Verifica que esté dentro del tablero
 		if (x >= 0 && x < 8 && y >= 0 && y < 8) {
 			if (control[x][y] != nullptr) {
-				// Puedes agregar aquí una condición para asegurarte de que sea del equipo contrario
-				// Por ejemplo:
-				// if (control[x][y]->get_color() != this->get_color())
+
 				return true;
 			}
 		}

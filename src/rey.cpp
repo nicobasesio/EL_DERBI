@@ -6,7 +6,7 @@ void Rey::dibuja()
 	glPushMatrix();
 	glTranslated(posicion_pieza.x, posicion_pieza.y, 0.001);
 	if (color == 0)
-		sprite2.draw();			//negras
+		sprite2.draw();			//rojas
 	if (color == 1)
 		sprite.draw();		// blancas
 	//fin del codigo incluido
