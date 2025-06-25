@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     glutMouseFunc(mouseClick);
 
     mundo.inicializa();
-    ETSIDI::playMusica("sonido/musica.mp3", true); // música de fondo del menú
+    ETSIDI::playMusica("sonido/musica.mp3", true);
 
     mundo.inicializa_tab();
 
@@ -285,8 +285,7 @@ void mouseClick(int button, int state, int x, int y) {
         std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
             estado = MENU_MODOS;
-            ETSIDI::stopMusica();
-            ETSIDI::play("sonido/Inicio.mp3");
+            
             glutPostRedisplay();
         }
         return;
@@ -301,6 +300,10 @@ void mouseClick(int button, int state, int x, int y) {
         if (x_normal > -8 && x_normal < 8 && y_normal > 13 && y_normal < 15.5) {
             modoSeleccionado = 1;
             tiempo_jugador1 = tiempo_jugador2 = 60;
+            ETSIDI::stopMusica(); 
+            estado = JUEGO;
+            glutPostRedisplay();
+
             estado = JUEGO;
             mundo.inicializa();
             return;
@@ -309,6 +312,9 @@ void mouseClick(int button, int state, int x, int y) {
         if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11) {
             modoSeleccionado = 2;
             tiempo_jugador1 = tiempo_jugador2 = 180;
+            ETSIDI::stopMusica();
+            estado = JUEGO;
+            glutPostRedisplay();
             estado = JUEGO;
             mundo.inicializa();
             return;
@@ -318,6 +324,9 @@ void mouseClick(int button, int state, int x, int y) {
         if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5) {
             modoSeleccionado = 3;
             tiempo_jugador1 = tiempo_jugador2 = 300;
+            ETSIDI::stopMusica();
+            estado = JUEGO;
+            glutPostRedisplay();
             estado = JUEGO;
             mundo.inicializa();
             return;
