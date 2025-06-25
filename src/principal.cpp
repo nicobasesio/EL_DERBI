@@ -45,25 +45,21 @@ int main(int argc, char* argv[]) {
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiJuego");
 
-    // Modo 2D ortográfico
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-15, 15, -5, 20);  // Cámara 2D
+    gluOrtho2D(-15, 15, -5, 20);  
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Desactivar iluminación (no usamos normales ni materiales)
     glDisable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
 
-    // Registrar callbacks
     glutDisplayFunc(OnDraw);
     glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
     glutMouseFunc(mouseClick);
 
-    // Inicializa mundo
     mundo.inicializa();
     ETSIDI::playMusica("sonido/musica.mp3", true); // música de fondo del menú
 
@@ -86,10 +82,10 @@ void OnDraw() {
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
         glColor3f(1, 1, 1);
-        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);	// izda abajo
-        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);	// dcha abajo
-        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);	// dcha arriba
-        glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.005);// izda arriba
+        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);	
+        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);	
+        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);	
+        glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.005);
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
@@ -148,7 +144,7 @@ void OnDraw() {
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
-        ETSIDI::setTextColor(1, 1, 0);  // Amarillo brillante
+        ETSIDI::setTextColor(1, 1, 0);  
         ETSIDI::printxy("PRUEBA DE TEXTO", -5, 0);
 
 
@@ -224,7 +220,7 @@ void OnTimer(int value) {
                     for (int j = 0; j < 8; ++j) {
                         if (mundo.getControl()[i][j] != nullptr)
                         {
-                            if (mundo.getControl()[i][j]->get_color()) // blanco
+                            if (mundo.getControl()[i][j]->get_color()) 
                                 fichas_blancas++;
                             else
                                 fichas_rojas++;
@@ -378,14 +374,14 @@ void mouseClick(int button, int state, int x, int y) {
 
         // Verificar si la casilla es válida
         if (!mundo.casillaValida(i, j)) {
-            std::cout << "[INFO] Casilla vacía o inválida, no se puede seleccionar\n";
+            std::cout << "[INFO] Casilla vacia o invalida, no se puede seleccionar\n";
             return;
         }
 
         if (!pieza_seleccionada) {
             Pieza* p = mundo.getControl()[i][j];
             if (p == nullptr) {
-                std::cout << "[INFO] Casilla vacía, no se puede seleccionar\n";
+                std::cout << "[INFO] Casilla vacia, no se puede seleccionar\n";
                 return;
             }
 
@@ -394,14 +390,14 @@ void mouseClick(int button, int state, int x, int y) {
                 return;
             }
 
-            // ⚠️ Verifica si hay capturas obligatorias
+            // Verifica si hay capturas obligatorias
             auto capturables = mundo.piezas_con_captura();
             if (!capturables.empty() && !es_pieza_con_captura(p, capturables)) {
                 std::cout << "[INFO] Debes seleccionar una pieza que pueda capturar\n";
                 return;
             }
 
-            // ✅ Selección válida
+            // Selección válida
             posicion_central_click = centro;
             posicion_central_click_anterior = centro;
             mundo.set_posicion_central_click(centro);
