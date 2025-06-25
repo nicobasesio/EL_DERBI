@@ -130,14 +130,13 @@ void Tablero::dibuja_casilla_anterior_tras_movimiento(VECTOR2D posicion_central_
 void Tablero::dibuja_temporizador() {
 	// Temporizador superior (jugador rojo)
 	glPushMatrix();
-	temporizador.setPos(-14.6f, 15.5f);  // más arriba y fuera del tablero
-	glTranslated(0, 0, 0.001);
+	temporizador.setPos(-14.6f, 15.5f);  
 	temporizador.draw();
 	glPopMatrix();
 
 	// Temporizador inferior (jugador blanco)
 	glPushMatrix();
-	temporizador2.setPos(-14.6f, -1.5f);  // más abajo y fuera del tablero
+	temporizador2.setPos(-14.6f, -1.5f);  
 	glTranslated(0, 0, 0.001);
 	temporizador2.draw();
 	glPopMatrix();
