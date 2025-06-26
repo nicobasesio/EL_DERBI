@@ -78,6 +78,30 @@ bool Rey::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> con
 	return false;
 }
 
+bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo) {
+	int movx = std::abs(posicion_pieza.x - destino.x);
+	int movy = std::abs(posicion_pieza.y - destino.y);
+
+	// Movimiento válido (como máximo 2 unidades en x o y, pero no quedarse quieto)
+	if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) {
+		int i = static_cast<int>((destino.x + 8.0) / 2.0);
+		int j = static_cast<int>((destino.y - 1.0) / 2.0);
+
+		if (i >= 0 && i < 8 && j >= 0 && j < 8) {
+			Pieza* objetivo = control[i][j];
+			if (objetivo != nullptr) {
+				capturo = true;
+			}
+
+			muevepieza(destino.x, destino.y);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 
 
 
