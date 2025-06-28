@@ -41,6 +41,9 @@ public:
 
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>>);
 
+	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
+
+
 	bool get_haComidoPieza()
 	{
 		return haComidoPieza;

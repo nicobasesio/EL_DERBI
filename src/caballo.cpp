@@ -71,6 +71,53 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 	return false;
 }
 
+bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo)
+{
+	int movx = std::abs(posicion_pieza.x - destino.x);
+	int movy = std::abs(posicion_pieza.y - destino.y);
+
+	
+	if (!((movx == 4 && movy == 2) || (movx == 2 && movy == 4)))
+	{
+		std::cout << "\n[DEBUG] Movimiento invalido para el caballo\n" << std::endl;
+		return false;
+	}
+
+
+	int x = static_cast<int>(round((destino.x + 7.0f) / 2.0f));
+	int y = static_cast<int>(round((destino.y - 2.5f) / 2.0f));
+
+	if (!casillaValida(x, y, control))
+	{
+		std::cout << "[DEBUG] Casilla destino fuera del tablero\n";
+		return false;
+	}
+
+	// Comprobar si hay pieza enemiga
+	Pieza* objetivo = control[x][y];
+	capturo = false;
+
+	if (objetivo != nullptr)
+	{
+		if (objetivo->get_color() != color)
+		{
+			capturo = true;
+			haComidoPieza = true;
+			std::cout << "[DEBUG] Caballo capturo una pieza\n";
+		}
+		else
+		{
+			std::cout << "[DEBUG] No puedes capturar tu propia pieza\n";
+			return false;
+		}
+	}
+
+	// Realizar el movimiento
+	muevepieza(destino.x, destino.y);
+	return true;
+}
+
+
 bool Caballo::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
 	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
@@ -91,3 +138,4 @@ bool Caballo::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>>
 	}
 	return false;
 }
+
