@@ -64,32 +64,48 @@ bool Alfil::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
-//para que no pueda saltar piezas
-bool Alfil::rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<std::vector<Pieza*>>& control) {
-	int dx = (x2 > x1) ? 1 : -1;
-	int dy = (y2 > y1) ? 1 : -1;
+bool Alfil::mover(VECTOR2D destino,std::vector<std::vector<Pieza*>>& control,bool& capturo)
+{
+	// 1) Convertir posición gráfica a índices de casilla (0–7)
+	int oi = static_cast<int>((posicion_pieza.x + 8.0) / 2.0);
+	int oj = static_cast<int>((posicion_pieza.y - 1.0) / 2.0);
+	int di = static_cast<int>((destino.x + 8.0) / 2.0);
+	int dj = static_cast<int>((destino.y - 1.0) / 2.0);
 
-	x1 += dx;
-	y1 += dy;
+	// 2) Verificar que destino esté dentro del tablero
+	if (di < 0 || di >= 8 || dj < 0 || dj >= 8)
+		return false;
 
-	while (x1 != x2 && y1 != y2) {
-		std::cout << "[DEBUG] Evaluando (" << x1 << "," << y1 << ")...\n";
+	// 3) Calcular desplazamiento en casillas
+	int delta_i = di - oi;
+	int delta_j = dj - oj;
+	int movx = std::abs(delta_i);
+	int movy = std::abs(delta_j);
 
-		if (x1 < 0 || x1 >= 8 || y1 < 0 || y1 >= 8) {
-			std::cout << "[ERROR] Coordenada fuera de tablero\n";
-			return false;
+	// 4) Sólo movimiento estrictamente diagonal y no quedarse en la misma casilla
+	if (movx == movy && movx > 0) {
+		int paso_i = (delta_i > 0 ? +1 : -1);
+		int paso_j = (delta_j > 0 ? +1 : -1);
+
+		// 5) Comprobar que no haya piezas intermedias bloqueando la diagonal
+		for (int k = 1; k < movx; ++k) {
+			int ii = oi + paso_i * k;
+			int jj = oj + paso_j * k;
+			if (control[ii][jj] != nullptr)
+				return false;
 		}
 
-		if (control[x1][y1] != nullptr) {
-			std::cout << "[BLOQUEADO] Hay una pieza en (" << x1 << "," << y1 << ")\n";
-			return false;
-		}
+		// 6) Marcar captura si en destino hay una pieza enemiga
+		if (control[di][dj] != nullptr)
+			capturo = true;
 
-		x1 += dx;
-		y1 += dy;
+		// 7) Mover gráficamente la pieza
+		muevepieza(destino.x, destino.y);
+		return true;
 	}
 
-	return true;
+	// No es un movimiento diagonal válido
+	return false;
 }
 
 bool Alfil::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
