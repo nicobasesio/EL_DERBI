@@ -65,6 +65,65 @@ bool Peon::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control)
 	return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
+bool Peon::mover(VECTOR2D destino,std::vector<std::vector<Pieza*>>& control, bool& capturo)
+{
+    // 1) Convertir posición gráfica a índices de casilla (0–7)
+    int oi = static_cast<int>((posicion_pieza.x + 8.0f) / 2.0f);
+    int oj = static_cast<int>((posicion_pieza.y - 1.0f) / 2.0f);
+    int di = static_cast<int>((destino.x + 8.0f) / 2.0f);
+    int dj = static_cast<int>((destino.y - 1.0f) / 2.0f);
+
+    // 2) Verificar que destino esté dentro del tablero
+    if (di < 0 || di >= 8 || dj < 0 || dj >= 8)
+        return false;
+
+    // 3) Diferencias en casillas
+    int delta_i = di - oi;   // columnas
+    int delta_j = dj - oj;   // filas
+    int movx = std::abs(delta_i);
+    float movy = std::abs(delta_j);
+
+    // 4) Dirección y fila inicial según color
+    bool esBlanco = get_color();
+    int  dir = esBlanco ? +1 : -1;
+    int  startRow = esBlanco ? 1 : 6;
+
+    // 5) Avance vertical (sin captura)
+    // — un paso
+    if (movx == 0 && delta_j == dir && control[di][dj] == nullptr) {
+        capturo = false;
+        muevepieza(destino.x, destino.y);
+        return true;
+    }
+    // — dos pasos en la primera jugada
+    if (movx == 0 && delta_j == 2 * dir && oj == startRow) {
+        int jm = oj + dir; // casilla intermedia
+        if (control[di][jm] == nullptr && control[di][dj] == nullptr) {
+            capturo = false;
+            muevepieza(destino.x, destino.y);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    // 6) Captura diagonal (ahora permite comer pieza propia o enemiga)
+    if (movx == 1 && delta_j == dir) {
+        Pieza* objetivo = control[di][dj];
+        if (objetivo != nullptr) {
+            // capturamos aunque la pieza sea del mismo color
+            capturo = true;
+            muevepieza(destino.x, destino.y);
+            return true;
+        }
+    }
+
+    // 7) Ningún caso válido
+    return false;
+}
+
+
 bool Peon::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
 	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));

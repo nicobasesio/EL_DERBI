@@ -547,6 +547,23 @@ void Mundo::mueve()
             return;
         }
 
+        if (pieza->es_peon()) {
+            Peon* peon = dynamic_cast<Peon*>(pieza);
+            bool capturo = false;
+            if (peon && peon->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no válido para el peón.\n";
+            }
+            return;
+        }
+
+
 
 
     
@@ -844,158 +861,6 @@ void Mundo::mueve()
                 std::cout << "[INFO] Movimiento invalido: no es linea recta\n";
             }
 
-        }
-
-        // los agrupamos en un vector de punteros
-        std::vector<Peon*> peones = { &peonB1, &peonB2, &peonB3,  &peonB4, &peonB5, &peonB6, &peonB7, &peonB8, &peonR1, &peonR2, &peonR3, &peonR4,
-        &peonR5, &peonR6, &peonR7, &peonR8 };
-
-        //PEONES BLANCOS
-        for (Peon* peon : peones) {
-            //  si el peón que hizo click coincide y es turno de blancas
-            if (posicion_central_click_anterior.x == peon->posicion_pieza.x && posicion_central_click_anterior.y == peon->posicion_pieza.y && turno == true)
-            {
-                //  desplazamientos en casillas
-                int dx = static_cast<int>(posicion_central_click.x - peon->posicion_pieza.x);
-                int dy = static_cast<int>(posicion_central_click.y - peon->posicion_pieza.y);
-                int movx = std::abs(dx), movy = std::abs(dy);
-                std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
-
-     
-                int ix = casilla_actual.x - 1;
-                int iy = casilla_actual.y - 1;
-                int srcY = casilla_anterior.y;  
-
-                if (!casillaValida(ix, iy)) {
-                    std::cout << "Movimiento invalido: fuera del tablero\n";
-                    return;
-                }
-
-                bool avance_simple = false;
-                if (dx == 0 && dy == 2 && control[ix][iy] == nullptr) {
-                    avance_simple = true;
-                }
-
-                bool avance_doble = false;
-                if (dx == 0 && dy == 4 && srcY == 2) {
-                    int iy_inter = iy - 1;
-                    if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-                    {
-                        avance_doble = true;
-                    }
-
-                }
-     
-                bool captura_diagonal = false;
-                if ((dx == 2 || dx == -2) && dy == 2) {
-                    if (peon->pieza_comible(casilla_actual, control)) {
-                        captura_diagonal = true;
-                    }
-                }
-        
-                if (avance_simple || avance_doble) {
-                    peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                }
-                else if (captura_diagonal) {
-                    Pieza* target = control[ix][iy];
-                    if (target != nullptr) {
-               
-                        if (target->get_color() == false)
-                            comidasR();
-                        else
-                            comidasB();
-                    }
-                    else {
-                        std::cout << "Movimiento invalido: no hay pieza para capturar\n";
-                        return;
-                    }
-                    peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                }
-                else {
-                    std::cout << "Movimiento invalido: el peon solo puede avanzar hacia delante\n"
-                        "o capturar en diagonal adelante (derecha o izquierda)\n";
-                    return;
-                }
-          
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;  // ahora es turno de las rojas
-                std::cout << "Turno de Rojas\n";
-            }
-
-        }
-
-
-        //PEONES ROJOS
-        for (Peon* peon : peones) {
-            //si el peón clicado coincide y es turno de rojas
-            if (posicion_central_click_anterior.x == peon->posicion_pieza.x && posicion_central_click_anterior.y == peon->posicion_pieza.y && turno == false)
-            {
-                // desplazamientos en casillas
-                int dx = static_cast<int>(posicion_central_click.x - peon->posicion_pieza.x);
-                int dy = static_cast<int>(posicion_central_click.y - peon->posicion_pieza.y);
-                int movx = std::abs(dx), movy = std::abs(dy);
-                std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
-
-                int ix = casilla_actual.x - 1;
-                int iy = casilla_actual.y - 1;
-                int srcY = casilla_anterior.y;  // fila origen (1..8)
-
-                if (!casillaValida(ix, iy)) {
-                    std::cout << "Movimiento invalido: fuera del tablero\n";
-                    return;
-                }
-
-                bool avance_simple = false;
-                if (dx == 0 && dy == -2 && control[ix][iy] == nullptr) {
-                    avance_simple = true;
-                }
-
-                bool avance_doble = false;
-                if (dx == 0 && dy == -4 && srcY == 7) {
-                    int iy_inter = iy + 1;  // casilla intermedia
-                    if (casillaValida(ix, iy_inter) && control[ix][iy_inter] == nullptr && control[ix][iy] == nullptr)
-                    {
-                        avance_doble = true;
-                    }
-                }
-
-                bool captura_diagonal = false;
-                if ((dx == 2 || dx == -2) && dy == -2) {
-                    if (peon->pieza_comible(casilla_actual, control)) {
-                        captura_diagonal = true;
-                    }
-                }
-
-                if (avance_simple || avance_doble) {
-                    peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                }
-                else if (captura_diagonal) {
-                    Pieza* target = control[ix][iy];
-                    if (target != nullptr) {
-                        // registrar captura (las rojas comen blancas)
-                        if (target->get_color() == true)
-                            comidasB();
-                        else
-                            comidasR();
-                    }
-                    else {
-                        std::cout << "Movimiento invalido: no hay pieza para capturar\n";
-                        return;
-                    }
-                    peon->muevepieza(posicion_central_click.x, posicion_central_click.y);
-                }
-                else {
-                    std::cout << "Movimiento invalido: el peon solo puede avanzar verticalmente hacia abajo\n"
-                        "o capturar en diagonal hacia abajo (derecha o izquierda)\n";
-                    return;
-                }
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;  // ahora es turno de las blancas
-                std::cout << "Turno de Blancas\n";
-            }
         }
 
         //movimiento caballo blanco1 
