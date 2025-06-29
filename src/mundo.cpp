@@ -594,6 +594,24 @@ void Mundo::mueve()
             return;
         }
 
+        if (pieza->es_caballo()) {
+            Caballo* caballo = dynamic_cast<Caballo*>(pieza);
+            bool capturo = false;
+            if (caballo && caballo->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
+            }
+            return;
+        }
+
+
+    }
 
         // los agrupamos en un vector de punteros
         std::vector<Peon*> peones = { &peonB1, &peonB2, &peonB3,  &peonB4, &peonB5, &peonB6, &peonB7, &peonB8, &peonR1, &peonR2, &peonR3, &peonR4,
