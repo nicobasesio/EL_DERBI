@@ -576,6 +576,23 @@ void Mundo::mueve()
             }
             return;
         }
+
+        if (pieza->es_reina()) {
+            Reina* reina = dynamic_cast<Reina*>(pieza);
+            bool capturo = false;
+            if (reina && reina->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para la reina.\n";
+            }
+            return;
+        }
+
         
         //caballoB1
         if (posicion_central_click_anterior.x == caballoB1.get_pos().x && posicion_central_click_anterior.y == caballoB1.get_pos().y && turno == true)
@@ -640,6 +657,7 @@ void Mundo::mueve()
             }
         }
 
+        /*
         // Movimiento reinaB
         if (posicion_central_click_anterior.x == reinaB.posicion_pieza.x &&
             posicion_central_click_anterior.y == reinaB.posicion_pieza.y && turno == true)
@@ -710,7 +728,7 @@ void Mundo::mueve()
                     turno = true;
                     std::cout << "Turno de rojas\n";
             }
-        }
+        }*/
     }
 
 }

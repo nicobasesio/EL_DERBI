@@ -94,6 +94,39 @@ bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 	}
 }
 
+bool Reina::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo) {
+	// Cálculo del desplazamiento en cada eje
+	int dx = static_cast<int>(destino.x - posicion_pieza.x);
+	int dy = static_cast<int>(destino.y - posicion_pieza.y);
+	int abs_dx = std::abs(dx);
+	int abs_dy = std::abs(dy);
+
+	// Sólo permitimos movimientos rectos o diagonales
+	if ((dx == 0 || dy == 0 || abs_dx == abs_dy) &&
+		caminoLibre(get_pos(), destino, control))
+	{
+		// Convertimos coordenadas de mundo a índices de matriz
+		int i = static_cast<int>((destino.x + 8.0) / 2.0);
+		int j = static_cast<int>((destino.y - 1.0) / 2.0);
+
+		// Verificamos que la casilla esté dentro del tablero
+		if (i >= 0 && i < 8 && j >= 0 && j < 8) {
+			// Si hay pieza enemiga, marcamos captura
+			if (control[i][j] != nullptr) {
+				capturo = true;
+			}
+			// Movemos la reina
+			muevepieza(destino.x, destino.y);
+			return true;
+		}
+	}
+
+	// Si no cumple las condiciones, no se mueve
+	return false;
+}
+
+
+
 bool Reina::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
 	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
