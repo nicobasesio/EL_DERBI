@@ -579,6 +579,23 @@ void Mundo::mueve()
             return;
         }
 
+        if (pieza->es_caballo()) {
+            Caballo* caballo = dynamic_cast<Caballo*>(pieza);
+            bool capturo = false;
+            if (caballo && caballo->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
+            }
+            return;
+        }
+
 
         // los agrupamos en un vector de punteros
         std::vector<Peon*> peones = { &peonB1, &peonB2, &peonB3,  &peonB4, &peonB5, &peonB6, &peonB7, &peonB8, &peonR1, &peonR2, &peonR3, &peonR4,
@@ -729,70 +746,6 @@ void Mundo::mueve()
                 movida = true;
                 turno = true;  // ahora es turno de las blancas
                 std::cout << "Turno de Blancas\n";
-            }
-        }
-        
-        
-        //caballoB1
-        if (posicion_central_click_anterior.x == caballoB1.get_pos().x && posicion_central_click_anterior.y == caballoB1.get_pos().y && turno == true)
-        {
-            bool capturo = false;
-            if (caballoB1.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasR();  
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;
-                std::cout << "Turno de Rojas\n" << std::endl;
-            }
-        }
-        //caballoB2
-        if (posicion_central_click_anterior.x == caballoB2.get_pos().x && posicion_central_click_anterior.y == caballoB2.get_pos().y && turno == true)
-        {
-            bool capturo = false;
-            if (caballoB2.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasR();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;
-                std::cout << "Turno de Rojas\n" << std::endl;
-            }
-        }
-
-        //caballoR1
-        if (posicion_central_click_anterior.x == caballoR1.get_pos().x && posicion_central_click_anterior.y == caballoR1.get_pos().y && turno == false)
-        {
-            bool capturo = false;
-            if (caballoR1.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasB();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;
-                std::cout << "Turno de blancas\n" << std::endl;
-            }
-        }
-
-        //caballoR2
-        if (posicion_central_click_anterior.x == caballoR2.get_pos().x && posicion_central_click_anterior.y == caballoR2.get_pos().y && turno == false)
-        {
-            bool capturo = false;
-            if (caballoR2.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasB();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;
-                std::cout << "Turno de Blancas\n" << std::endl;
             }
         }
 

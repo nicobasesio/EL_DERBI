@@ -73,30 +73,27 @@ bool Caballo::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pie
 
 bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo)
 {
-	int movx = std::abs(posicion_pieza.x - destino.x);
-	int movy = std::abs(posicion_pieza.y - destino.y);
+	int oi = static_cast<int>((posicion_pieza.x + 8.0) / 2.0);
+	int oj = static_cast<int>((posicion_pieza.y - 1.0) / 2.0);
+	int di = static_cast<int>((destino.x + 8.0) / 2.0);
+	int dj = static_cast<int>((destino.y - 1.0) / 2.0);
 
-	
-	if (!((movx == 4 && movy == 2) || (movx == 2 && movy == 4)))
-	{
-		std::cout << "\n[DEBUG] Movimiento invalido para el caballo\n" << std::endl;
-		return false;
-	}
-
-
-	int x = static_cast<int>(round((destino.x + 7.0f) / 2.0f));
-	int y = static_cast<int>(round((destino.y - 2.5f) / 2.0f));
-
-	if (!casillaValida(x, y, control))
+	// 2) Verificar que destino esté dentro del tablero
+	if (di < 0 || di >= 8 || dj < 0 || dj >= 8)
 	{
 		std::cout << "[DEBUG] Casilla destino fuera del tablero\n";
 		return false;
 	}
+	int delta_i = std::abs(di - oi);
+	int delta_j = std::abs(dj - oj);
 
-	// Comprobar si hay pieza enemiga
-	Pieza* objetivo = control[x][y];
+	if (!((delta_i == 2 && delta_j == 1) || (delta_i == 1 && delta_j == 2)))
+	{
+		std::cout << "[DEBUG] Movimiento invalido para el caballo\n";
+		return false;
+	}
 	capturo = false;
-
+	Pieza* objetivo = control[di][dj];
 	if (objetivo != nullptr)
 	{
 		if (objetivo->get_color() != color)
@@ -104,6 +101,7 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 			capturo = true;
 			haComidoPieza = true;
 			std::cout << "[DEBUG] Caballo capturo una pieza\n";
+			
 		}
 		else
 		{
@@ -112,8 +110,11 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 		}
 	}
 
-	// Realizar el movimiento
+	control[oi][oj] = nullptr;
+	control[di][dj] = this;
+
 	muevepieza(destino.x, destino.y);
+
 	return true;
 }
 
