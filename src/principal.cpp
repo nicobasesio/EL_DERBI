@@ -113,18 +113,18 @@ void OnDraw() {
         mundo.dibuja();
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
-
+        ETSIDI::setFont("fuente/OpenSans_Condensed-Bold.ttf", 22);
         char buffer1[20], buffer2[20];
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
         sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
-
+        
         //temporizadores
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
         ETSIDI::setTextColor(1, 1, 1);
 
-        ETSIDI::printxy(buffer1, -15.0f, -4.0f);
-        ETSIDI::printxy(buffer2, 9.3f, -4.0f);
+        ETSIDI::printxy(buffer1, -13.5f, 16.7f);
+        ETSIDI::printxy(buffer2, -13.5f, -1.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
@@ -184,7 +184,7 @@ void OnTimer(int value) {
                 tiempo_jugador1--;
             else
                 tiempo_jugador2--;
-
+            std::cout << "[DEBUG] Tiempo jugador 1: " << tiempo_jugador1 << std::endl;
             ultimo_tiempo_actualizado = tiempo_actual;
 
             // Comprobación por tiempo agotado
