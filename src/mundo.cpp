@@ -101,7 +101,7 @@ void Mundo::crear_matriz_control() {
 
 }
 
-Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr)) {}
+Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr))  {}
 
 
 void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
@@ -254,7 +254,10 @@ void Mundo::dibuja() {
     caballoR2.dibuja_pieza();
     reyR.dibuja();
     reinaR.dibuja_pieza();
-
+    for (auto* pieza : comidaB)
+        pieza->dibuja_pieza();
+    for (auto* pieza : comidaR)
+        pieza->dibuja_pieza();
 
 }
 
@@ -624,8 +627,8 @@ void Mundo::comidasB() {
 
     if (pieza_comida != nullptr) {
         comidaB.push_back(pieza_comida);
-        comidaB.back()->muevepieza(pos_comidaB_X, -2);
-        pos_comidaB_X -= 2.0;
+        comidaB.back()->muevepieza(pos_comidaB_X, -4);
+        pos_comidaB_X -= 1.0;
     }
     else {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;
@@ -642,7 +645,7 @@ void Mundo::comidasR() {
     if (pieza_comida != nullptr) {
         comidaR.push_back(pieza_comida);
         comidaR.back()->muevepieza(pos_comidaR_X, -2);
-        pos_comidaR_X += 2.0;
+        pos_comidaR_X += 1.0;
     }
     else {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;

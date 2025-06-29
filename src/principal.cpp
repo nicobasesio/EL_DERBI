@@ -128,8 +128,7 @@ void OnDraw() {
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
-        ETSIDI::setTextColor(1, 1, 0);  
-        ETSIDI::printxy("PRUEBA DE TEXTO", -5, 0);
+        
 
 
     }
