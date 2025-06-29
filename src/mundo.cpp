@@ -593,6 +593,23 @@ void Mundo::mueve()
             return;
         }
 
+        if (pieza->es_caballo()) {
+            Caballo* caballo = dynamic_cast<Caballo*>(pieza);
+            bool capturo = false;
+            if (caballo && caballo->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
+            }
+            return;
+        }
+
+
     }
 
 }
