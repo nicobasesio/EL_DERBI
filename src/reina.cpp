@@ -12,7 +12,7 @@ void Reina::muevepieza(double x, double y)
 }
 
 
-bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   
+bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {
 	if (i >= 0 && i < control.size() && j >= 0 && j < control[0].size())
 		return true;
 	else
@@ -22,12 +22,12 @@ bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control
 
 
 
-
 void Reina::set_pos_pieza(const VECTOR2D& pos)
 {
 	if (r.casilla.x == 0 && r.casilla.y == 0)
 		posicion_pieza = pos;
 }
+
 
 void Reina::dibuja_pieza()
 {
@@ -37,7 +37,7 @@ void Reina::dibuja_pieza()
 		sprite2.draw();			//rojas
 	if (color == 1)
 		sprite.draw();		// blancas
-	//fin del codigo incluido
+	
 	glPopMatrix();
 	glFlush();
 }
@@ -50,8 +50,9 @@ void Reina::set_color_pieza(bool a)
 		color = false;
 }
 
+
 bool Reina::caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control) {
-	int x1 = static_cast<int>((origen.x + 8.0) / 2.0);   
+	int x1 = static_cast<int>((origen.x + 8.0) / 2.0);
 	int y1 = static_cast<int>((origen.y - 1.0) / 2.0);
 	int x2 = static_cast<int>((destino.x + 8.0) / 2.0);
 	int y2 = static_cast<int>((destino.y - 1.0) / 2.0);
@@ -86,13 +87,46 @@ bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 			int y = reina_y + dy - 1;
 			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
 				if (control[x][y] != nullptr) {
-					
+
 					return true;
 				}
 			}
 		}
 	}
 }
+
+
+bool Reina::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo) {
+	// Cálculo del desplazamiento en cada eje
+	int dx = static_cast<int>(destino.x - posicion_pieza.x);
+	int dy = static_cast<int>(destino.y - posicion_pieza.y);
+	int abs_dx = std::abs(dx);
+	int abs_dy = std::abs(dy);
+
+	// Sólo permitimos movimientos rectos o diagonales
+	if ((dx == 0 || dy == 0 || abs_dx == abs_dy) &&
+		caminoLibre(get_pos(), destino, control))
+	{
+		// Convertimos coordenadas de mundo a índices de matriz
+		int i = static_cast<int>((destino.x + 8.0) / 2.0);
+		int j = static_cast<int>((destino.y - 1.0) / 2.0);
+
+		// Verificamos que la casilla esté dentro del tablero
+		if (i >= 0 && i < 8 && j >= 0 && j < 8) {
+			// Si hay pieza enemiga, marcamos captura
+			if (control[i][j] != nullptr) {
+				capturo = true;
+			}
+			// Movemos la reina
+			muevepieza(destino.x, destino.y);
+			return true;
+		}
+	}
+
+	
+	return false;
+}
+
 
 bool Reina::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));

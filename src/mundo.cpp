@@ -268,7 +268,7 @@ void Mundo::mueve()
     Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
 
     if (!capturables.empty()) {
-        
+
         Pieza* pieza_seleccionada = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
         VECTOR2D origen = posicion_central_click_anterior;
 
@@ -349,14 +349,14 @@ void Mundo::mueve()
             int dx[] = { 0, 0, -1, 1 };
             int dy[] = { -1, 1, 0, 0 };
 
-                
+
             std::vector<VECTOR2D> posibles_destinos;
 
             for (int dir = 0; dir < 4; ++dir) { // evalua todas las direcciones horizontales y verticales
                 int nx = x + dx[dir];
                 int ny = y + dy[dir];
                 while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) { // mientras que no se salga del tablero continua
-                    Pieza* objetivo = control[nx][ny]; 
+                    Pieza* objetivo = control[nx][ny];
                     if (objetivo != nullptr) {
                         if (objetivo->get_color() != pieza->get_color()) {
                             float x_mundo = nx * 2.0f - 7.0f;
@@ -365,7 +365,7 @@ void Mundo::mueve()
                             destino.x = x_mundo;
                             destino.y = y_mundo;
                             posibles_destinos.push_back(destino);
-                                
+
                         }
                         break;
                     }
@@ -513,8 +513,6 @@ void Mundo::mueve()
 
     else
     {
-
-       
         if (pieza->es_rey()) {
             Rey* rey = dynamic_cast<Rey*>(pieza);
             bool capturo = false;
@@ -536,7 +534,7 @@ void Mundo::mueve()
             bool capturo = false;
             if (alfil && alfil->mover(posicion_central_click, control, capturo)) {
                 if (capturo)
-                    pieza->get_color() ? comidasB() : comidasR(); 
+                    pieza->get_color() ? comidasB() : comidasR();
                 actualizar_matriz_control();
                 turno = !turno;
                 movida = true;
@@ -558,7 +556,7 @@ void Mundo::mueve()
                 movida = true;
             }
             else {
-                std::cout << "[REGLA] Movimiento no valido para el peón.\n";
+                std::cout << "[REGLA] Movimiento no valido para el peon.\n";
             }
             return;
         }
@@ -668,25 +666,25 @@ void Mundo::mueve()
                     return;
                 }
           
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;  // ahora es turno de las rojas
-                std::cout << "Turno de Rojas\n";
-            }
 
+        if (pieza->es_reina()) {
+            Reina* reina = dynamic_cast<Reina*>(pieza);
+            bool capturo = false;
+            if (reina && reina->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para la reina.\n";
+            }
+            return;
         }
 
 
-        //PEONES ROJOS
-        for (Peon* peon : peones) {
-            //si el peón clicado coincide y es turno de rojas
-            if (posicion_central_click_anterior.x == peon->posicion_pieza.x && posicion_central_click_anterior.y == peon->posicion_pieza.y && turno == false)
-            {
-                // desplazamientos en casillas
-                int dx = static_cast<int>(posicion_central_click.x - peon->posicion_pieza.x);
-                int dy = static_cast<int>(posicion_central_click.y - peon->posicion_pieza.y);
-                int movx = std::abs(dx), movy = std::abs(dy);
-                std::cout << "[DEBUG] movx: " << movx << ", movy: " << movy << std::endl;
 
                 int ix = casilla_actual.x - 1;
                 int iy = casilla_actual.y - 1;
@@ -746,80 +744,70 @@ void Mundo::mueve()
                 movida = true;
                 turno = true;  // ahora es turno de las blancas
                 std::cout << "Turno de Blancas\n";
-            }
-        }
 
-        // Movimiento reinaB
-        if (posicion_central_click_anterior.x == reinaB.posicion_pieza.x &&
-            posicion_central_click_anterior.y == reinaB.posicion_pieza.y && turno == true)
+        //caballoB1
+        if (posicion_central_click_anterior.x == caballoB1.get_pos().x && posicion_central_click_anterior.y == caballoB1.get_pos().y && turno == true)
         {
-            int dx = posicion_central_click.x - reinaB.posicion_pieza.x;
-            int dy = posicion_central_click.y - reinaB.posicion_pieza.y;
-
-            int abs_dx = std::abs(dx);
-            int abs_dy = std::abs(dy);
-
-            bool movimiento_valido = (dx == 0 || dy == 0 || abs_dx == abs_dy);
-
-            if (movimiento_valido && reinaB.caminoLibre(reinaB.get_pos(), posicion_central_click, control))
+            bool capturo = false;
+            if (caballoB1.mover(posicion_central_click, control, capturo))
             {
-            
-            
-                    if (reinaB.pieza_comible(casilla_actual, control))
-                    {
-                        if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
-                            control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == false)
-                        {
-                            comidasR();
-                        }
-                        else
-                        {
-                            comidasB();
-                        }
-                    }
+                if (capturo)
+                    comidasR();
 
-                    reinaB.muevepieza(posicion_central_click.x, posicion_central_click.y);
-                    actualizar_matriz_control();
-                    movida = true;
-                    turno = false;
-                    std::cout << "Turno de rojas\n";
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de Rojas\n" << std::endl;
             }
         }
-
-        // Movimiento reinaR
-        if (posicion_central_click_anterior.x == reinaR.posicion_pieza.x &&
-            posicion_central_click_anterior.y == reinaR.posicion_pieza.y && turno == false)
+        //caballoB2
+        if (posicion_central_click_anterior.x == caballoB2.get_pos().x && posicion_central_click_anterior.y == caballoB2.get_pos().y && turno == true)
         {
-            int dx = posicion_central_click.x - reinaR.posicion_pieza.x;
-            int dy = posicion_central_click.y - reinaR.posicion_pieza.y;
-
-            int abs_dx = std::abs(dx);
-            int abs_dy = std::abs(dy);
-
-            bool movimiento_valido = (dx == 0 || dy == 0 || abs_dx == abs_dy);
-
-            if (movimiento_valido && reinaR.caminoLibre(reinaR.get_pos(), posicion_central_click, control))
+            bool capturo = false;
+            if (caballoB2.mover(posicion_central_click, control, capturo))
             {
-                    if (reinaR.pieza_comible(casilla_actual, control))
-                    {
-                        if (control[casilla_actual.x - 1][casilla_actual.y - 1] != nullptr &&
-                            control[casilla_actual.x - 1][casilla_actual.y - 1]->get_color() == true)
-                        {
-                            comidasB();
-                        }
-                        else
-                        {
-                            comidasR();
-                        }
-                    }
+                if (capturo)
+                    comidasR();
 
-                    reinaR.muevepieza(posicion_central_click.x, posicion_central_click.y);
-                    actualizar_matriz_control();
-                    movida = true;
-                    turno = true;
-                    std::cout << "Turno de rojas\n";
+                actualizar_matriz_control();
+                movida = true;
+                turno = false;
+                std::cout << "Turno de Rojas\n" << std::endl;
             }
         }
+
+        //caballoR1
+        if (posicion_central_click_anterior.x == caballoR1.get_pos().x && posicion_central_click_anterior.y == caballoR1.get_pos().y && turno == false)
+        {
+            bool capturo = false;
+            if (caballoR1.mover(posicion_central_click, control, capturo))
+            {
+                if (capturo)
+                    comidasB();
+
+                actualizar_matriz_control();
+                movida = true;
+                turno = true;
+                std::cout << "Turno de blancas\n" << std::endl;
+            }
+        }
+
+        //caballoR2
+        if (posicion_central_click_anterior.x == caballoR2.get_pos().x && posicion_central_click_anterior.y == caballoR2.get_pos().y && turno == false)
+        {
+            bool capturo = false;
+            if (caballoR2.mover(posicion_central_click, control, capturo))
+            {
+                if (capturo)
+                    comidasB();
+
+                actualizar_matriz_control();
+                movida = true;
+                turno = true;
+                std::cout << "Turno de Blancas\n" << std::endl;
+            }
+        }
+
     }
 
 }
@@ -850,17 +838,13 @@ void Mundo::comidasR() {
 
     if (pieza_comida != nullptr) {
         comidaR.push_back(pieza_comida);
-        comidaR.back()->muevepieza(pos_comidaR_X, -2);  
+        comidaR.back()->muevepieza(pos_comidaR_X, -2);
         pos_comidaR_X += 2.0;
     }
     else {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;
     }
 }
-
-
-
-
 
 void Mundo::actualizar_matriz_control()
 {
@@ -887,19 +871,3 @@ std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() { // el pai
     }
     return lista;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
