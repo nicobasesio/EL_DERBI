@@ -11,7 +11,7 @@
 
 class Mundo
 {
-	Tablero tablero;
+	//Tablero tablero;
 	VECTOR2D posicion_central_click; //es la posicion del centro de la casilla a la que se hace click
 	VECTOR2D posicion_central_click_anterior;
 	VECTOR2D casilla_actual;
@@ -60,7 +60,7 @@ class Mundo
 	
 public:
 	Mundo();
-	
+	Tablero tablero;
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
