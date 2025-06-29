@@ -5,7 +5,7 @@
 #include "ETSIDI.h"
 #include "pieza.h"
 
-class Reina :public Pieza	
+class Reina :public Pieza
 {
 	Raton r;
 	bool color;
@@ -38,10 +38,11 @@ public:
 	VECTOR2D get_pos() {
 		return posicion_pieza;
 	}
-	
-	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  
+
+	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>>);
 	inline bool es_reina() const override { return true; }
 	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
 	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
+
 };

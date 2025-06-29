@@ -12,7 +12,7 @@ void Reina::muevepieza(double x, double y)
 }
 
 
-bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   
+bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {
 	if (i >= 0 && i < control.size() && j >= 0 && j < control[0].size())
 		return true;
 	else
@@ -51,7 +51,7 @@ void Reina::set_color_pieza(bool a)
 }
 
 bool Reina::caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control) {
-	int x1 = static_cast<int>((origen.x + 8.0) / 2.0);   
+	int x1 = static_cast<int>((origen.x + 8.0) / 2.0);
 	int y1 = static_cast<int>((origen.y - 1.0) / 2.0);
 	int x2 = static_cast<int>((destino.x + 8.0) / 2.0);
 	int y2 = static_cast<int>((destino.y - 1.0) / 2.0);
@@ -86,7 +86,7 @@ bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 			int y = reina_y + dy - 1;
 			if (x >= 0 && x <= 7 && y >= 0 && y <= 8) {  // mira si esta en el limite del tablero
 				if (control[x][y] != nullptr) {
-					
+
 					return true;
 				}
 			}
@@ -124,7 +124,6 @@ bool Reina::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, b
 	// Si no cumple las condiciones, no se mueve
 	return false;
 }
-
 
 
 bool Reina::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
