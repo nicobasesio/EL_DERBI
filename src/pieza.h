@@ -19,6 +19,7 @@ public:
 	Pieza* pieza_comible = nullptr;
 	virtual void muevepieza(double x, double y) = 0;
 	virtual ~Pieza() {}
+	virtual bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo) = 0;
 	virtual void set_pos_pieza(const VECTOR2D& pos) {} // Se introduce la dirección en la que hay una pieza
 	virtual void dibuja_pieza() {}
 	virtual void set_color_pieza(bool a) {
@@ -69,8 +70,6 @@ public:
 	virtual bool es_alfil() const { return false; }
 	virtual bool es_reina() const { return false; }
 
-
-	
 	
 };
 

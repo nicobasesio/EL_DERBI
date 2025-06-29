@@ -1,6 +1,7 @@
 #pragma once
 #include "VECTOR2D.h"
 #include "ETSIDI.h"
+#include <vector>
 class Tablero
 {
 public:
@@ -9,6 +10,13 @@ public:
 	VECTOR2D posicion_temp;
 	ETSIDI::SpriteSequence temporizador{ "imagenes/temporizador.png", 1 };
 	ETSIDI::SpriteSequence temporizador2{ "imagenes/temporizador.png", 1 };
+
+
+
+private:
+	std::vector<std::pair<int, int>> casillasResaltadas;
+	// dibuja el recuadro rojo en torno a la casilla cuyo centro es 'centro'
+	void dibuja_casilla_resaltada(const VECTOR2D& centro);
 
 public:
 	
@@ -27,6 +35,9 @@ public:
 	void dibuja_temporizador();
 
 	void set_coordenadas(const VECTOR2D& coord);
+	void limpiarResaltados();
+	void agregarResaltado(int col, int fil);
+
 	void dibuja_casilla(VECTOR2D posicion_central_click);
 	void dibuja_casilla_anterior_tras_movimiento(VECTOR2D posicion_central_click_anterior);
 

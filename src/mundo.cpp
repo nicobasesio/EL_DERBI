@@ -216,6 +216,7 @@ void Mundo::dibuja() {
     if (casilla_seleccionada)
         tablero.dibuja_casilla(posicion_central_click);
 
+
     //Blancas
     peonB1.dibuja_pieza();
     peonB2.dibuja_pieza();
