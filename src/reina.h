@@ -52,6 +52,6 @@ public:
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>>);
 	inline bool es_reina() const override { return true; }
 	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
-	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo)override;
+	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
 
 };

@@ -98,19 +98,12 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 	capturo = false;
 
 	if (objetivo != nullptr)
-	{
-		if (objetivo->get_color() != color)
-		{
-			capturo = true;
-			haComidoPieza = true;
-			std::cout << "[DEBUG] Caballo capturo una pieza\n";
-		}
-		else
-		{
-			std::cout << "[DEBUG] No puedes capturar tu propia pieza\n";
-			return false;
-		}
-	}
+{
+    capturo = true;
+    haComidoPieza = true;
+    std::cout << "[DEBUG] Caballo capturo una pieza\n";
+}
+
 
 	// Realizar el movimiento
 	muevepieza(destino.x, destino.y);
