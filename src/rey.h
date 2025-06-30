@@ -29,6 +29,7 @@ public:
 	bool get_color() {
 		return color;
 	}
+	void dibuja_pieza() override;
 	bool get_haComidoPieza() {
 		return haComidoPieza;
 	}
@@ -39,7 +40,7 @@ public:
 	
 	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
 	inline bool es_rey() const override { return true; }
-	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
+	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo)override;
 	
 
 		

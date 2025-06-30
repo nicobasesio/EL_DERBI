@@ -4,36 +4,44 @@
 #include <stdio.h>
 #include "raton.h"
 
-
-void Tablero::dibuja_tablero(int c, int f)
-{
-	
-	
+void Tablero::dibuja_tablero(int columnas, int filas) {
 	glDisable(GL_LIGHTING);
-	//Bucle que dibuja el tablero cuadrado a cuadrado
-	for (int i = 0; i < c; i++)
-	{
-		for (int j = 0; j < f; j++)
-		{
-			// Primeramente hacemos la fila de abajo (cada columna) y después saltamos a la siguiente fila 
-			//Va de izquierda a derecha
-			if ((i + j) % 2 != 0) //si la suma de fila + columna es imparpar, dibuja blanco, sino, rojo
-				dibuja_cuadrado_blanco(i, j); //blanco
-			else
-				dibuja_cuadrado_verde(i, j); //rojo
+
+	// 1) dibuja casillas normales
+	for (int c = 0; c < columnas; ++c) {
+		for (int f = 0; f < filas; ++f) {
+			if ((c + f) & 1) dibuja_cuadrado_blanco(c, f);
+			else            dibuja_cuadrado_verde(c, f);
 		}
 	}
 
-	
-	dibuja_marco(c, f);
+	// 2) dibuja todos los resaltados registrados
+	for (auto& pr : casillasResaltadas) {
+		int c = pr.first, f = pr.second;
+		VECTOR2D centro{
+			coordenadas.x + 2.0 * c,
+			coordenadas.y + 2.0 * f
+		};
+		dibuja_casilla_resaltada(centro);
+	}
+
+	// 3) marco, fondo, temporizadores...
+	dibuja_marco(columnas, filas);
 	glEnable(GL_LIGHTING);
 	dibuja_fondo();
-
-	//Llamamos todas las funciones en dibuja tablero
-	
 	dibuja_temporizador();
-	
+}
 
+// Borra todos los resaltados
+void Tablero::limpiarResaltados() {
+	casillasResaltadas.clear();
+}
+
+// Registra un resaltado dado por índices (0..7)
+void Tablero::agregarResaltado(int col, int fil) {
+	// sólo si están en rango
+	if (col >= 0 && col < 8 && fil >= 0 && fil < 8)
+		casillasResaltadas.emplace_back(col, fil);
 }
 
 
@@ -140,4 +148,14 @@ void Tablero::dibuja_temporizador() {
 	glTranslated(0, 0, 0.001);
 	temporizador2.draw();
 	glPopMatrix();
+}
+
+void Tablero::dibuja_casilla_resaltada(const VECTOR2D& centro) {
+	glColor3ub(220, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(centro.x - 1, centro.y - 1, 0.0f);
+	glVertex3f(centro.x - 1, centro.y + 1, 0.0f);
+	glVertex3f(centro.x + 1, centro.y + 1, 0.0f);
+	glVertex3f(centro.x + 1, centro.y - 1, 0.0f);
+	glEnd();
 }

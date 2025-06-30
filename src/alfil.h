@@ -42,6 +42,6 @@ public:
 	bool rutaDiagonalLibre(int x1, int y1, int x2, int y2, const std::vector<std::vector<Pieza*>>& control);
 	inline bool es_alfil() const override { return true; }
 	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
-	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
+	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo)override;
 
 };

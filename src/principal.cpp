@@ -5,6 +5,8 @@
 #include<freeglut.h>
 #include <string>
 #include <random>
+#include "tablero.h"
+
 using namespace std;
 
 Mundo mundo;
@@ -111,23 +113,22 @@ void OnDraw() {
         mundo.dibuja();
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
-
+        ETSIDI::setFont("fuente/OpenSans_Condensed-Bold.ttf", 22);
         char buffer1[20], buffer2[20];
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
         sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
-
+        
         //temporizadores
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
         ETSIDI::setTextColor(1, 1, 1);
 
-        ETSIDI::printxy(buffer1, -15.0f, -4.0f);
-        ETSIDI::printxy(buffer2, 9.3f, -4.0f);
+        ETSIDI::printxy(buffer1, -13.5f, 16.7f);
+        ETSIDI::printxy(buffer2, -13.5f, -1.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
-        ETSIDI::setTextColor(1, 1, 0);  
-        ETSIDI::printxy("PRUEBA DE TEXTO", -5, 0);
+        
 
 
     }
@@ -182,7 +183,7 @@ void OnTimer(int value) {
                 tiempo_jugador1--;
             else
                 tiempo_jugador2--;
-
+            std::cout << "[DEBUG] Tiempo jugador 1: " << tiempo_jugador1 << std::endl;
             ultimo_tiempo_actualizado = tiempo_actual;
 
             // Comprobación por tiempo agotado
@@ -257,186 +258,168 @@ bool es_pieza_con_captura(Pieza* pieza, const std::vector<std::pair<Pieza*, VECT
 }
 
 void mouseClick(int button, int state, int x, int y) {
+    // 1) Convertir píxel → coordenadas de mundo
     float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
     float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
 
+    // 2) MENÚS
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
-        float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
-
-        std::cout << "Click en pantalla: (" << x << "," << y << ") => mundo: (" << x_normal << "," << y_normal << ")\n";
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
             estado = MENU_MODOS;
-            
             glutPostRedisplay();
         }
         return;
     }
-
     if (estado == MENU_MODOS && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
-
-        std::cout << "Click en seleccion de modo: (" << x_normal << "," << y_normal << ")\n";
-
-        //modo1
+        // modo1
         if (x_normal > -8 && x_normal < 8 && y_normal > 13 && y_normal < 15.5) {
-            modoSeleccionado = 1;
-            tiempo_jugador1 = tiempo_jugador2 = 60;
-            ETSIDI::stopMusica(); 
-            estado = JUEGO;
-            glutPostRedisplay();
-
-            estado = JUEGO;
-            mundo.inicializa();
-            return;
+            modoSeleccionado = 1; tiempo_jugador1 = tiempo_jugador2 = 60;
         }
-        //modo2
-        if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11) {
-            modoSeleccionado = 2;
-            tiempo_jugador1 = tiempo_jugador2 = 180;
-            ETSIDI::stopMusica();
-            estado = JUEGO;
-            glutPostRedisplay();
-            estado = JUEGO;
-            mundo.inicializa();
-            return;
+        // modo2
+        else if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11) {
+            modoSeleccionado = 2; tiempo_jugador1 = tiempo_jugador2 = 180;
         }
-
-        //modo3
-        if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5) {
-            modoSeleccionado = 3;
-            tiempo_jugador1 = tiempo_jugador2 = 300;
-            ETSIDI::stopMusica();
-            estado = JUEGO;
-            glutPostRedisplay();
-            estado = JUEGO;
-            mundo.inicializa();
-            return;
+        // modo3
+        else if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5) {
+            modoSeleccionado = 3; tiempo_jugador1 = tiempo_jugador2 = 300;
         }
-
-        // Clic sobre el icono "i" 
-        if (x_normal > 11 && x_normal < 13.5 && y_normal > -2 && y_normal < 0.5) {
+        // info
+        else if (x_normal > 11 && x_normal < 13.5 && y_normal > -2 && y_normal < 0.5) {
             estado = MENU_INFO;
             glutPostRedisplay();
             return;
         }
-
-
+        else {
+            return; // fuera de botones
+        }
+        ETSIDI::stopMusica();
+        estado = JUEGO;
+        mundo.inicializa();
+        glutPostRedisplay();
         return;
     }
-
     if (estado == MENU_INFO && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Botón de retroceso en la esquina superior izquierda
         if (x_normal > -14 && x_normal < -11.5 && y_normal > 16 && y_normal < 18.5) {
             estado = MENU_MODOS;
             glutPostRedisplay();
-            return;
         }
+        return;
     }
 
+    // 3) JUEGO – sólo entramos si ya estamos en JUEGO
+    if (estado != JUEGO || button != GLUT_LEFT_BUTTON || state != GLUT_DOWN)
+        return;
+    // … tras comprobar estado==JUEGO y botón pulsado …
+
+    auto capturables = mundo.piezas_con_captura();
+    mundo.tablero.limpiarResaltados();
+
+    for (auto& par : capturables) {
+        Pieza* atacante = par.first;
+        VECTOR2D dest = par.second;
+
+        // DEBUG: qué par estamos procesando
+        std::cout
+            << "[DEBUG] atacante en ("
+            << atacante->get_pos().x << "," << atacante->get_pos().y
+            << "), destino lógico = ("
+            << dest.x << "," << dest.y << ")\n";
+
+        // cálculo índices
+        int col_at = int((atacante->get_pos().x - mundo.tablero.coordenadas.x) / 2 + .5f);
+        int fil_at = int((atacante->get_pos().y - mundo.tablero.coordenadas.y) / 2 + .5f);
+        int col_de = int((dest.x - mundo.tablero.coordenadas.x) / 2 + .5f);
+        int fil_de = int((dest.y - mundo.tablero.coordenadas.y) / 2 + .5f);
+
+        std::cout
+            << "[DEBUG] índices → atacante("
+            << col_at << "," << fil_at
+            << "), destino("
+            << col_de << "," << fil_de
+            << ")\n";
+
+        // resalto si están en rango
+        if (col_at >= 0 && col_at < 8 && fil_at >= 0 && fil_at < 8)
+            mundo.tablero.agregarResaltado(col_at, fil_at);
+
+        if (col_de >= 0 && col_de < 8 && fil_de >= 0 && fil_de < 8)
+            mundo.tablero.agregarResaltado(col_de, fil_de);
+    }
+
+    glutPostRedisplay();
 
 
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Transformar coordenadas de pantalla a coordenadas del mundo
-        if ((x >= 15 && x <= 400) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
-            raton.posicion.y = ((-18.0 * y) + (575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
-        }
-        else if ((x > 400 && x <= 785) && (y >= 13 && y <= 575 * 18 / 21 + 13)) {
-            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
-            raton.posicion.y = ((-18.0 * y + 575.0 * 18 * 18 / 21 + 13 * 18)) / (575.0 * 18 / 21);
-        }
-        else if ((x > 400 && x <= 785) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-            raton.posicion.x = (-14.0 * x + 5600.0) / -385.0;
-            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
-        }
-        else if ((x >= 15 && x <= 400) && (y >= (575 * 18 / 21) + 13 && y <= 588)) {
-            raton.posicion.x = (14.0 * x - 5600.0) / 385.0;
-            raton.posicion.y = ((3.0 * y - 3 * (575 * 18 / 21 + 13))) / (575.0 * 18 / 21 - 575.0);
-        }
-        else {
-            mundo.casilla_seleccionada = false;
+
+
+    // 3.2) Calcular casilla clicada
+    raton.posicion.x = x_normal;
+    raton.posicion.y = y_normal;
+    VECTOR2D centro = raton.elige_casilla();
+    if (centro.x == 0.0f && centro.y == 0.0f) {
+        std::cout << "[INFO] Click fuera del tablero\n";
+        return;
+    }
+    int i = static_cast<int>(raton.casilla.x) - 1;
+    int j = static_cast<int>(raton.casilla.y) - 1;
+    if (!mundo.casillaValida(i, j)) {
+        std::cout << "[INFO] Casilla vacía o inválida\n";
+        return;
+    }
+
+    // 3.3) Primer clic: seleccionar pieza
+    if (!pieza_seleccionada) {
+        Pieza* p = mundo.getControl()[i][j];
+        if (!p || p->get_color() != mundo.get_turno()) {
+            std::cout << "[INFO] Selección inválida\n";
             return;
         }
+        posicion_central_click = centro;
+        posicion_central_click_anterior = centro;
+        mundo.set_posicion_central_click(centro);
+        mundo.set_posicion_central_click_anterior(centro);
+        mundo.casilla_seleccionada = true;
+        pieza_seleccionada = true;
+        return;
+    }
 
-        VECTOR2D centro = raton.elige_casilla();
-        int i = static_cast<int>(raton.casilla.x) - 1;
-        int j = static_cast<int>(raton.casilla.y) - 1;
+    // 3.4) Segundo clic: mover o capturar
+    if (posicion_central_click.x == centro.x &&
+        posicion_central_click.y == centro.y) {
+        // deselecciona
+        pieza_seleccionada = false;
+        mundo.casilla_seleccionada = false;
+        return;
+    }
+    // preparar para mover
+    mundo.set_posicion_central_click(centro);
+    mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
+    mundo.set_casilla_actual(raton.casilla);
+    mundo.set_casilla_anterior(raton.casilla_anterior);
 
-        // Verificar si la casilla es válida
-        if (!mundo.casillaValida(i, j)) {
-            std::cout << "[INFO] Casilla vacia o invalida, no se puede seleccionar\n";
-            return;
-        }
-
-        if (!pieza_seleccionada) {
-            Pieza* p = mundo.getControl()[i][j];
-            if (p == nullptr) {
-                std::cout << "[INFO] Casilla vacia, no se puede seleccionar\n";
-                return;
-            }
-
-            if (p->get_color() != mundo.get_turno()) {
-                std::cout << "[INFO] No puedes mover piezas del otro color\n";
-                return;
-            }
-
-            // Verifica si hay capturas obligatorias
-            auto capturables = mundo.piezas_con_captura();
-            if (!capturables.empty() && !es_pieza_con_captura(p, capturables)) {
-                std::cout << "[INFO] Debes seleccionar una pieza que pueda capturar\n";
-                return;
-            }
-
-            // Selección válida
-            posicion_central_click = centro;
-            posicion_central_click_anterior = centro;
-            mundo.set_posicion_central_click(centro);
-            mundo.set_posicion_central_click_anterior(centro);
-            mundo.casilla_seleccionada = true;
-            pieza_seleccionada = true;
-        }
-
-        else {
-            // Segundo clic: intentar mover
-            posicion_central_click = centro;
-
-            if (posicion_central_click.x == posicion_central_click_anterior.x &&
-                posicion_central_click.y == posicion_central_click_anterior.y) {
-                std::cout << "[INFO] Casilla deseleccionada\n";
-                mundo.casilla_seleccionada = false;
-                pieza_seleccionada = false;
-                return;
-            }
-
-            mundo.set_posicion_central_click(posicion_central_click);
-            mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
-            mundo.set_casilla_actual(raton.casilla);
-            mundo.set_casilla_anterior(raton.casilla_anterior);
-
-            if (!mundo.casilla_seleccionada) {
-                std::cout << "[INFO] No hay casilla seleccionada, no se puede mover\n";
-                pieza_seleccionada = false;
-                return;
-            }
-
-            // Si hay capturas obligatorias, solo puedes moverte a una casilla con enemigo
-            auto capturables = mundo.piezas_con_captura();
-            if (!capturables.empty()) {
-                Pieza* destino = mundo.getControl()[i][j];
-                if (destino == nullptr || destino->get_color() == mundo.get_turno()) {
-                    std::cout << "[INFO] Debes capturar una pieza enemiga\n";
-                    pieza_seleccionada = false;
-                    return;
-                }
-            }
-
-
-            mundo.casilla_seleccionada = true;
-            mundo.mueve();
+    // si hay capturas forzosas, obligar a destino enemigo
+    if (!capturables.empty()) {
+        Pieza* dest = mundo.getControl()[i][j];
+        if (!dest || dest->get_color() == mundo.get_turno()) {
+            std::cout << "[INFO] Debes capturar una pieza enemiga\n";
             pieza_seleccionada = false;
+            return;
         }
     }
+
+    // ejecuta la jugada
+   // … después de validar captura o movimiento …
+    mundo.mueve();
+
+    // **Aquí** eliminamos cualquier resaltado pendiente
+    mundo.tablero.limpiarResaltados();
+    glutPostRedisplay();
+
+    pieza_seleccionada = false;
 
 }
+
+
+
+
+
 

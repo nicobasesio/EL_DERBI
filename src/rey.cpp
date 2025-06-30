@@ -102,9 +102,6 @@ bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, boo
 }
 
 
-
-
-
-
-
-
+void Rey::dibuja_pieza() {
+	dibuja(); 
+}
