@@ -17,8 +17,8 @@ class Mundo
 	VECTOR2D casilla_actual;
 	VECTOR2D casilla_anterior;
 	VECTOR2D coordRatonFin, coordRatonInicial;
-	VECTOR2D posInicioPiezaMover;    //Mediante el azar se elegirá una pieza del vector piezasNegras. Posicion inicial de la pieza que se movera
-	VECTOR2D posFinPiezaMover;       //Mediante el azar se elegirá una pieza del vector posiciones. Posicion final donde la pieza se movera
+	VECTOR2D posInicioPiezaMover;    //Mediante el azar se elegirï¿½ una pieza del vector piezasNegras. Posicion inicial de la pieza que se movera
+	VECTOR2D posFinPiezaMover;       //Mediante el azar se elegirï¿½ una pieza del vector posiciones. Posicion final donde la pieza se movera
 	VECTOR2D posicion_anterior;
 	VECTOR2D posicion_actual;
 	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
@@ -33,6 +33,7 @@ class Mundo
 	Caballo caballoR1, caballoR2;
 	Rey reyB, reyR;
 	Reina reinaB, reinaR;
+	Tablero tablero;
 	std::vector<std::vector<Pieza*>> control;
 
 	double pos_comidaB_X = 7.0;
@@ -55,12 +56,12 @@ class Mundo
 	int filas;
 	
 
-	bool movida = false; //será true cuando se haya movido una pieza
+	bool movida = false; //serï¿½ true cuando se haya movido una pieza
 
 	
 public:
 	Mundo();
-	Tablero tablero;
+	
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
@@ -77,12 +78,17 @@ public:
 	void actualizar_matriz_control();
 	void comidasB();
 	void comidasR();
-
-
+    // Getters para exponer el tablero
+    Tablero& getTablero() {
+        return tablero;
+    }
+    const Tablero& getTablero() const {
+        return tablero;
+    }
 	inline bool get_turno() { return turno; }
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
-	bool casilla_seleccionada = false; //será true cuando se haya movido una pieza
+	bool casilla_seleccionada = false; //serï¿½ true cuando se haya movido una pieza
 	
 	std::vector<std::pair<Pieza*, VECTOR2D>> piezas_con_captura();
 	
