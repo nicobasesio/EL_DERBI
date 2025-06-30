@@ -7,6 +7,8 @@
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
 
+float anguloAnimacion = 0.0f;
+
 void Mundo::crear_matriz_control() {
     columnas = 8;
     filas = 8;
@@ -101,7 +103,7 @@ void Mundo::crear_matriz_control() {
 
 }
 
-Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr)) {}
+Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr))  {}
 
 
 void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
@@ -127,6 +129,8 @@ void Mundo::inicializa() {
     y_ojo = 7.5;
     z_ojo = 30.0;
     inicializa_tab();
+
+
     //Piezas blancas
     peonB1.set_pos_pieza({ -7,4.5 });
     peonB2.set_pos_pieza({ -5,4.5 });
@@ -211,51 +215,93 @@ void Mundo::inicializa_tab() {
     filas = 8;
     tablero.set_coordenadas({ -columnas + 1.0, ((21.0 - 2.0 * filas) / 2.0) - 3.0 + 3.0 });
 }
+
+void dibujar_con_balanceo(Pieza& pieza, float angulo) {
+    VECTOR2D pos = pieza.get_pos();
+
+    glPushMatrix();
+    glTranslatef(pos.x, pos.y, 0.0f); // Mueve al centro de la pieza
+    float rot = sin(angulo * 3.1416f / 180.0f) * 20.0f; // Oscilación grados
+    glRotatef(rot, 0.0f, 0.0f, 1.0f); // Rota en Z
+    glTranslatef(-pos.x, -pos.y, 0.0f); // Regresa a origen
+
+    pieza.dibuja_pieza();
+
+    glPopMatrix();
+}
+
+
+
 void Mundo::dibuja() {
+
+    anguloAnimacion += 10.0f;
+    if (anguloAnimacion > 360.0f)
+        anguloAnimacion -= 360.0f;
+
+
     tablero.dibuja_tablero(columnas, filas);
     if (casilla_seleccionada)
         tablero.dibuja_casilla(posicion_central_click);
 
-    //Blancas
-    peonB1.dibuja_pieza();
-    peonB2.dibuja_pieza();
-    peonB3.dibuja_pieza();
-    peonB4.dibuja_pieza();
-    peonB5.dibuja_pieza();
-    peonB6.dibuja_pieza();
-    peonB7.dibuja_pieza();
-    peonB8.dibuja_pieza();
 
-    torreB1.dibuja_pieza();
-    torreB2.dibuja_pieza();
-    alfilB1.dibuja_pieza();
-    alfilB2.dibuja_pieza();
-    caballoB1.dibuja_pieza();
-    caballoB2.dibuja_pieza();
-    reyB.dibuja();
-    reinaB.dibuja_pieza();
+    //Blancas
+    dibujar_con_balanceo(peonB1, anguloAnimacion);
+    dibujar_con_balanceo(peonB2, anguloAnimacion);
+    dibujar_con_balanceo(peonB3, anguloAnimacion);
+    dibujar_con_balanceo(peonB4, anguloAnimacion);
+    dibujar_con_balanceo(peonB5, anguloAnimacion);
+    dibujar_con_balanceo(peonB6, anguloAnimacion);
+    dibujar_con_balanceo(peonB7, anguloAnimacion);
+    dibujar_con_balanceo(peonB8, anguloAnimacion);
+
+
+
+    dibujar_con_balanceo(torreB1, anguloAnimacion);
+    dibujar_con_balanceo(torreB2, anguloAnimacion);
+    dibujar_con_balanceo(alfilB1, anguloAnimacion);
+    dibujar_con_balanceo(alfilB2, anguloAnimacion);
+    dibujar_con_balanceo(caballoB1, anguloAnimacion);
+    dibujar_con_balanceo(caballoB2, anguloAnimacion);
+    dibujar_con_balanceo(reyB, anguloAnimacion);
+    dibujar_con_balanceo(reinaB, anguloAnimacion);
+
+
 
 
     //Rojas
-    peonR1.dibuja_pieza();
-    peonR2.dibuja_pieza();
-    peonR3.dibuja_pieza();
-    peonR4.dibuja_pieza();
-    peonR5.dibuja_pieza();
-    peonR6.dibuja_pieza();
-    peonR7.dibuja_pieza();
-    peonR8.dibuja_pieza();
-    torreR1.dibuja_pieza();
-    torreR2.dibuja_pieza();
-    alfilR1.dibuja_pieza();
-    alfilR2.dibuja_pieza();
-    caballoR1.dibuja_pieza();
-    caballoR2.dibuja_pieza();
-    reyR.dibuja();
-    reinaR.dibuja_pieza();
+
+    dibujar_con_balanceo(peonR1, anguloAnimacion);
+    dibujar_con_balanceo(peonR2, anguloAnimacion);
+    dibujar_con_balanceo(peonR3, anguloAnimacion);
+    dibujar_con_balanceo(peonR4, anguloAnimacion);
+    dibujar_con_balanceo(peonR5, anguloAnimacion);
+    dibujar_con_balanceo(peonR6, anguloAnimacion);
+    dibujar_con_balanceo(peonR7, anguloAnimacion);
+    dibujar_con_balanceo(peonR8, anguloAnimacion);
+
+
+
+    dibujar_con_balanceo(torreR1, anguloAnimacion);
+    dibujar_con_balanceo(torreR2, anguloAnimacion);
+    dibujar_con_balanceo(alfilR1, anguloAnimacion);
+    dibujar_con_balanceo(alfilR2, anguloAnimacion);
+    dibujar_con_balanceo(caballoR1, anguloAnimacion);
+    dibujar_con_balanceo(caballoR2, anguloAnimacion);
+    dibujar_con_balanceo(reyR, anguloAnimacion);
+    dibujar_con_balanceo(reinaR, anguloAnimacion);
+
+    
+    for (auto* pieza : comidaB)
+        dibujar_con_balanceo(*pieza, anguloAnimacion);
+
+    for (auto* pieza : comidaR)
+        dibujar_con_balanceo(*pieza, anguloAnimacion);
 
 
 }
+
+
+
 
 bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tamaño de la matriz control 
     return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
@@ -518,7 +564,7 @@ void Mundo::mueve()
             bool capturo = false;
             if (rey && rey->mover(posicion_central_click, control, capturo)) {
                 if (capturo)
-                    pieza->get_color() ? comidasB() : comidasR(); // si get color true entonces comidasB si no comidas R
+                    pieza->get_color() ? comidasB() : comidasR(); 
                 actualizar_matriz_control();
                 turno = !turno;
                 movida = true;
@@ -593,70 +639,22 @@ void Mundo::mueve()
             return;
         }
 
-
-
-        //caballoB1
-        if (posicion_central_click_anterior.x == caballoB1.get_pos().x && posicion_central_click_anterior.y == caballoB1.get_pos().y && turno == true)
-        {
+        if (pieza->es_caballo()) {
+            Caballo* caballo = dynamic_cast<Caballo*>(pieza);
             bool capturo = false;
-            if (caballoB1.mover(posicion_central_click, control, capturo))
-            {
+            if (caballo && caballo->mover(posicion_central_click, control, capturo)) {
                 if (capturo)
-                    comidasR();
-
+                    pieza->get_color() ? comidasB() : comidasR();
                 actualizar_matriz_control();
+                turno = !turno;
                 movida = true;
-                turno = false;
-                std::cout << "Turno de Rojas\n" << std::endl;
             }
-        }
-        //caballoB2
-        if (posicion_central_click_anterior.x == caballoB2.get_pos().x && posicion_central_click_anterior.y == caballoB2.get_pos().y && turno == true)
-        {
-            bool capturo = false;
-            if (caballoB2.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasR();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = false;
-                std::cout << "Turno de Rojas\n" << std::endl;
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
             }
+            return;
         }
 
-        //caballoR1
-        if (posicion_central_click_anterior.x == caballoR1.get_pos().x && posicion_central_click_anterior.y == caballoR1.get_pos().y && turno == false)
-        {
-            bool capturo = false;
-            if (caballoR1.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasB();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;
-                std::cout << "Turno de blancas\n" << std::endl;
-            }
-        }
-
-        //caballoR2
-        if (posicion_central_click_anterior.x == caballoR2.get_pos().x && posicion_central_click_anterior.y == caballoR2.get_pos().y && turno == false)
-        {
-            bool capturo = false;
-            if (caballoR2.mover(posicion_central_click, control, capturo))
-            {
-                if (capturo)
-                    comidasB();
-
-                actualizar_matriz_control();
-                movida = true;
-                turno = true;
-                std::cout << "Turno de Blancas\n" << std::endl;
-            }
-        }
 
     }
 
@@ -671,8 +669,8 @@ void Mundo::comidasB() {
 
     if (pieza_comida != nullptr) {
         comidaB.push_back(pieza_comida);
-        comidaB.back()->muevepieza(pos_comidaB_X, -2);
-        pos_comidaB_X -= 2.0;
+        comidaB.back()->muevepieza(pos_comidaB_X, -4);
+        pos_comidaB_X -= 1.0;
     }
     else {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;
@@ -689,7 +687,7 @@ void Mundo::comidasR() {
     if (pieza_comida != nullptr) {
         comidaR.push_back(pieza_comida);
         comidaR.back()->muevepieza(pos_comidaR_X, -2);
-        pos_comidaR_X += 2.0;
+        pos_comidaR_X += 1.0;
     }
     else {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;
