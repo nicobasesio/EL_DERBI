@@ -78,6 +78,7 @@ public:
 	void comidasB();
 	void comidasR();
 
+
 	inline bool get_turno() { return turno; }
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
