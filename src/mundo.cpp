@@ -208,67 +208,7 @@ void Mundo::inicializa() {
 
 
     crear_matriz_control();
-    
-    //Para mejorar la nítidez de las piezas
-    auto tB = ETSIDI::getTexture("imagenes/caballoB.png");
-    glBindTexture(GL_TEXTURE_2D, tB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
-    auto tR = ETSIDI::getTexture("imagenes/caballoR.png");
-    glBindTexture(GL_TEXTURE_2D, tR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
-    auto tTB = ETSIDI::getTexture("imagenes/torreB.png");
-    glBindTexture(GL_TEXTURE_2D, tTB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    auto tTR = ETSIDI::getTexture("imagenes/torreR.png");
-    glBindTexture(GL_TEXTURE_2D, tTR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tAB = ETSIDI::getTexture("imagenes/alfilB.png");
-    glBindTexture(GL_TEXTURE_2D, tAB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tAR = ETSIDI::getTexture("imagenes/alfilR.png");
-    glBindTexture(GL_TEXTURE_2D, tAR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tPB = ETSIDI::getTexture("imagenes/peonB.png");
-    glBindTexture(GL_TEXTURE_2D, tPB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tPR = ETSIDI::getTexture("imagenes/peonR.png");
-    glBindTexture(GL_TEXTURE_2D, tPR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tQB = ETSIDI::getTexture("imagenes/reinaB.png");
-    glBindTexture(GL_TEXTURE_2D, tQB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tQR = ETSIDI::getTexture("imagenes/reinaR.png");
-    glBindTexture(GL_TEXTURE_2D, tQR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tKB = ETSIDI::getTexture("imagenes/reyB.png");
-    glBindTexture(GL_TEXTURE_2D, tKB.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    auto tKR = ETSIDI::getTexture("imagenes/reyR.png");
-    glBindTexture(GL_TEXTURE_2D, tKR.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 void Mundo::inicializa_tab() {
     columnas = 8;
