@@ -129,6 +129,8 @@ void Mundo::inicializa() {
     y_ojo = 7.5;
     z_ojo = 30.0;
     inicializa_tab();
+
+
     //Piezas blancas
     peonB1.set_pos_pieza({ -7,4.5 });
     peonB2.set_pos_pieza({ -5,4.5 });
@@ -562,7 +564,7 @@ void Mundo::mueve()
             bool capturo = false;
             if (rey && rey->mover(posicion_central_click, control, capturo)) {
                 if (capturo)
-                    pieza->get_color() ? comidasB() : comidasR(); // si get color true entonces comidasB si no comidas R
+                    pieza->get_color() ? comidasB() : comidasR(); 
                 actualizar_matriz_control();
                 turno = !turno;
                 movida = true;

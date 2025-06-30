@@ -21,6 +21,8 @@ int tiempo_jugador2;
 bool fin_partida = false;
 unsigned int ultimo_tiempo_actualizado = 0;
 int jugador_que_pierde = 0;
+bool leyenda_visible = false;
+
 
 enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL, MENU_INFO};
 EstadoPantalla estado = MENU_START;
@@ -33,7 +35,7 @@ static bool pieza_seleccionada = false;
 
 void OnDraw(void);
 void OnTimer(int value);
-void OnKeyboardDown(unsigned char key, int x, int y);
+void OnKeyboardDown(unsigned char key, int x_t, int y_t);
 void mouseClick(int button, int state, int x, int y);
 void display();
 
@@ -129,6 +131,21 @@ void OnDraw() {
         glEnable(GL_LIGHTING);
 
         
+        if (leyenda_visible) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/leyenda.png").id);
+            glDisable(GL_LIGHTING);
+            glColor4f(1, 1, 1, 0.8f);  // Opcional: transparencia si quieres
+            glBegin(GL_POLYGON);
+            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.01);
+            glTexCoord2d(1, 1); glVertex3d(14, -3, 0.01);
+            glTexCoord2d(1, 0); glVertex3d(14, 18, 0.01);
+            glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.01);
+            glEnd();
+            glEnable(GL_LIGHTING);
+            glDisable(GL_TEXTURE_2D);
+        }
+
 
 
     }
@@ -195,7 +212,7 @@ void OnTimer(int value) {
                 ETSIDI::play("sonido/final.mp3");
             }
 
-            // Si no se ha terminado por tiempo, comprobamos fichas
+            
             if (!fin_partida) {
                 int fichas_blancas = 0, fichas_rojas = 0;
 
@@ -244,7 +261,22 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
         ETSIDI::playMusica("sonido/musica.mp3", true);
     }
 
+    if (estado == MENU_FINAL) {
+        estado = MENU_START;
+        fin_partida = false;
+        jugador_que_pierde = 0;
+        tiempo_jugador1 = tiempo_jugador2 = 0;
+        ETSIDI::playMusica("sonido/musica.mp3", true);
+    }
+    else if (estado == JUEGO) {
+        if (key == 'i' || key == 'I') {
+            leyenda_visible = !leyenda_visible;
+            glutPostRedisplay();
+        }
+    }
+
 }
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glutSwapBuffers();
@@ -417,9 +449,3 @@ void mouseClick(int button, int state, int x, int y) {
     pieza_seleccionada = false;
 
 }
-
-
-
-
-
-
