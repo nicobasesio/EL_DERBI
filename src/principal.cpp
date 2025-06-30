@@ -312,7 +312,7 @@ void mouseClick(int button, int state, int x, int y) {
     // … tras comprobar estado==JUEGO y botón pulsado …
 
     auto capturables = mundo.piezas_con_captura();
-    mundo.tablero.limpiarResaltados();
+    mundo.getTablero().limpiarResaltados();
 
     for (auto& par : capturables) {
         Pieza* atacante = par.first;
@@ -326,10 +326,10 @@ void mouseClick(int button, int state, int x, int y) {
             << dest.x << "," << dest.y << ")\n";
 
         // cálculo índices
-        int col_at = int((atacante->get_pos().x - mundo.tablero.coordenadas.x) / 2 + .5f);
-        int fil_at = int((atacante->get_pos().y - mundo.tablero.coordenadas.y) / 2 + .5f);
-        int col_de = int((dest.x - mundo.tablero.coordenadas.x) / 2 + .5f);
-        int fil_de = int((dest.y - mundo.tablero.coordenadas.y) / 2 + .5f);
+        int col_at = int((atacante->get_pos().x - mundo.getTablero().coordenadas.x) / 2 + .5f);
+        int fil_at = int((atacante->get_pos().y - mundo.getTablero().coordenadas.y) / 2 + .5f);
+        int col_de = int((dest.x - mundo.getTablero().coordenadas.x) / 2 + .5f);
+        int fil_de = int((dest.y - mundo.getTablero().coordenadas.y) / 2 + .5f);
 
         std::cout
             << "[DEBUG] índices → atacante("
@@ -340,10 +340,10 @@ void mouseClick(int button, int state, int x, int y) {
 
         // resalto si están en rango
         if (col_at >= 0 && col_at < 8 && fil_at >= 0 && fil_at < 8)
-            mundo.tablero.agregarResaltado(col_at, fil_at);
+            mundo.getTablero().agregarResaltado(col_at, fil_at);
 
         if (col_de >= 0 && col_de < 8 && fil_de >= 0 && fil_de < 8)
-            mundo.tablero.agregarResaltado(col_de, fil_de);
+            mundo.getTablero().agregarResaltado(col_de, fil_de);
     }
 
     glutPostRedisplay();
@@ -411,7 +411,7 @@ void mouseClick(int button, int state, int x, int y) {
     mundo.mueve();
 
     // **Aquí** eliminamos cualquier resaltado pendiente
-    mundo.tablero.limpiarResaltados();
+    mundo.getTablero().limpiarResaltados();
     glutPostRedisplay();
 
     pieza_seleccionada = false;

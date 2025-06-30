@@ -33,6 +33,7 @@ class Mundo
 	Caballo caballoR1, caballoR2;
 	Rey reyB, reyR;
 	Reina reinaB, reinaR;
+	Tablero tablero;
 	std::vector<std::vector<Pieza*>> control;
 
 	double pos_comidaB_X = 7.0;
@@ -60,7 +61,7 @@ class Mundo
 	
 public:
 	Mundo();
-	Tablero tablero;
+	
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
@@ -77,7 +78,12 @@ public:
 	void actualizar_matriz_control();
 	void comidasB();
 	void comidasR();
-
+	Tablero& getTablero() {
+		return tablero;
+	}
+	const Tablero& getTablero() const {
+		return tablero;
+	}
 	inline bool get_turno() { return turno; }
 
 	double x_ojo{}, y_ojo{}, z_ojo{};
