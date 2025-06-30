@@ -29,6 +29,7 @@ public:
 	bool get_color() {
 		return color;
 	}
+	void dibuja_pieza() override;
 	bool get_haComidoPieza() {
 		return haComidoPieza;
 	}
