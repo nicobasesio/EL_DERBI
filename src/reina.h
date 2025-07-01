@@ -16,10 +16,10 @@ public:
 
 
 	Reina() {
-		sprite.setCenter(+0.75, +0.75); //puesto a mano. las 'x' positivas van hacia la izquierda y las 'y' positivas van hacia abajo. en el (0,0), está descolocada
+		sprite.setCenter(+0.75, +0.75); //puesto a mano. las 'x' positivas van hacia la izquierda y las 'y' positivas van hacia abajo. en el (0,0), estï¿½ descolocada
 		sprite.setSize(1.5, 1.5);
 		//sprite.setPos(0,0);
-		sprite2.setCenter(+0.75, +0.75); //puesto a mano. las 'x' positivas van hacia la izquierda y las 'y' positivas van hacia abajo. en el (0,0), está descolocada
+		sprite2.setCenter(+0.75, +0.75); //puesto a mano. las 'x' positivas van hacia la izquierda y las 'y' positivas van hacia abajo. en el (0,0), estï¿½ descolocada
 		sprite2.setSize(1.5, 1.5);
 		color = TRUE; //Blanco predeterminado
 
@@ -27,7 +27,7 @@ public:
 
 
 	void muevepieza(double, double);
-	void set_pos_pieza(const VECTOR2D& pos);	// Se introduce la dirección en la que hay una reina
+	void set_pos_pieza(const VECTOR2D& pos);	// Se introduce la direcciï¿½n en la que hay una reina
 	void dibuja_pieza();
 	void set_color_pieza(bool a);
 	bool caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control);
@@ -46,6 +46,7 @@ public:
 	VECTOR2D get_pos() {
 		return posicion_pieza;
 	}
+
 
 
 	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);
