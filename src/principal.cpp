@@ -60,6 +60,9 @@ int main(int argc, char* argv[]) {
     glDisable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
     glutDisplayFunc(OnDraw);
     glutTimerFunc(33, OnTimer, 0);
@@ -75,11 +78,34 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+void dibujarArbitro()
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/arbitro.png").id);
+    glDisable(GL_LIGHTING);
+    glColor4f(1, 1, 1,1);
 
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.1f);
+
+    glBegin(GL_POLYGON);
+    glTexCoord2d(0, 1); glVertex3d(9, 5, 0.01);
+    glTexCoord2d(1, 1); glVertex3d(13, 5, 0.01);
+    glTexCoord2d(1, 0); glVertex3d(13, 12, 0.01);
+    glTexCoord2d(0, 0); glVertex3d(9, 12, 0.01);
+
+    glEnd();
+    glDisable(GL_ALPHA_TEST);
+    glEnable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+}
 
 void OnDraw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
+
+ 
+
 
     if (estado == MENU_START) {
         // Dibuja el fondo del menú
@@ -95,6 +121,7 @@ void OnDraw() {
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
+  
     }
     if (estado == MENU_MODOS) {
         glEnable(GL_TEXTURE_2D);
@@ -109,7 +136,7 @@ void OnDraw() {
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
-
+    
     }
 
 
@@ -131,7 +158,7 @@ void OnDraw() {
         ETSIDI::printxy(buffer2, -13.5f, -1.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
-
+        dibujarArbitro();
         
         if (guia_visible) {
             glEnable(GL_TEXTURE_2D);
