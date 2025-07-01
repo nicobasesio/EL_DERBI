@@ -1,11 +1,13 @@
 #include "rey.h"
 #include <iostream>
 #include "ETSIDI.h"
+#include"efectos.h"
 
 
 extern int tiempo_jugador1;
 extern int tiempo_jugador2;
-extern void aplicar_efecto_especial();
+extern EfectoEspecial efectoEspecial;
+extern void aplicar_efecto_especial(VECTOR2D pos);
 
 void Rey::dibuja()
 {
@@ -108,7 +110,7 @@ bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, boo
 
 				
 				objetivo->setTipo("balon");
-				aplicar_efecto_especial();
+				aplicar_efecto_especial(destino);
 
 				if (color == true) 
 					tiempo_jugador1 += 5;
