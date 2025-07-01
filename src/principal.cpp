@@ -6,6 +6,8 @@
 #include <string>
 #include <random>
 #include "tablero.h"
+#include "VECTOR2D.h"
+#include"efectos.h"
 
 int windowWidth = 800;
 int windowHeight = 600;
@@ -50,6 +52,15 @@ void mouseClick(int button, int state, int x, int y);
 void display();
 
 
+EfectoEspecial efectoEspecial;
+
+void aplicar_efecto_especial(VECTOR2D pos) {
+    efectoEspecial.activo = true;
+    efectoEspecial.escala = 1.0f;
+    efectoEspecial.tiempoRestante = 2.0f;
+    efectoEspecial.posicion = pos;
+    ETSIDI::play("sonido/bonus.wav");  // si tienes un sonido
+}
 
 void OnResize(int w, int h) {
     windowWidth = w;
@@ -162,24 +173,51 @@ void OnDraw() {
 
     if (estado == JUEGO) {
         mundo.dibuja();
+
+        // DIBUJAR EFECTO ESPECIAL
+        if (efectoEspecial.activo) {
+            efectoEspecial.tiempoRestante -= 0.033f;
+            if (efectoEspecial.tiempoRestante <= 0) {
+                efectoEspecial.activo = false;
+            }
+            else {
+                glPushMatrix();
+                glTranslatef(efectoEspecial.posicion.x, efectoEspecial.posicion.y, 0.15f);
+                glScalef(efectoEspecial.escala, efectoEspecial.escala, 1.0f);
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/bonus.png").id);
+                glDisable(GL_LIGHTING);
+                glBegin(GL_QUADS);
+                glTexCoord2d(0, 1); glVertex3d(-1, -1, 0);
+                glTexCoord2d(1, 1); glVertex3d(1, -1, 0);
+                glTexCoord2d(1, 0); glVertex3d(1, 1, 0);
+                glTexCoord2d(0, 0); glVertex3d(-1, 1, 0);
+                glEnd();
+                glEnable(GL_LIGHTING);
+                glDisable(GL_TEXTURE_2D);
+                glPopMatrix();
+            }
+        }
+
+        // TEMPORIZADORES
         float ancho_marcador = 6.0f;
         float alto_marcador = 2.0f;
         ETSIDI::setFont("fuente/OpenSans_Condensed-Bold.ttf", 22);
         char buffer1[20], buffer2[20];
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
         sprintf(buffer2, "%02d:%02d", tiempo_jugador2 / 60, tiempo_jugador2 % 60);
-        
-        //temporizadores
+
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
         ETSIDI::setTextColor(1, 1, 1);
-
         ETSIDI::printxy(buffer1, -13.5f, 16.7f);
         ETSIDI::printxy(buffer2, -13.5f, -1.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
+
         dibujarArbitro();
-        
+
+        // GUIA
         if (guia_visible) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/guia.png").id);
@@ -195,13 +233,14 @@ void OnDraw() {
             glDisable(GL_TEXTURE_2D);
         }
 
+        // LEYENDA
         if (leyenda_visible) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/leyenda.png").id);
             glDisable(GL_LIGHTING);
             glColor4f(1, 1, 1, 1.0f);
             glBegin(GL_POLYGON);
-            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.11); // z más alto que guia
+            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.11); // z más alto
             glTexCoord2d(1, 1); glVertex3d(14, -3, 0.11);
             glTexCoord2d(1, 0); glVertex3d(14, 18, 0.11);
             glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.11);
@@ -209,10 +248,9 @@ void OnDraw() {
             glEnable(GL_LIGHTING);
             glDisable(GL_TEXTURE_2D);
         }
-
-
-
     }
+
+
 
     if (estado == MENU_INFO) {
         glEnable(GL_TEXTURE_2D);
@@ -250,24 +288,6 @@ void OnDraw() {
         ETSIDI::printxy("Pulsa cualquier tecla para volver al menu", -10, 1);
     }
 
-    if (efecto_activo) {
-        unsigned int t = glutGet(GLUT_ELAPSED_TIME);
-        if (t - tiempo_efecto < 500) {  // 0.5 segundos
-            glDisable(GL_LIGHTING);
-            glColor4f(1, 1, 0.5f, 0.3f);  // color amarillento translúcido
-            glBegin(GL_QUADS);
-            glVertex3f(-14, -3, 0.2f);
-            glVertex3f(14, -3, 0.2f);
-            glVertex3f(14, 18, 0.2f);
-            glVertex3f(-14, 18, 0.2f);
-            glEnd();
-            glEnable(GL_LIGHTING);
-        }
-        else {
-            efecto_activo = false;
-        }
-    }
-
     glutSwapBuffers();
 
 
@@ -277,6 +297,7 @@ void OnDraw() {
 
 void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
+
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {
             if (mundo.get_turno() == BLANCO)
@@ -335,8 +356,16 @@ void OnTimer(int value) {
             }
         }
     }
+    
+    if (efectoEspecial.activo) {
+        efectoEspecial.tiempoRestante -= 0.033f;  // 33 ms por frame (~30 fps)
+        if (efectoEspecial.tiempoRestante <= 0.0f) {
+            efectoEspecial.activo = false;
+        }
+    }
 
     glutTimerFunc(33, OnTimer, 0);
+   // efectoEspecial.mueve();
     glutPostRedisplay();
 }
 
