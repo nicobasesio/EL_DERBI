@@ -7,6 +7,12 @@
 #include <random>
 #include "tablero.h"
 
+int windowWidth = 800;
+int windowHeight = 600;
+const float worldLeft = -15.0f;
+const float worldRight = 15.0f;
+const float worldBottom = -5.0f;
+const float worldTop = 20.0f;
 using namespace std;
 
 Mundo mundo;
@@ -43,14 +49,26 @@ void display();
 
 
 
-
+void OnResize(int w, int h) {
+    windowWidth = w;
+    windowHeight = h;
+    // 1) Ajusta el viewport
+    glViewport(0, 0, w, h);
+    // 2) Redefine la proyección ortográfica con tus límites
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(worldLeft, worldRight, worldBottom, worldTop);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
 
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiJuego");
-
+    glutReshapeFunc(OnResize);
+    OnResize(windowWidth, windowHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(-15, 15, -5, 20);  
@@ -350,9 +368,9 @@ bool es_pieza_con_captura(Pieza* pieza, const std::vector<std::pair<Pieza*, VECT
 
 void mouseClick(int button, int state, int x, int y) {
     // 1) Convertir píxel → coordenadas de mundo
-    float x_normal = ((x / 800.0f) * 30.0f) - 15.0f;
-    float y_normal = ((600.0f - y) / 600.0f) * 25.0f - 5.0f;
+    float x_normal = worldLeft + (float)x / windowWidth * (worldRight - worldLeft);
 
+    float y_normal = worldBottom + (float)(windowHeight - y) / windowHeight * (worldTop - worldBottom);
     // 2) MENÚS
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
