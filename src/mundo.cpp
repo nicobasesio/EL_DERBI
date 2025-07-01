@@ -208,7 +208,67 @@ void Mundo::inicializa() {
 
 
     crear_matriz_control();
+    
+    //Para mejorar la nítidez de las piezas
+    auto tB = ETSIDI::getTexture("imagenes/caballoB.png");
+    glBindTexture(GL_TEXTURE_2D, tB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    auto tR = ETSIDI::getTexture("imagenes/caballoR.png");
+    glBindTexture(GL_TEXTURE_2D, tR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    auto tTB = ETSIDI::getTexture("imagenes/torreB.png");
+    glBindTexture(GL_TEXTURE_2D, tTB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    auto tTR = ETSIDI::getTexture("imagenes/torreR.png");
+    glBindTexture(GL_TEXTURE_2D, tTR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tAB = ETSIDI::getTexture("imagenes/alfilB.png");
+    glBindTexture(GL_TEXTURE_2D, tAB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tAR = ETSIDI::getTexture("imagenes/alfilR.png");
+    glBindTexture(GL_TEXTURE_2D, tAR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tPB = ETSIDI::getTexture("imagenes/peonB.png");
+    glBindTexture(GL_TEXTURE_2D, tPB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tPR = ETSIDI::getTexture("imagenes/peonR.png");
+    glBindTexture(GL_TEXTURE_2D, tPR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tQB = ETSIDI::getTexture("imagenes/reinaB.png");
+    glBindTexture(GL_TEXTURE_2D, tQB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tQR = ETSIDI::getTexture("imagenes/reinaR.png");
+    glBindTexture(GL_TEXTURE_2D, tQR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tKB = ETSIDI::getTexture("imagenes/reyB.png");
+    glBindTexture(GL_TEXTURE_2D, tKB.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    auto tKR = ETSIDI::getTexture("imagenes/reyR.png");
+    glBindTexture(GL_TEXTURE_2D, tKR.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 void Mundo::inicializa_tab() {
     columnas = 8;
@@ -290,6 +350,7 @@ void Mundo::dibuja() {
     dibujar_con_balanceo(reyR, anguloAnimacion);
     dibujar_con_balanceo(reinaR, anguloAnimacion);
 
+
     
     for (auto* pieza : comidaB)
         dibujar_con_balanceo(*pieza, anguloAnimacion);
@@ -298,6 +359,42 @@ void Mundo::dibuja() {
         dibujar_con_balanceo(*pieza, anguloAnimacion);
 
 
+    for (auto* pieza : comidaB)
+        pieza->dibuja(); 
+
+    for (auto* pieza : comidaR)
+        pieza->dibuja();
+
+    // Efecto especial visual (destello al capturar con el rey)
+    if (efecto_activo) {
+        unsigned int t = glutGet(GLUT_ELAPSED_TIME);
+        if (t - tiempo_efecto < 500) {  // 500 ms de duracion
+            glDisable(GL_LIGHTING);
+            glColor4f(1, 1, 0.5f, 0.3f);  // color amarillo translucido
+            glBegin(GL_QUADS);
+            glVertex3f(-14, -3, 0.2f);
+            glVertex3f(14, -3, 0.2f);
+            glVertex3f(14, 18, 0.2f);
+            glVertex3f(-14, 18, 0.2f);
+            glEnd();
+            glEnable(GL_LIGHTING);
+        }
+        else {
+            efecto_activo = false;
+        }
+    }
+
+
+}
+
+
+
+bool efecto_activo = false;
+unsigned int tiempo_efecto = 0;
+
+void aplicar_efecto_especial() {
+    efecto_activo = true;
+    tiempo_efecto = glutGet(GLUT_ELAPSED_TIME);
 }
 
 
@@ -307,13 +404,12 @@ bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tamaño 
     return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
-void Mundo::mueve()
-
-{
-    auto capturables = piezas_con_captura();
-    Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
+void Mundo::mueve() {
+    auto capturables = piezas_con_captura(); // devuelve una lista con las piezas que tienen que capturar y su posicion 
+    Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1]; // primer click
 
     if (!capturables.empty()) {
+
 
         Pieza* pieza_seleccionada = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
         VECTOR2D origen = posicion_central_click_anterior;
@@ -323,21 +419,28 @@ void Mundo::mueve()
         for (const auto& par : capturables) {
             if (par.first == pieza_seleccionada) {
                 es_pieza_capturable = true;
+
+        bool es_capturable = false;
+        for (const auto& par : capturables) { // for de rango de el vector capturables
+            if (par.first == pieza) {  // si la pieza seleccionada es igual a una de las que esta capturables
+                es_capturable = true;
+
                 break;
             }
         }
 
-        if (!es_pieza_capturable) {
+        if (!es_capturable) {
             std::cout << "[REGLA] Debes mover una de las piezas obligadas a capturar.\n";
             return;
         }
+
 
         // Ahora usamos la pieza seleccionada normalmente
         pieza = pieza_seleccionada;
 
         std::vector<VECTOR2D> destinos;
 
-        // Si es REY movimiento automático al destino clicado
+        // Si es REY movimiento automatico al destino clicado
         if (pieza->es_rey()) {
             std::cout << "[AUTO] Captura unica con rey.\n";
             Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
@@ -353,7 +456,7 @@ void Mundo::mueve()
             return;
         }
 
-        // Si es PEÓN lo mismo: captura directa
+        // Si es PEON lo mismo: captura directa
         if (pieza->es_peon()) {
             std::cout << "[AUTO] Captura unica con peon.\n";
             Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
@@ -656,9 +759,24 @@ void Mundo::mueve()
         }
 
 
+
     }
 
+    // Aquí se mueve cualquier pieza, tanto en caso obligatorio como libre
+    bool capturo = false;
+    if (pieza && pieza->mover(posicion_central_click, control, capturo)) { 
+        if (capturo)
+            pieza->get_color() ? comidasB() : comidasR();
+        actualizar_matriz_control();
+        turno = !turno;
+        movida = true;
+    }
+    else {
+        std::cout << "[REGLA] Movimiento no válido para la pieza.\n";
+
+    }
 }
+
 
 
 
@@ -712,7 +830,7 @@ std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() { // el pai
                 VECTOR2D pos = p->posicion_pieza;  // posicion de la pieza
                 if (p->puede_comer_enemigo(pos, control)) {  //funcion interna de cada pieza para ver si hay un enemigo comible, si lo hay devuelve true, se pasa control para saber las posiciones de las piezas en el tablero
                     std::cout << "[INFO] Pieza en coordenadas físicas (" << pos.x << "," << pos.y << ") puede capturar\n";
-                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector
+                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector lista que devuelve el tipo de pieza y su posicion
                 }
             }
         }

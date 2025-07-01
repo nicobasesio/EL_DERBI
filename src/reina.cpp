@@ -22,12 +22,12 @@ bool Reina::casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control
 
 
 
-
 void Reina::set_pos_pieza(const VECTOR2D& pos)
 {
 	if (r.casilla.x == 0 && r.casilla.y == 0)
 		posicion_pieza = pos;
 }
+
 
 void Reina::dibuja_pieza()
 {
@@ -37,7 +37,7 @@ void Reina::dibuja_pieza()
 		sprite2.draw();			//rojas
 	if (color == 1)
 		sprite.draw();		// blancas
-	//fin del codigo incluido
+	
 	glPopMatrix();
 	glFlush();
 }
@@ -49,6 +49,7 @@ void Reina::set_color_pieza(bool a)
 	if (a == false)
 		color = false;
 }
+
 
 bool Reina::caminoLibre(VECTOR2D origen, VECTOR2D destino, const std::vector<std::vector<Pieza*>>& control) {
 	int x1 = static_cast<int>((origen.x + 8.0) / 2.0);
@@ -94,6 +95,7 @@ bool Reina::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza
 	}
 }
 
+
 bool Reina::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo) {
 	// Cálculo del desplazamiento en cada eje
 	int dx = static_cast<int>(destino.x - posicion_pieza.x);
@@ -121,7 +123,7 @@ bool Reina::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, b
 		}
 	}
 
-	// Si no cumple las condiciones, no se mueve
+	
 	return false;
 }
 
