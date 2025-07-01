@@ -404,11 +404,14 @@ bool Mundo::casillaValida(int i, int j) {   // Para que no se salga del tamaño 
     return i >= 0 && i < control.size() && j >= 0 && j < control[i].size();
 }
 
-void Mundo::mueve() {
-    auto capturables = piezas_con_captura(); // devuelve una lista con las piezas que tienen que capturar y su posicion 
-    Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1]; // primer click
+void Mundo::mueve()
+
+{
+    auto capturables = piezas_con_captura();
+    Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
 
     if (!capturables.empty()) {
+
 
 
         Pieza* pieza_seleccionada = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
@@ -429,7 +432,7 @@ void Mundo::mueve() {
             }
         }
 
-        if (!es_capturable) {
+        if (!es_pieza_capturable) {
             std::cout << "[REGLA] Debes mover una de las piezas obligadas a capturar.\n";
             return;
         }
@@ -440,7 +443,11 @@ void Mundo::mueve() {
 
         std::vector<VECTOR2D> destinos;
 
+
         // Si es REY movimiento automatico al destino clicado
+
+        // Si es REY movimiento automatico al destino clicado
+
         if (pieza->es_rey()) {
             std::cout << "[AUTO] Captura unica con rey.\n";
             Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
@@ -455,6 +462,9 @@ void Mundo::mueve() {
             turno = !turno;
             return;
         }
+
+
+        // Si es PEON lo mismo: captura directa
 
         // Si es PEON lo mismo: captura directa
         if (pieza->es_peon()) {
@@ -523,7 +533,7 @@ void Mundo::mueve() {
                 }
             }
 
-            // el clic está en uno de esos destinos válidos
+            // el clic esta en uno de esos destinos validos
             for (const auto& destino : posibles_destinos) {
                 if (std::abs(destino.x - posicion_central_click.x) < 0.1 &&
                     std::abs(destino.y - posicion_central_click.y) < 0.1) {
@@ -658,6 +668,7 @@ void Mundo::mueve() {
             return;
         }
 
+
     }
 
     else
@@ -762,7 +773,7 @@ void Mundo::mueve() {
 
     }
 
-    // Aquí se mueve cualquier pieza, tanto en caso obligatorio como libre
+    // Aqui se mueve cualquier pieza, tanto en caso obligatorio como libre
     bool capturo = false;
     if (pieza && pieza->mover(posicion_central_click, control, capturo)) { 
         if (capturo)
@@ -772,11 +783,113 @@ void Mundo::mueve() {
         movida = true;
     }
     else {
-        std::cout << "[REGLA] Movimiento no válido para la pieza.\n";
+        std::cout << "[REGLA] Movimiento no valido para la pieza.\n";
 
     }
-}
 
+    else
+    {
+        if (pieza->es_rey()) {
+            Rey* rey = dynamic_cast<Rey*>(pieza);
+            bool capturo = false;
+            if (rey && rey->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR(); 
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el rey.\n";
+            }
+            return;
+        }
+
+        if (pieza->es_alfil()) {
+            Alfil* alfil = dynamic_cast<Alfil*>(pieza);
+            bool capturo = false;
+            if (alfil && alfil->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el alfil.\n";
+            }
+            return;
+        }
+
+        if (pieza->es_peon()) {
+            Peon* peon = dynamic_cast<Peon*>(pieza);
+            bool capturo = false;
+            if (peon && peon->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el peon.\n";
+            }
+            return;
+        }
+
+        if (pieza->es_torre()) {
+            Torre* torre = dynamic_cast<Torre*>(pieza);
+            bool capturo = false;
+            if (torre && torre->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para la torre.\n";
+            }
+            return;
+        }
+
+        if (pieza->es_reina()) {
+            Reina* reina = dynamic_cast<Reina*>(pieza);
+            bool capturo = false;
+            if (reina && reina->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para la reina.\n";
+            }
+            return;
+        }
+
+        if (pieza->es_caballo()) {
+            Caballo* caballo = dynamic_cast<Caballo*>(pieza);
+            bool capturo = false;
+            if (caballo && caballo->mover(posicion_central_click, control, capturo)) {
+                if (capturo)
+                    pieza->get_color() ? comidasB() : comidasR();
+                actualizar_matriz_control();
+                turno = !turno;
+                movida = true;
+            }
+            else {
+                std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
+            }
+            return;
+        }
+
+
+
+    }
+
+}
 
 
 
@@ -830,7 +943,7 @@ std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() { // el pai
                 VECTOR2D pos = p->posicion_pieza;  // posicion de la pieza
                 if (p->puede_comer_enemigo(pos, control)) {  //funcion interna de cada pieza para ver si hay un enemigo comible, si lo hay devuelve true, se pasa control para saber las posiciones de las piezas en el tablero
                     std::cout << "[INFO] Pieza en coordenadas físicas (" << pos.x << "," << pos.y << ") puede capturar\n";
-                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector lista que devuelve el tipo de pieza y su posicion
+                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector
                 }
             }
         }
