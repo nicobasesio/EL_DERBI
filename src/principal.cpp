@@ -94,6 +94,7 @@ void dibujarArbitro()
     glTexCoord2d(1, 0); glVertex3d(13, 12, 0.01);
     glTexCoord2d(0, 0); glVertex3d(9, 12, 0.01);
 
+
     glEnd();
     glDisable(GL_ALPHA_TEST);
     glEnable(GL_LIGHTING);
