@@ -1,102 +1,96 @@
+#pragma once
+#include "VECTOR2D.h"
 #include "pieza.h"
 #include "torre.h"
 #include "tablero.h"
 #include "peon.h"
 #include "alfil.h"
-#include <vector>
-#include <iostream>
 #include "rey.h"
 #include "caballo.h"
 #include "reina.h"
 #include "freeglut.h"
+#include "efectos.h"
+#include <vector>
+#include <iostream>
 
-class Mundo
-{
-	//Tablero tablero;
-	VECTOR2D posicion_central_click; //es la posicion del centro de la casilla a la que se hace click
+class Mundo {
+	
+	VECTOR2D posicion_central_click; // posición del centro de la casilla clicada
 	VECTOR2D posicion_central_click_anterior;
 	VECTOR2D casilla_actual;
 	VECTOR2D casilla_anterior;
 	VECTOR2D coordRatonFin, coordRatonInicial;
-	VECTOR2D posInicioPiezaMover;    //Mediante el azar se elegir� una pieza del vector piezasNegras. Posicion inicial de la pieza que se movera
-	VECTOR2D posFinPiezaMover;       //Mediante el azar se elegir� una pieza del vector posiciones. Posicion final donde la pieza se movera
+	VECTOR2D posInicioPiezaMover;
+	VECTOR2D posFinPiezaMover;
 	VECTOR2D posicion_anterior;
 	VECTOR2D posicion_actual;
+
 	Peon peonB1, peonB2, peonB3, peonB4, peonB5, peonB6, peonB7, peonB8;
 	Peon peonR1, peonR2, peonR3, peonR4, peonR5, peonR6, peonR7, peonR8;
-	Torre torreB1;
-	Torre torreB2;
-	Torre torreR1;
-	Torre torreR2;
-	Alfil alfilB1, alfilB2;
-	Alfil alfilR1, alfilR2;
-	Caballo caballoB1, caballoB2;
-	Caballo caballoR1, caballoR2;
+	Torre torreB1, torreB2, torreR1, torreR2;
+	Alfil alfilB1, alfilB2, alfilR1, alfilR2;
+	Caballo caballoB1, caballoB2, caballoR1, caballoR2;
 	Rey reyB, reyR;
 	Reina reinaB, reinaR;
+
 	Tablero tablero;
 	std::vector<std::vector<Pieza*>> control;
 
 	double pos_comidaB_X = 7.0;
 	double pos_comidaR_X = -7.0;
 
-
-	std::vector<Pieza*> comidaB;//es un vector que contienen punteros a objetos de tipo Pieza
-	std::vector<Pieza*> comidaR;//es un vector que contienen punteros a objetos de tipo Pieza
+	std::vector<Pieza*> comidaB;
+	std::vector<Pieza*> comidaR;
 
 	std::vector<VECTOR2D> posiciones_comidas_rojas = {
-		{7.0, -2.0}, {6.0, -2.0}, {5.0, -2.0}, {4.0, -2.0}, {3.0, -2.0}, {2.0, -2.0}, {1.0, -2.0}, {0.0, -2.0}
+		{7.0, -2.0}, {6.0, -2.0}, {5.0, -2.0}, {4.0, -2.0},
+		{3.0, -2.0}, {2.0, -2.0}, {1.0, -2.0}, {0.0, -2.0}
 	};
 
 	std::vector<VECTOR2D> posiciones_comidas_blancas = {
-		{-7.0, 17.0}, {-6.0, 17.0}, {-5.0, 17.0}, {-4.0, 17.0}, {-3.0, 17.0}, {-2.0, 17.0}, {-1.0, 17.0}, {0.0, 17.0}
+		{-7.0, 17.0}, {-6.0, 17.0}, {-5.0, 17.0}, {-4.0, 17.0},
+		{-3.0, 17.0}, {-2.0, 17.0}, {-1.0, 17.0}, {0.0, 17.0}
 	};
 
-	bool turno = true; //true: turno de blancos, false: turno de rojas
+	bool turno = true; 
 	int columnas;
 	int filas;
-	
-	bool movida = false; //ser� true cuando se haya movido una pieza
+	bool movida = false;
 
-	
 public:
 	Mundo();
-	
+
+	// ======== MÉTODOS PÚBLICOS ========
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
 	void inicializa();
 	void inicializa_tab();
 	void mueve();
-	void set_posicion_central_click(VECTOR2D& posicion_central_click);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
-	void set_posicion_central_click_anterior(VECTOR2D& posicion_central);
-	void set_casilla_actual(VECTOR2D& casilla_act);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
-	void set_casilla_anterior(VECTOR2D& casilla_ant);
-	bool casillaValida(int fila, int columna);
-	void aplicar_efecto_especial();
-	void crear_matriz_control();
-
 	void actualizar_matriz_control();
 	void comidasB();
 	void comidasR();
-    // Getters para exponer el tablero
-    Tablero& getTablero() {
-        return tablero;
-    }
-    const Tablero& getTablero() const {
-        return tablero;
-    }
+	void crear_matriz_control();
+	bool casillaValida(int fila, int columna);
+	void aplicar_efecto_especial(VECTOR2D pos);
+
+	// Getters/setters de posición
+	VECTOR2D get_posicion_central_click() const { return posicion_central_click; }
+	void set_posicion_central_click(const VECTOR2D& p) { posicion_central_click = p; }
+	void set_posicion_central_click_anterior(VECTOR2D& posicion_central);
+	void set_casilla_actual(VECTOR2D& casilla_act);
+	void set_casilla_anterior(VECTOR2D& casilla_ant);
+
+	// Acceso al tablero
+	Tablero& getTablero() { return tablero; }
+	const Tablero& getTablero() const { return tablero; }
+
 	inline bool get_turno() { return turno; }
 
+	// Cámara y selección
 	double x_ojo{}, y_ojo{}, z_ojo{};
-	bool casilla_seleccionada = false; //ser� true cuando se haya movido una pieza
-	
+	bool casilla_seleccionada = false;
+
 	std::vector<std::pair<Pieza*, VECTOR2D>> piezas_con_captura();
-	
-	
 };
 
-extern bool efecto_activo;
-extern unsigned int tiempo_efecto;
-
-void aplicar_efecto_especial();

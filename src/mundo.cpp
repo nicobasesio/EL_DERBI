@@ -2,12 +2,14 @@
 #include "pieza.h"
 #include "freeglut.h"
 #include <cmath> 
-
+#include "efectos.h"
 
 // Se crea una matriz con el contenido inicial de cada casilla del tablero. En el momento de mover la ficha, se actualiza la información
    //std::vector<std::vector<Pieza>> control(8, std::vector<Pieza>(8));  // columnas, filas
 
 float anguloAnimacion = 0.0f;
+extern EfectoEspecial efectoEspecial;
+
 
 void Mundo::crear_matriz_control() {
     columnas = 8;
@@ -105,11 +107,6 @@ void Mundo::crear_matriz_control() {
 
 Mundo::Mundo() : control(8, std::vector<Pieza*>(8, nullptr))  {}
 
-
-void Mundo::set_posicion_central_click(VECTOR2D& posicion_central) {
-    posicion_central_click = posicion_central;
-    // Aquí no detectamos clics en el menú si no estamos en el estado de menú principal
-}
 
 void Mundo::set_posicion_central_click_anterior(VECTOR2D& posicion_central)
 {
@@ -303,6 +300,11 @@ void Mundo::dibuja() {
     if (casilla_seleccionada)
         tablero.dibuja_casilla(posicion_central_click);
 
+    if (efectoEspecial.activo) {
+        efectoEspecial.dibuja();
+    }
+
+
 
     //Blancas
     dibujar_con_balanceo(peonB1, anguloAnimacion);
@@ -357,34 +359,7 @@ void Mundo::dibuja() {
     for (auto* pieza : comidaR)
         pieza->dibuja();
 
-    // ✨ Efecto especial visual (destello al capturar con el rey)
-    if (efecto_activo) {
-        unsigned int t = glutGet(GLUT_ELAPSED_TIME);
-        if (t - tiempo_efecto < 500) {  // 500 ms de duración
-            glDisable(GL_LIGHTING);
-            glColor4f(1, 1, 0.5f, 0.3f);  // color amarillo translúcido
-            glBegin(GL_QUADS);
-            glVertex3f(-14, -3, 0.2f);
-            glVertex3f(14, -3, 0.2f);
-            glVertex3f(14, 18, 0.2f);
-            glVertex3f(-14, 18, 0.2f);
-            glEnd();
-            glEnable(GL_LIGHTING);
-        }
-        else {
-            efecto_activo = false;
-        }
-    }
 
-
-}
-
-bool efecto_activo = false;
-unsigned int tiempo_efecto = 0;
-
-void aplicar_efecto_especial() {
-    efecto_activo = true;
-    tiempo_efecto = glutGet(GLUT_ELAPSED_TIME);
 }
 
 
@@ -425,7 +400,7 @@ void Mundo::mueve()
 
         // Si es REY movimiento automático al destino clicado
         if (pieza->es_rey()) {
-            std::cout << "[AUTO] Captura unica con rey.\n";
+            std::cout << "[AUTO] Captura única con rey.\n";
             Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
             if (comida) {
                 if (comida->get_color())
@@ -433,11 +408,21 @@ void Mundo::mueve()
                 else
                     comidasR();
             }
+
             pieza->muevepieza(posicion_central_click.x, posicion_central_click.y);
+
+            if (comida) {
+                this->aplicar_efecto_especial(posicion_central_click);
+
+
+            }
+
             actualizar_matriz_control();
             turno = !turno;
             return;
         }
+
+
 
         // Si es PEÓN lo mismo: captura directa
         if (pieza->es_peon()) {
@@ -779,6 +764,15 @@ void Mundo::comidasR() {
         std::cerr << "[ERROR] pieza comida era nullptr" << std::endl;
     }
 }
+
+void Mundo::aplicar_efecto_especial(VECTOR2D pos) {
+    efectoEspecial.activo = true;
+    efectoEspecial.escala = 1.0f;
+    efectoEspecial.tiempoRestante = 2.0f;
+    efectoEspecial.posicion = pos;
+    ETSIDI::play("sonido/bonus.wav");  // si tienes sonido
+}
+
 
 void Mundo::actualizar_matriz_control()
 {
