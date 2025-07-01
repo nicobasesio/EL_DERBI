@@ -17,7 +17,7 @@ protected:
 public:
 	bool color;	// FALSE es rojo. TRUE es blanco
 	bool haComidoPieza;
-	VECTOR2D posicion_pieza{}; // comÃºn a todas las piezas
+	VECTOR2D posicion_pieza{}; // común a todas las piezas
 	Pieza* pieza_comible = nullptr;
 
 	virtual ~Pieza() {}
@@ -27,7 +27,7 @@ public:
 
 	virtual void set_pos_pieza(const VECTOR2D& pos) {}
 
-	virtual void dibuja() {} // <-- AÃ±adido para evitar errores con override
+	virtual void dibuja() {} // <-- Añadido para evitar errores con override
 	virtual void dibuja_pieza() { dibuja(); }
 
 	virtual void set_color_pieza(bool a) { color = a; }
@@ -44,9 +44,7 @@ public:
 	}
 
 	virtual bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {
-
-
-	virtual bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {  
+		return false;
 	}
 
 	virtual std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
@@ -58,10 +56,8 @@ public:
 		return false;
 	}
 
-	// MÃ©todos de identificaciÃ³n de tipo de pieza
+	// Métodos de identificación de tipo de pieza
 	virtual std::string nombre() const { return "pieza"; }
-
-	
 	virtual bool es_rey() const { return false; }
 	virtual bool es_peon() const { return false; }
 	virtual bool es_caballo() const { return false; }

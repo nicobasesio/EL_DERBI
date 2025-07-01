@@ -29,7 +29,7 @@ public:
 	void set_pos(const VECTOR2D& pos);
 	void dibuja();
 	void set_color(bool a);
-	void setTipo(const std::string& t);
+	void setTipo(const std::string& t);  // nuevo método
 
 	bool get_color() {
 		return color;
@@ -42,12 +42,7 @@ public:
 	VECTOR2D get_pos() {
 		return posicion_pieza;
 	}
-
 	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>>);
-
-
-
-	bool pieza_comible(VECTOR2D, std::vector<std::vector<Pieza*>> );
 
 	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
 	inline bool es_rey() const override { return true; }
