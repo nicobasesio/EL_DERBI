@@ -38,13 +38,6 @@ public:
 		return posicion_pieza;
 	}
 
-	virtual bool piezaAhogada(std::vector<VECTOR2D> posiciones)
-	{
-		if (posiciones.size() == 0)
-			return true;
-		else
-			return false;
-	}
 
 	virtual bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control) {   // Para que no se salga del tamaño de la matriz control al comprobar si es jaque o no
 		return false;
@@ -62,7 +55,7 @@ public:
 		return false;
 	}
 
-	virtual std::string nombre() const { return "pieza"; }
+	
 	virtual bool es_rey() const { return false; }
 	virtual bool es_peon() const { return false; }
 	virtual bool es_caballo()const {return false;}
