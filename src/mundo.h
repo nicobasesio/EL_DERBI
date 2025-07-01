@@ -8,6 +8,7 @@
 #include "rey.h"
 #include "caballo.h"
 #include "reina.h"
+#include "freeglut.h"
 
 class Mundo
 {
@@ -55,7 +56,6 @@ class Mundo
 	int columnas;
 	int filas;
 	
-
 	bool movida = false; //ser� true cuando se haya movido una pieza
 
 	
@@ -73,6 +73,7 @@ public:
 	void set_casilla_actual(VECTOR2D& casilla_act);	// De esta manera no es necesario introducir como entrada este valor para los metodos "mueve_pieza()" y "dibuja()"
 	void set_casilla_anterior(VECTOR2D& casilla_ant);
 	bool casillaValida(int fila, int columna);
+	void aplicar_efecto_especial();
 	void crear_matriz_control();
 
 	void actualizar_matriz_control();
@@ -95,5 +96,7 @@ public:
 	
 };
 
+extern bool efecto_activo;
+extern unsigned int tiempo_efecto;
 
-
+void aplicar_efecto_especial();

@@ -350,16 +350,42 @@ void Mundo::dibuja() {
     dibujar_con_balanceo(reyR, anguloAnimacion);
     dibujar_con_balanceo(reinaR, anguloAnimacion);
 
-    
+
     for (auto* pieza : comidaB)
-        dibujar_con_balanceo(*pieza, anguloAnimacion);
+        pieza->dibuja();  // llama al nuevo método que sabe si debe dibujar balón o sprite
 
     for (auto* pieza : comidaR)
-        dibujar_con_balanceo(*pieza, anguloAnimacion);
+        pieza->dibuja();
+
+    // ✨ Efecto especial visual (destello al capturar con el rey)
+    if (efecto_activo) {
+        unsigned int t = glutGet(GLUT_ELAPSED_TIME);
+        if (t - tiempo_efecto < 500) {  // 500 ms de duración
+            glDisable(GL_LIGHTING);
+            glColor4f(1, 1, 0.5f, 0.3f);  // color amarillo translúcido
+            glBegin(GL_QUADS);
+            glVertex3f(-14, -3, 0.2f);
+            glVertex3f(14, -3, 0.2f);
+            glVertex3f(14, 18, 0.2f);
+            glVertex3f(-14, 18, 0.2f);
+            glEnd();
+            glEnable(GL_LIGHTING);
+        }
+        else {
+            efecto_activo = false;
+        }
+    }
 
 
 }
 
+bool efecto_activo = false;
+unsigned int tiempo_efecto = 0;
+
+void aplicar_efecto_especial() {
+    efecto_activo = true;
+    tiempo_efecto = glutGet(GLUT_ELAPSED_TIME);
+}
 
 
 

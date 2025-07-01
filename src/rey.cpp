@@ -1,25 +1,37 @@
 #include "rey.h"
 #include <iostream>
+#include "ETSIDI.h"
+
+
+extern int tiempo_jugador1;
+extern int tiempo_jugador2;
+extern void aplicar_efecto_especial();
 
 void Rey::dibuja()
 {
 	glPushMatrix();
 	glTranslated(posicion_pieza.x, posicion_pieza.y, 0.001);
-	if (color == 0)
-		sprite2.draw();			//rojas
-	if (color == 1)
-		sprite.draw();		// blancas
-	//fin del codigo incluido
+
+	if (tipo == "balon") {
+		ETSIDI::Sprite balon("imagenes/balon.png", 1.0f);
+		balon.setCenter(0.75f, 0.75f);
+		balon.setPos(posicion_pieza.x, posicion_pieza.y);
+		balon.draw();
+	}
+	else {
+		if (color == 0)
+			sprite2.draw();	// rojas
+		else
+			sprite.draw();	// blancas
+	}
+
 	glPopMatrix();
 	glFlush();
 }
 
 void Rey::set_color(bool a)
 {
-	if (a == true)
-		color = true;
-	if (a == false)
-		color = false;
+	color = a;
 }
 
 void Rey::set_pos(const VECTOR2D& pos)
@@ -27,6 +39,10 @@ void Rey::set_pos(const VECTOR2D& pos)
 	posicion_pieza = pos;
 }
 
+void Rey::setTipo(const std::string& t)
+{
+	tipo = t;
+}
 
 void Rey::muevepieza(double x, double y)
 {
@@ -51,10 +67,8 @@ bool Rey::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>
 			}
 		}
 	}
-	return false;  
+	return false;
 }
-
-
 
 bool Rey::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
 	int i = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
@@ -82,7 +96,7 @@ bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, boo
 	int movx = std::abs(posicion_pieza.x - destino.x);
 	int movy = std::abs(posicion_pieza.y - destino.y);
 
-	// Movimiento válido (como máximo 2 unidades en x o y, pero no quedarse quieto)
+	
 	if (movx <= 2 && movy <= 2 && !(movx == 0 && movy == 0)) {
 		int i = static_cast<int>((destino.x + 8.0) / 2.0);
 		int j = static_cast<int>((destino.y - 1.0) / 2.0);
@@ -91,6 +105,16 @@ bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, boo
 			Pieza* objetivo = control[i][j];
 			if (objetivo != nullptr) {
 				capturo = true;
+
+				
+				objetivo->setTipo("balon");
+				aplicar_efecto_especial();
+
+				if (color == true) 
+					tiempo_jugador1 += 5;
+				else              
+					tiempo_jugador2 += 5;
+				
 			}
 
 			muevepieza(destino.x, destino.y);
@@ -101,7 +125,7 @@ bool Rey::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, boo
 	return false;
 }
 
-
 void Rey::dibuja_pieza() {
-	dibuja(); 
+	dibuja();
 }
+

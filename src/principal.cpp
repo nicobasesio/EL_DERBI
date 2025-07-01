@@ -203,6 +203,24 @@ void OnDraw() {
         ETSIDI::printxy("Pulsa cualquier tecla para volver al menu", -10, 1);
     }
 
+    if (efecto_activo) {
+        unsigned int t = glutGet(GLUT_ELAPSED_TIME);
+        if (t - tiempo_efecto < 500) {  // 0.5 segundos
+            glDisable(GL_LIGHTING);
+            glColor4f(1, 1, 0.5f, 0.3f);  // color amarillento translúcido
+            glBegin(GL_QUADS);
+            glVertex3f(-14, -3, 0.2f);
+            glVertex3f(14, -3, 0.2f);
+            glVertex3f(14, 18, 0.2f);
+            glVertex3f(-14, 18, 0.2f);
+            glEnd();
+            glEnable(GL_LIGHTING);
+        }
+        else {
+            efecto_activo = false;
+        }
+    }
+
     glutSwapBuffers();
 
 
