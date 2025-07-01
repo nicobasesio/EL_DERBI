@@ -29,6 +29,8 @@ unsigned int ultimo_tiempo_actualizado = 0;
 int jugador_que_pierde = 0;
 bool leyenda_visible = false;
 bool guia_visible = false;
+const int UMBRAL_TENSION = 20;
+bool tension_activa = false;
 
 
 
@@ -283,13 +285,20 @@ void OnTimer(int value) {
                 tiempo_jugador2--;
             std::cout << "[DEBUG] Tiempo jugador 1: " << tiempo_jugador1 << std::endl;
             ultimo_tiempo_actualizado = tiempo_actual;
+            bool queda_1_10 = (tiempo_jugador1 > 0 && tiempo_jugador1 <= UMBRAL_TENSION) || (tiempo_jugador2 > 0 && tiempo_jugador2 <= UMBRAL_TENSION);
+            if (queda_1_10 && !tension_activa) {
+                tension_activa = true;
+                ETSIDI::stopMusica();
+                ETSIDI::playMusica("sonido/tension.mp3", true);
+            }
 
             // Comprobación por tiempo agotado
-            if (tiempo_jugador1 <= 0 || tiempo_jugador2 <= 0) {
+            if (tiempo_jugador1 <= 0 || tiempo_jugador2 <= 0 && tension_activa) {
                 fin_partida = true;
                 jugador_que_pierde = (tiempo_jugador1 <= 0) ? 1 : 2;
                 estado = MENU_FINAL;
                 ETSIDI::stopMusica();
+                tension_activa = false;
                 ETSIDI::play("sonido/final.mp3");
             }
 
