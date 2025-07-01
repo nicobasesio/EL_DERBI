@@ -22,6 +22,8 @@ bool fin_partida = false;
 unsigned int ultimo_tiempo_actualizado = 0;
 int jugador_que_pierde = 0;
 bool leyenda_visible = false;
+bool guia_visible = false;
+
 
 
 enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL, MENU_INFO};
@@ -131,16 +133,31 @@ void OnDraw() {
         glEnable(GL_LIGHTING);
 
         
+        if (guia_visible) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/guia.png").id);
+            glDisable(GL_LIGHTING);
+            glColor4f(1, 1, 1, 1.0f);
+            glBegin(GL_POLYGON);
+            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.1);
+            glTexCoord2d(1, 1); glVertex3d(14, -3, 0.1);
+            glTexCoord2d(1, 0); glVertex3d(14, 18, 0.1);
+            glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.1);
+            glEnd();
+            glEnable(GL_LIGHTING);
+            glDisable(GL_TEXTURE_2D);
+        }
+
         if (leyenda_visible) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/leyenda.png").id);
             glDisable(GL_LIGHTING);
-            glColor4f(1, 1, 1, 0.8f);  // Opcional: transparencia si quieres
+            glColor4f(1, 1, 1, 1.0f);
             glBegin(GL_POLYGON);
-            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.01);
-            glTexCoord2d(1, 1); glVertex3d(14, -3, 0.01);
-            glTexCoord2d(1, 0); glVertex3d(14, 18, 0.01);
-            glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.01);
+            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.11); // z más alto que guia
+            glTexCoord2d(1, 1); glVertex3d(14, -3, 0.11);
+            glTexCoord2d(1, 0); glVertex3d(14, 18, 0.11);
+            glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.11);
             glEnd();
             glEnable(GL_LIGHTING);
             glDisable(GL_TEXTURE_2D);
@@ -191,6 +208,7 @@ void OnDraw() {
 
 
 }
+
 
 void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
@@ -251,7 +269,6 @@ void OnTimer(int value) {
 }
 
 
-
 void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
     if (estado == MENU_FINAL) {
         estado = MENU_START;
@@ -260,22 +277,19 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
         tiempo_jugador1 = tiempo_jugador2 = 0;
         ETSIDI::playMusica("sonido/musica.mp3", true);
     }
-
-    if (estado == MENU_FINAL) {
-        estado = MENU_START;
-        fin_partida = false;
-        jugador_que_pierde = 0;
-        tiempo_jugador1 = tiempo_jugador2 = 0;
-        ETSIDI::playMusica("sonido/musica.mp3", true);
-    }
     else if (estado == JUEGO) {
-        if (key == 'i' || key == 'I') {
+        if (key == 'g' || key == 'G') {
+            guia_visible = !guia_visible;
+            glutPostRedisplay();
+        }
+        if (key == 'l' || key == 'L') {
             leyenda_visible = !leyenda_visible;
             glutPostRedisplay();
         }
     }
-
 }
+
+
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
