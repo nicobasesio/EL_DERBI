@@ -95,6 +95,7 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 	capturo = false;
 	Pieza* objetivo = control[di][dj];
 	if (objetivo != nullptr)
+
 	{
 		if (objetivo->get_color() != color)
 		{
@@ -109,6 +110,14 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 			return false;
 		}
 	}
+
+{
+    capturo = true;
+    haComidoPieza = true;
+    std::cout << "[DEBUG] Caballo capturo una pieza\n";
+}
+
+
 
 	control[oi][oj] = nullptr;
 	control[di][dj] = this;

@@ -151,7 +151,7 @@ void Tablero::dibuja_temporizador() {
 }
 
 void Tablero::dibuja_casilla_resaltada(const VECTOR2D& centro) {
-	glColor3ub(220, 0, 0);
+	glColor3ub(255, 255, 0);
 	glBegin(GL_POLYGON);
 	glVertex3f(centro.x - 1, centro.y - 1, 0.0f);
 	glVertex3f(centro.x - 1, centro.y + 1, 0.0f);
