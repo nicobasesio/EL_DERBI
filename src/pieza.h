@@ -47,14 +47,11 @@ public:
 		return false;
 	}
 
-	virtual std::vector<VECTOR2D> get_movimientos_validos(std::vector<std::vector<Pieza*>> control, VECTOR2D pos, VECTOR2D reyPos) {
-		std::vector<VECTOR2D> posiciones;
-		return posiciones;
-	}
-
-	virtual bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
+	virtual bool puede_comer_enemigo(const VECTOR2D& origen,const VECTOR2D& destino,const std::vector<std::vector<Pieza*>>& control) {
 		return false;
 	}
+
+
 
 	// Métodos de identificación de tipo de pieza
 	virtual std::string nombre() const { return "pieza"; }

@@ -50,23 +50,30 @@ bool Rey::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>
     return false;
 }
 
-bool Rey::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
-    int i = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
-    int j = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
-            int ni = i + dx;
-            int nj = j + dy;
-            if (ni >= 0 && ni < 8 && nj >= 0 && nj < 8) {
-                Pieza* p = control[ni][nj];
-                if (p != nullptr && p->get_color() != this->color) {
-                    std::cout << "[DEBUG] " << (color ? "Rey blanco" : "Rey rojo")
-                        << " ve enemigo en (" << ni << "," << nj << ")\n";
-                    return true;
-                }
-            }
-        }
+bool Rey::puede_comer_enemigo(const VECTOR2D& origen,
+    const VECTOR2D& destino,
+    const std::vector<std::vector<Pieza*>>& control) {
+    // 1) Índices del rey (origen físico → [0..7])
+    int i = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
+    int j = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));
+
+    // 2) Ídem para destino
+    int xf = static_cast<int>(std::round(destino.x));
+    int yf = static_cast<int>(std::round(destino.y));
+
+    // 3) Solo vecinas (±1 en x/y, sin (0,0))
+    int dx = xf - i;
+    int dy = yf - j;
+    if ((std::abs(dx) > 1 || std::abs(dy) > 1) || (dx == 0 && dy == 0))
+        return false;
+
+    // 4) Comprobación y debug
+    Pieza* p = control[xf][yf];
+    if (p && p->get_color() != this->color) {
+        std::cout << "[DEBUG] "
+            << (color ? "Rey blanco" : "Rey rojo")
+            << " ve enemigo en (" << xf << "," << yf << ")\n";
+        return true;
     }
     return false;
 }

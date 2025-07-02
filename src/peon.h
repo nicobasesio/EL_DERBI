@@ -40,9 +40,11 @@ public:
 	
 	inline bool es_peon() const override { return true; }
 	bool casillaValida(int i, int j, std::vector<std::vector<Pieza*>> control);  // Para que no se salga del tamaño de la matriz control 
-	bool puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) override;
+	
 	bool mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control, bool& capturo);
-
+	bool puede_comer_enemigo(const VECTOR2D& origen,const VECTOR2D& destino,const std::vector<std::vector<Pieza*>>& control) override;
 };
+
+
 
 

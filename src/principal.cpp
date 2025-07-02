@@ -393,8 +393,9 @@ void mouseClick(int button, int state, int x, int y) {
 
         int col_at = int((atacante->get_pos().x - mundo.getTablero().coordenadas.x) / 2 + .5f);
         int fil_at = int((atacante->get_pos().y - mundo.getTablero().coordenadas.y) / 2 + .5f);
-        int col_de = int((dest.x - mundo.getTablero().coordenadas.x) / 2 + .5f);
-        int fil_de = int((dest.y - mundo.getTablero().coordenadas.y) / 2 + .5f);
+        int col_de = static_cast<int>(dest.x);
+        int fil_de = static_cast<int>(dest.y);
+
 
         if (col_at >= 0 && col_at < 8 && fil_at >= 0 && fil_at < 8)
             mundo.getTablero().agregarResaltado(col_at, fil_at);

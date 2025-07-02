@@ -111,24 +111,38 @@ bool Caballo::mover(VECTOR2D destino, std::vector<std::vector<Pieza*>>& control,
 }
 
 
-bool Caballo::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
-	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
-	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+bool Caballo::puede_comer_enemigo(const VECTOR2D& origen,
+	const VECTOR2D& destino,
+	const std::vector<std::vector<Pieza*>>& control) {
+	// 1) Convertir origen físico a índices de tablero
+	int xi = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
+	int yi = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));
 
-	int dx[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
-	int dy[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+	// 2) Indices destino (ya en [0..7])
+	int xf = static_cast<int>(std::round(destino.x));
+	int yf = static_cast<int>(std::round(destino.y));
 
-	for (int i = 0; i < 8; ++i) {
-		int nx = x + dx[i];
-		int ny = y + dy[i];
+	// 3) Calcular desplazamientos relativos
+	int dx = xf - xi;
+	int dy = yf - yi;
 
-		if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-			Pieza* objetivo = control[nx][ny];
-			if (objetivo != nullptr && objetivo->get_color() != color) {
-				return true;
-			}
+	// 4) Movimientos válidos del caballo
+	const int movesX[8] = { 1,  2,  2,  1, -1, -2, -2, -1 };
+	const int movesY[8] = { 2,  1, -1, -2, -2, -1,  1,  2 };
+
+	bool esMovimientoValido = false;
+	for (int k = 0; k < 8; ++k) {
+		if (dx == movesX[k] && dy == movesY[k]) {
+			esMovimientoValido = true;
+			break;
 		}
 	}
-	return false;
+	if (!esMovimientoValido) {
+		return false;
+	}
+
+	// 5) En destino debe haber pieza enemiga
+	Pieza* objetivo = control[xf][yf];
+	return objetivo && objetivo->get_color() != this->color;
 }
 

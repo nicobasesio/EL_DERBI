@@ -566,22 +566,71 @@ void Mundo::actualizar_matriz_control()
     control[casilla_anterior.x - 1][casilla_anterior.y - 1] = nullptr;
 }
 
-
-
-std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() { // el pair es para empaquetar dos valores
+std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() {
     std::vector<std::pair<Pieza*, VECTOR2D>> lista;
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            Pieza* p = control[i][j];
-            if (p != nullptr && p->get_color() == turno) { // si hay pieza y la pizea que hay es del color adecuado
-                VECTOR2D pos = p->posicion_pieza;  // posicion de la pieza
-                if (p->puede_comer_enemigo(pos, control)) {  //funcion interna de cada pieza para ver si hay un enemigo comible, si lo hay devuelve true, se pasa control para saber las posiciones de las piezas en el tablero
-                    std::cout << "[INFO] Pieza en coordenadas físicas (" << pos.x << "," << pos.y << ") puede capturar\n";
-                    lista.push_back(std::make_pair(p, pos)); //aumentamos el vector
+            Pieza* origen = control[i][j];
+            if (!origen || origen->get_color() != turno)
+                continue;
+
+            VECTOR2D pos_origen = origen->posicion_pieza;
+
+            // ——— Comprobación de mapeo para el origen ———
+            {
+                int test_i = static_cast<int>(std::round((pos_origen.x + 7.0f) / 2.0f));
+                int test_j = static_cast<int>(std::round((pos_origen.y - 2.5f) / 2.0f));
+                if (test_i != i || test_j != j) {
+                    std::cout << "[MAPPING-ERROR] origen índice esperado ("
+                        << i << "," << j << ") vs mapeado ("
+                        << test_i << "," << test_j << ")\n";
+                }
+            }
+
+            // Recorremos cada casilla destino
+            for (int x = 0; x < 8; ++x) {
+                for (int y = 0; y < 8; ++y) {
+                    Pieza* destinoPieza = control[x][y];
+
+                    // —— Paso 2: filtro por pieza enemiga —— 
+                    if (!destinoPieza || destinoPieza->get_color() == turno)
+                        continue;
+
+                    // **DECLARA AQUÍ** el VECTOR2D destino
+                    VECTOR2D pos_destino{
+                        static_cast<double>(x),
+                        static_cast<double>(y)
+                    };
+
+                    // ——— Comprobación de mapeo para el destino ———
+                    {
+                        int test_x = static_cast<int>(std::round(pos_destino.x));
+                        int test_y = static_cast<int>(std::round(pos_destino.y));
+                        if (test_x != x || test_y != y) {
+                            std::cout << "[MAPPING-ERROR] destino índice esperado ("
+                                << x << "," << y << ") vs mapeado ("
+                                << test_x << "," << test_y << ")\n";
+                        }
+                    }
+
+                    // DEBUG: imprimo antes de añadir al vector
+                    if (origen->puede_comer_enemigo(pos_origen,
+                        pos_destino,
+                        control)) {
+                        std::cout << "[DEBUG] Origen=("
+                            << i << "," << j
+                            << ") Destino=("
+                            << x << "," << y
+                            << ")\n";
+
+                        lista.emplace_back(origen, pos_origen);
+                        lista.emplace_back(destinoPieza, pos_destino);
+                    }
                 }
             }
         }
     }
+
     return lista;
 }
