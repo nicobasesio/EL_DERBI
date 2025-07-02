@@ -46,6 +46,10 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t);
 void mouseClick(int button, int state, int x, int y);
 void display();
 
+std::string imagen_arbitro = "imagenes/arbitroamarillo.png";
+unsigned int tiempo_cambio_arbitro = 0;
+
+
 EfectoEspecial efectoEspecial;
 
 void OnResize(int w, int h) {
@@ -58,6 +62,7 @@ void OnResize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
+
 
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
@@ -93,7 +98,8 @@ int main(int argc, char* argv[]) {
 
 void dibujarArbitro() {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/arbitro.png").id);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture(imagen_arbitro.c_str()).id);
+    glDisable(GL_LIGHTING);
     glDisable(GL_LIGHTING);
     glColor4f(1, 1, 1, 1);
     glEnable(GL_ALPHA_TEST);
@@ -291,9 +297,17 @@ void OnTimer(int value) {
                     ETSIDI::play("sonido/final.mp3");
                 }
             }
+           
+            
+
         }
     }
-
+    if (!imagen_arbitro.empty() && imagen_arbitro != "imagenes/arbitro.png") {
+        unsigned int ahora = glutGet(GLUT_ELAPSED_TIME);
+        if (ahora - tiempo_cambio_arbitro >= 2000) { 
+            imagen_arbitro = "imagenes/arbitro.png";
+        }
+    }
     if (efectoEspecial.activo)
         efectoEspecial.mueve();
 
@@ -328,6 +342,7 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
 void mouseClick(int button, int state, int x, int y) {
     float x_normal = worldLeft + (float)x / windowWidth * (worldRight - worldLeft);
     float y_normal = worldBottom + (float)(windowHeight - y) / windowHeight * (worldTop - worldBottom);
+
 
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
@@ -397,11 +412,23 @@ void mouseClick(int button, int state, int x, int y) {
 
     int i = static_cast<int>(raton.casilla.x) - 1;
     int j = static_cast<int>(raton.casilla.y) - 1;
-    if (!mundo.casillaValida(i, j)) return;
+    if (!mundo.casillaValida(i, j))
+    {
+        imagen_arbitro = "imagenes/arbitroamarillo.png";
+        tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+        ETSIDI::play("sonido/pitido.mp3");
+        return;
+    }
 
     if (!pieza_seleccionada) {
         Pieza* p = mundo.getControl()[i][j];
-        if (!p || p->get_color() != mundo.get_turno()) return;
+        if (!p || p->get_color() != mundo.get_turno())
+        {
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
+            return;
+        }
 
         posicion_central_click = centro;
         posicion_central_click_anterior = centro;

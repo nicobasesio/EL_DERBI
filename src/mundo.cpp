@@ -411,10 +411,12 @@ void Mundo::aplicar_efecto_especial(VECTOR2D pos) {
     efectoBonus.posicion = { 0.0f, 0.0f }; 
     efectoBonus.explosionHecha = false;
 
-    ETSIDI::play("sonido/bonus.wav");
+    ETSIDI::play("sonido/bonus.mp3");
 }
 
 
+extern std::string imagen_arbitro;
+extern unsigned int tiempo_cambio_arbitro;
 
 
 void Mundo::mueve() {
@@ -432,12 +434,20 @@ void Mundo::mueve() {
         }
         if (!es_pieza_capturable) {
             std::cout << "[REGLA] Debes mover una de las piezas obligadas a capturar.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
             return;
         }
         pieza = pieza_seleccionada;
     }
 
-    if (!pieza) return;
+    if (!pieza) 
+    {
+        imagen_arbitro = "imagenes/arbitroamarillo.png";
+        tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+        ETSIDI::play("sonido/pitido.mp3");
+    }
 
     bool capturo = false;
 
@@ -459,6 +469,9 @@ void Mundo::mueve() {
         }
         else {
             std::cout << "[REGLA] Movimiento no valido para el rey.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
         }
         return;
     }
@@ -470,6 +483,12 @@ void Mundo::mueve() {
             actualizar_matriz_control();
             turno = !turno;
         }
+        else {
+            std::cout << "[REGLA] Movimiento no valido para el peon.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
+        }
         return;
     }
 
@@ -479,6 +498,12 @@ void Mundo::mueve() {
             if (capturo) pieza->get_color() ? comidasB() : comidasR();
             actualizar_matriz_control();
             turno = !turno;
+        }
+        else {
+            std::cout << "[REGLA] Movimiento no valido para la torre.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
         }
         return;
     }
@@ -490,6 +515,12 @@ void Mundo::mueve() {
             actualizar_matriz_control();
             turno = !turno;
         }
+        else {
+            std::cout << "[REGLA] Movimiento no valido para el alfil.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
+        }
         return;
     }
 
@@ -499,6 +530,12 @@ void Mundo::mueve() {
             if (capturo) pieza->get_color() ? comidasB() : comidasR();
             actualizar_matriz_control();
             turno = !turno;
+        }
+        else {
+            std::cout << "[REGLA] Movimiento no valido para la reina.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
         }
         return;
     }
@@ -510,8 +547,15 @@ void Mundo::mueve() {
             actualizar_matriz_control();
             turno = !turno;
         }
+        else {
+            std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
+            imagen_arbitro = "imagenes/arbitroamarillo.png";
+            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
+            ETSIDI::play("sonido/pitido.mp3");
+        }
         return;
     }
+
 }
 
 
