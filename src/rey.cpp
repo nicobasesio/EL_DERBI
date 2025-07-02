@@ -50,9 +50,7 @@ bool Rey::pieza_comible(VECTOR2D casilla_actual, std::vector<std::vector<Pieza*>
     return false;
 }
 
-bool Rey::puede_comer_enemigo(const VECTOR2D& origen,
-    const VECTOR2D& destino,
-    const std::vector<std::vector<Pieza*>>& control) {
+bool Rey::puede_comer_enemigo(const VECTOR2D& origen,const VECTOR2D& destino, const std::vector<std::vector<Pieza*>>& control) {
     // 1) Índices del rey (origen físico → [0..7])
     int i = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
     int j = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));

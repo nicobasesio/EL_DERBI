@@ -116,9 +116,7 @@ bool Torre::mover(VECTOR2D destino,std::vector<std::vector<Pieza*>>& control,boo
 }
 
 
-bool Torre::puede_comer_enemigo(const VECTOR2D& origen,
-    const VECTOR2D& destino,
-    const std::vector<std::vector<Pieza*>>& control) {
+bool Torre::puede_comer_enemigo(const VECTOR2D& origen, const VECTOR2D& destino, const std::vector<std::vector<Pieza*>>& control) {
     // 1) Convertir origen físico a índices de tablero
     int xi = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
     int yi = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));

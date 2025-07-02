@@ -15,7 +15,10 @@ const float worldLeft = -15.0f;
 const float worldRight = 15.0f;
 const float worldBottom = -5.0f;
 const float worldTop = 20.0f;
-
+const std::string TITULO      = "ETSIDI";
+int               letrasMostradas = 0;
+float             tiempoAcumulado = 0.0f;
+const float       INTERVALO       = 0.3f;  // segundos entre cada letra
 using namespace std;
 
 Mundo mundo;
@@ -163,13 +166,19 @@ void OnDraw() {
 
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
-        ETSIDI::setTextColor(1, 1, 1);
+        ETSIDI::setTextColor(255, 255,255);
         ETSIDI::printxy(buffer1, -13.5f, 16.7f);
         ETSIDI::printxy(buffer2, -13.5f, -1.0f);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
 
         dibujarArbitro();
+        ETSIDI::setTextColor(255, 255, 255);
+        float x0 = -5.0f,y0 = 18.0f, esp = 2.0f;
+        for (int i = 0; i < letrasMostradas; ++i) {
+            std::string letra = TITULO.substr(i, 1);
+            ETSIDI::printxy(letra.c_str(), x0 + i * esp, y0);
+        }
 
         if (guia_visible) {
             glEnable(GL_TEXTURE_2D);
@@ -242,6 +251,13 @@ void OnDraw() {
 
 
 void OnTimer(int value) {
+
+    const float dt = 33.0f / 1000.0f;              // intervalos de ~33 ms
+    tiempoAcumulado += dt;
+    if (tiempoAcumulado >= INTERVALO && letrasMostradas < (int)TITULO.size()) {
+        letrasMostradas++;
+        tiempoAcumulado = 0.0f;
+    }
     if (estado == JUEGO && !fin_partida) {
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {

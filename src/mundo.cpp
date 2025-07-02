@@ -577,53 +577,42 @@ std::vector<std::pair<Pieza*, VECTOR2D>> Mundo::piezas_con_captura() {
 
             VECTOR2D pos_origen = origen->posicion_pieza;
 
-            // ——— Comprobación de mapeo para el origen ———
+            
             {
                 int test_i = static_cast<int>(std::round((pos_origen.x + 7.0f) / 2.0f));
                 int test_j = static_cast<int>(std::round((pos_origen.y - 2.5f) / 2.0f));
                 if (test_i != i || test_j != j) {
-                    std::cout << "[MAPPING-ERROR] origen índice esperado ("
-                        << i << "," << j << ") vs mapeado ("
-                        << test_i << "," << test_j << ")\n";
+                    std::cout << "[MAPPING-ERROR] origen índice esperado ("<< i << "," << j << ") vs mapeado (" << test_i << "," << test_j << ")\n";
                 }
             }
 
-            // Recorremos cada casilla destino
+            
             for (int x = 0; x < 8; ++x) {
                 for (int y = 0; y < 8; ++y) {
                     Pieza* destinoPieza = control[x][y];
 
-                    // —— Paso 2: filtro por pieza enemiga —— 
+                   
                     if (!destinoPieza || destinoPieza->get_color() == turno)
                         continue;
 
-                    // **DECLARA AQUÍ** el VECTOR2D destino
+                    
                     VECTOR2D pos_destino{
                         static_cast<double>(x),
                         static_cast<double>(y)
                     };
 
-                    // ——— Comprobación de mapeo para el destino ———
+                    
                     {
                         int test_x = static_cast<int>(std::round(pos_destino.x));
                         int test_y = static_cast<int>(std::round(pos_destino.y));
                         if (test_x != x || test_y != y) {
-                            std::cout << "[MAPPING-ERROR] destino índice esperado ("
-                                << x << "," << y << ") vs mapeado ("
-                                << test_x << "," << test_y << ")\n";
+                            std::cout << "[MAPPING-ERROR] destino índice esperado (" << x << "," << y << ") vs mapeado (" << test_x << "," << test_y << ")\n";
                         }
                     }
 
-                    // DEBUG: imprimo antes de añadir al vector
-                    if (origen->puede_comer_enemigo(pos_origen,
-                        pos_destino,
-                        control)) {
-                        std::cout << "[DEBUG] Origen=("
-                            << i << "," << j
-                            << ") Destino=("
-                            << x << "," << y
-                            << ")\n";
-
+                    
+                    if (origen->puede_comer_enemigo(pos_origen,pos_destino,control)) {
+                        std::cout << "[DEBUG] Origen=("<< i << "," << j << ") Destino=(" << x << "," << y << ")\n";
                         lista.emplace_back(origen, pos_origen);
                         lista.emplace_back(destinoPieza, pos_destino);
                     }

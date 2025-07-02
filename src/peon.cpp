@@ -124,9 +124,7 @@ bool Peon::mover(VECTOR2D destino,std::vector<std::vector<Pieza*>>& control, boo
 }
 
 
-bool Peon::puede_comer_enemigo(const VECTOR2D& origen,
-    const VECTOR2D& destino,
-    const std::vector<std::vector<Pieza*>>& control) {
+bool Peon::puede_comer_enemigo(const VECTOR2D& origen, const VECTOR2D& destino, const std::vector<std::vector<Pieza*>>& control) {
     // Paso 1: convertir la posición física del peón a índices de tablero
     int xi = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
     int yi = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));
