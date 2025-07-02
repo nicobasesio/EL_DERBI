@@ -116,27 +116,37 @@ bool Torre::mover(VECTOR2D destino,std::vector<std::vector<Pieza*>>& control,boo
 }
 
 
-bool Torre::puede_comer_enemigo(VECTOR2D pos, std::vector<std::vector<Pieza*>> control) {
-	int x = static_cast<int>(round((pos.x + 7.0f) / 2.0f));
-	int y = static_cast<int>(round((pos.y - 2.5f) / 2.0f));
+bool Torre::puede_comer_enemigo(const VECTOR2D& origen,
+    const VECTOR2D& destino,
+    const std::vector<std::vector<Pieza*>>& control) {
+    // 1) Convertir origen físico a índices de tablero
+    int xi = static_cast<int>(std::round((origen.x + 7.0f) / 2.0f));
+    int yi = static_cast<int>(std::round((origen.y - 2.5f) / 2.0f));
 
-	// Cuatro direcciones: arriba, abajo, izquierda, derecha
-	int dx[] = { 0, 0, -1, 1 };
-	int dy[] = { -1, 1, 0, 0 };
+    // 2) Obtener índices destino (ya en [0..7])
+    int xf = static_cast<int>(std::round(destino.x));
+    int yf = static_cast<int>(std::round(destino.y));
 
-	for (int dir = 0; dir < 4; ++dir) {
-		int nx = x + dx[dir];
-		int ny = y + dy[dir];
-		while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-			Pieza* objetivo = control[nx][ny];
-			if (objetivo != nullptr) {
-				if (objetivo->get_color() != this->color) return true;
-				else break; // bloqueado por aliada
-			}
-			nx += dx[dir];
-			ny += dy[dir];
-		}
-	}
+    // 3) Comprobar que destino está en la misma fila o columna
+    if (xi != xf && yi != yf) {
+        return false;
+    }
 
-	return false;
+    // 4) Determinar el paso unitario según la dirección
+    int stepX = (xf > xi) ? 1 : (xf < xi) ? -1 : 0;
+    int stepY = (yf > yi) ? 1 : (yf < yi) ? -1 : 0;
+
+    // 5) Recorrer el camino desde la casilla siguiente hasta la anterior a destino
+    for (int x = xi + stepX, y = yi + stepY;
+        x != xf || y != yf;
+        x += stepX, y += stepY) {
+        if (control[x][y] != nullptr) {
+            // Bloqueado por cualquier pieza intermedia
+            return false;
+        }
+    }
+
+    // 6) En destino debe haber pieza enemiga
+    Pieza* objetivo = control[xf][yf];
+    return (objetivo && objetivo->get_color() != this->color);
 }
