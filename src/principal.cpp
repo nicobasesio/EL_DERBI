@@ -299,14 +299,14 @@ void OnTimer(int value) {
                         }
 
                 if (fichas_blancas == 0) {
-                    jugador_que_pierde = 2;
+                    jugador_que_pierde = 1;
                     fin_partida = true;
                     estado = MENU_FINAL;
                     ETSIDI::stopMusica();
                     ETSIDI::play("sonido/final.mp3");
                 }
                 else if (fichas_rojas == 0) {
-                    jugador_que_pierde = 1;
+                    jugador_que_pierde = 2;
                     fin_partida = true;
                     estado = MENU_FINAL;
                     ETSIDI::stopMusica();
@@ -401,26 +401,32 @@ void mouseClick(int button, int state, int x, int y) {
         return;
 
     auto capturables = mundo.piezas_con_captura();
-    mundo.getTablero().limpiarResaltados();
+    auto& tab = mundo.getTablero();
+    tab.limpiarResaltados();
 
-    for (auto& par : capturables) {
-        Pieza* atacante = par.first;
-        VECTOR2D dest = par.second;
+    VECTOR2D coord = tab.getCoordenadas();
 
-        int col_at = int((atacante->get_pos().x - mundo.getTablero().coordenadas.x) / 2 + .5f);
-        int fil_at = int((atacante->get_pos().y - mundo.getTablero().coordenadas.y) / 2 + .5f);
+    
+    for (size_t i = 0; i + 1 < capturables.size(); i += 2) {
+        Pieza* atacante = capturables[i].first;
+        VECTOR2D dest = capturables[i + 1].second;
+
+        int col_at = int((atacante->get_pos().x - coord.x) / 2 + .5f);
+        int fil_at = int((atacante->get_pos().y - coord.y) / 2 + .5f);
+
         int col_de = static_cast<int>(dest.x);
         int fil_de = static_cast<int>(dest.y);
 
+        std::cout << "[DEBUG CLICK] ORIGEN(" << col_at << "," << fil_at
+            << ") DESTINO(" << col_de << "," << fil_de << ")\n";
 
-        if (col_at >= 0 && col_at < 8 && fil_at >= 0 && fil_at < 8)
-            mundo.getTablero().agregarResaltado(col_at, fil_at);
-
-        if (col_de >= 0 && col_de < 8 && fil_de >= 0 && fil_de < 8)
-            mundo.getTablero().agregarResaltado(col_de, fil_de);
+        tab.agregarResaltadoOrigen(col_at, fil_at);
+        tab.agregarResaltadoDestino(col_de, fil_de);
     }
 
     glutPostRedisplay();
+
+
 
     raton.posicion.x = x_normal;
     raton.posicion.y = y_normal;
