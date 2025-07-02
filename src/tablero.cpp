@@ -3,47 +3,63 @@
 #include "ETSIDI.h"
 #include <stdio.h>
 #include "raton.h"
+#include <iostream>
 
 void Tablero::dibuja_tablero(int columnas, int filas) {
 	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
-	// 1) dibuja casillas normales
-	for (int c = 0; c < columnas; ++c) {
-		for (int f = 0; f < filas; ++f) {
-			if ((c + f) & 1) dibuja_cuadrado_blanco(c, f);
-			else            dibuja_cuadrado_verde(c, f);
-		}
-	}
+	// 1) casillas normales
+	for (int c = 0; c < columnas; ++c)
+		for (int f = 0; f < filas; ++f)
+			((c + f) & 1 ? dibuja_cuadrado_blanco(c, f)
+				: dibuja_cuadrado_verde(c, f));
 
-	// 2) dibuja todos los resaltados registrados
-	for (auto& pr : casillasResaltadas) {
-		int c = pr.first, f = pr.second;
+	// Orígenes en amarillo
+	for (auto& pr : casillasResaltadasOrigen) {
 		VECTOR2D centro{
-			coordenadas.x + 2.0 * c,
-			coordenadas.y + 2.0 * f
+			coordenadas.x + 2.0 * pr.first,
+			coordenadas.y + 2.0 * pr.second
 		};
-		dibuja_casilla_resaltada(centro);
+		dibujaResaltado(centro, 255, 235, 59);
 	}
 
-	// 3) marco, fondo, temporizadores...
-	dibuja_marco(columnas, filas);
+	// Destinos en naranja
+	for (auto& pr : casillasResaltadasDestino) {
+		VECTOR2D centro{
+			coordenadas.x + 2.0 * pr.first,
+			coordenadas.y + 2.0 * pr.second
+		};
+		dibujaResaltado(centro, 173, 216, 230);
+	}
+
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+
+
+	dibuja_marco(columnas, filas);
 	dibuja_fondo();
 	dibuja_temporizador();
 }
 
-// Borra todos los resaltados
+
+
+
 void Tablero::limpiarResaltados() {
-	casillasResaltadas.clear();
+	casillasResaltadasOrigen.clear();
+	casillasResaltadasDestino.clear();
 }
 
-// Registra un resaltado dado por índices (0..7)
-void Tablero::agregarResaltado(int col, int fil) {
-	// sólo si están en rango
+void Tablero::agregarResaltadoOrigen(int col, int fil) {
 	if (col >= 0 && col < 8 && fil >= 0 && fil < 8)
-		casillasResaltadas.emplace_back(col, fil);
+		casillasResaltadasOrigen.emplace_back(col, fil);
 }
 
+// Registra un resaltado de destino
+void Tablero::agregarResaltadoDestino(int col, int fil) {
+	if (col >= 0 && col < 8 && fil >= 0 && fil < 8)
+		casillasResaltadasDestino.emplace_back(col, fil);
+}
 
 void Tablero::dibuja_cuadrado_blanco(double i, double j)
 {
@@ -150,12 +166,16 @@ void Tablero::dibuja_temporizador() {
 	glPopMatrix();
 }
 
-void Tablero::dibuja_casilla_resaltada(const VECTOR2D& centro) {
-	glColor3ub(255, 255, 0);
+void Tablero::dibujaResaltado(const VECTOR2D& centro,unsigned char r, unsigned char g,unsigned char b) {
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
+	glColor3ub(r, g, b);
 	glBegin(GL_POLYGON);
 	glVertex3f(centro.x - 1, centro.y - 1, 0.0f);
 	glVertex3f(centro.x - 1, centro.y + 1, 0.0f);
 	glVertex3f(centro.x + 1, centro.y + 1, 0.0f);
 	glVertex3f(centro.x + 1, centro.y - 1, 0.0f);
 	glEnd();
+	glEnable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
 }
