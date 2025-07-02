@@ -2,12 +2,12 @@
 #include <iostream>
 #include "mundo.h"
 #include "raton.h"
-#include<freeglut.h>
+#include <freeglut.h>
 #include <string>
 #include <random>
 #include "tablero.h"
 #include "VECTOR2D.h"
-#include"efectos.h"
+#include "efectos.h"
 
 int windowWidth = 800;
 int windowHeight = 600;
@@ -15,6 +15,7 @@ const float worldLeft = -15.0f;
 const float worldRight = 15.0f;
 const float worldBottom = -5.0f;
 const float worldTop = 20.0f;
+
 using namespace std;
 
 Mundo mundo;
@@ -22,7 +23,6 @@ Raton raton;
 Tablero tablero;
 VECTOR2D posicion_central_click{};
 VECTOR2D posicion_central_click_anterior{};
-
 
 int tiempo_jugador1; // en segundos
 int tiempo_jugador2;
@@ -34,16 +34,11 @@ bool guia_visible = false;
 const int UMBRAL_TENSION = 20;
 bool tension_activa = false;
 
-
-
-enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL, MENU_INFO};
+enum EstadoPantalla { MENU_START, MENU_MODOS, JUEGO, MENU_FINAL, MENU_INFO };
 EstadoPantalla estado = MENU_START;
 int modoSeleccionado = 0;
 enum Turno { BLANCO, ROJO };
 static bool pieza_seleccionada = false;
-
-
-
 
 void OnDraw(void);
 void OnTimer(int value);
@@ -51,23 +46,12 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t);
 void mouseClick(int button, int state, int x, int y);
 void display();
 
-
 EfectoEspecial efectoEspecial;
-
-void aplicar_efecto_especial(VECTOR2D pos) {
-    efectoEspecial.activo = true;
-    efectoEspecial.escala = 1.0f;
-    efectoEspecial.tiempoRestante = 2.0f;
-    efectoEspecial.posicion = pos;
-    ETSIDI::play("sonido/bonus.wav");  // si tienes un sonido
-}
 
 void OnResize(int w, int h) {
     windowWidth = w;
     windowHeight = h;
-    // 1) Ajusta el viewport
     glViewport(0, 0, w, h);
-    // 2) Redefine la proyección ortográfica con tus límites
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(worldLeft, worldRight, worldBottom, worldTop);
@@ -84,7 +68,7 @@ int main(int argc, char* argv[]) {
     OnResize(windowWidth, windowHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-15, 15, -5, 20);  
+    gluOrtho2D(-15, 15, -5, 20);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -94,7 +78,6 @@ int main(int argc, char* argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
     glutDisplayFunc(OnDraw);
     glutTimerFunc(33, OnTimer, 0);
     glutKeyboardFunc(OnKeyboardDown);
@@ -102,30 +85,24 @@ int main(int argc, char* argv[]) {
 
     mundo.inicializa();
     ETSIDI::playMusica("sonido/musica.mp3", true);
-
     mundo.inicializa_tab();
 
     glutMainLoop();
     return 0;
 }
 
-void dibujarArbitro()
-{
+void dibujarArbitro() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/arbitro.png").id);
     glDisable(GL_LIGHTING);
-    glColor4f(1, 1, 1,1);
-
+    glColor4f(1, 1, 1, 1);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.1f);
-
     glBegin(GL_POLYGON);
     glTexCoord2d(0, 1); glVertex3d(9, 5, 0.01);
     glTexCoord2d(1, 1); glVertex3d(13, 5, 0.01);
     glTexCoord2d(1, 0); glVertex3d(13, 12, 0.01);
     glTexCoord2d(0, 0); glVertex3d(9, 12, 0.01);
-
-
     glEnd();
     glDisable(GL_ALPHA_TEST);
     glEnable(GL_LIGHTING);
@@ -136,25 +113,21 @@ void OnDraw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
- 
-
-
     if (estado == MENU_START) {
-        // Dibuja el fondo del menú
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu1.png").id);
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
         glColor3f(1, 1, 1);
-        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);	
-        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);	
-        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);	
+        glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.005);
+        glTexCoord2d(1, 1); glVertex3d(14, -3, 0.005);
+        glTexCoord2d(1, 0); glVertex3d(14, 18, 0.005);
         glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.005);
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
-  
     }
+
     if (estado == MENU_MODOS) {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu2.png").id);
@@ -168,41 +141,15 @@ void OnDraw() {
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
-    
     }
-
 
     if (estado == JUEGO) {
         mundo.dibuja();
 
-        // DIBUJAR EFECTO ESPECIAL
-        if (efectoEspecial.activo) {
-            efectoEspecial.tiempoRestante -= 0.033f;
-            if (efectoEspecial.tiempoRestante <= 0) {
-                efectoEspecial.activo = false;
-            }
-            else {
-                glPushMatrix();
-                glTranslatef(efectoEspecial.posicion.x, efectoEspecial.posicion.y, 0.15f);
-                glScalef(efectoEspecial.escala, efectoEspecial.escala, 1.0f);
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/bonus.png").id);
-                glDisable(GL_LIGHTING);
-                glBegin(GL_QUADS);
-                glTexCoord2d(0, 1); glVertex3d(-1, -1, 0);
-                glTexCoord2d(1, 1); glVertex3d(1, -1, 0);
-                glTexCoord2d(1, 0); glVertex3d(1, 1, 0);
-                glTexCoord2d(0, 0); glVertex3d(-1, 1, 0);
-                glEnd();
-                glEnable(GL_LIGHTING);
-                glDisable(GL_TEXTURE_2D);
-                glPopMatrix();
-            }
-        }
+        // Mostrar efecto especial (balón o bonus)
+        if (efectoEspecial.activo)
+            efectoEspecial.dibuja();
 
-        // TEMPORIZADORES
-        float ancho_marcador = 6.0f;
-        float alto_marcador = 2.0f;
         ETSIDI::setFont("fuente/OpenSans_Condensed-Bold.ttf", 22);
         char buffer1[20], buffer2[20];
         sprintf(buffer1, "%02d:%02d", tiempo_jugador1 / 60, tiempo_jugador1 % 60);
@@ -218,7 +165,6 @@ void OnDraw() {
 
         dibujarArbitro();
 
-        // GUIA
         if (guia_visible) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/guia.png").id);
@@ -234,14 +180,13 @@ void OnDraw() {
             glDisable(GL_TEXTURE_2D);
         }
 
-        // LEYENDA
         if (leyenda_visible) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/leyenda.png").id);
             glDisable(GL_LIGHTING);
             glColor4f(1, 1, 1, 1.0f);
             glBegin(GL_POLYGON);
-            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.11); // z más alto
+            glTexCoord2d(0, 1); glVertex3d(-14, -3, 0.11);
             glTexCoord2d(1, 1); glVertex3d(14, -3, 0.11);
             glTexCoord2d(1, 0); glVertex3d(14, 18, 0.11);
             glTexCoord2d(0, 0); glVertex3d(-14, 18, 0.11);
@@ -250,8 +195,6 @@ void OnDraw() {
             glDisable(GL_TEXTURE_2D);
         }
     }
-
-
 
     if (estado == MENU_INFO) {
         glEnable(GL_TEXTURE_2D);
@@ -267,7 +210,6 @@ void OnDraw() {
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
     }
-
 
     if (estado == MENU_FINAL) {
         std::string imagen_final = (jugador_que_pierde == 1) ? "imagenes/madridgana.png" : "imagenes/atleticogana.png";
@@ -290,32 +232,31 @@ void OnDraw() {
     }
 
     glutSwapBuffers();
-
-
-
 }
 
 
 void OnTimer(int value) {
     if (estado == JUEGO && !fin_partida) {
-
         unsigned int tiempo_actual = glutGet(GLUT_ELAPSED_TIME);
         if (tiempo_actual - ultimo_tiempo_actualizado >= 1000) {
             if (mundo.get_turno() == BLANCO)
                 tiempo_jugador1--;
             else
                 tiempo_jugador2--;
+
             std::cout << "[DEBUG] Tiempo jugador 1: " << tiempo_jugador1 << std::endl;
             ultimo_tiempo_actualizado = tiempo_actual;
-            bool queda_1_10 = (tiempo_jugador1 > 0 && tiempo_jugador1 <= UMBRAL_TENSION) || (tiempo_jugador2 > 0 && tiempo_jugador2 <= UMBRAL_TENSION);
+
+            bool queda_1_10 = (tiempo_jugador1 > 0 && tiempo_jugador1 <= UMBRAL_TENSION) ||
+                (tiempo_jugador2 > 0 && tiempo_jugador2 <= UMBRAL_TENSION);
+
             if (queda_1_10 && !tension_activa) {
                 tension_activa = true;
                 ETSIDI::stopMusica();
                 ETSIDI::playMusica("sonido/tension.mp3", true);
             }
 
-            // Comprobación por tiempo agotado
-            if (tiempo_jugador1 <= 0 || tiempo_jugador2 <= 0 && tension_activa) {
+            if ((tiempo_jugador1 <= 0 || tiempo_jugador2 <= 0) && tension_activa) {
                 fin_partida = true;
                 jugador_que_pierde = (tiempo_jugador1 <= 0) ? 1 : 2;
                 estado = MENU_FINAL;
@@ -324,21 +265,16 @@ void OnTimer(int value) {
                 ETSIDI::play("sonido/final.mp3");
             }
 
-            
             if (!fin_partida) {
                 int fichas_blancas = 0, fichas_rojas = 0;
-
-                for (int i = 0; i < 8; ++i) {
-                    for (int j = 0; j < 8; ++j) {
-                        if (mundo.getControl()[i][j] != nullptr)
-                        {
-                            if (mundo.getControl()[i][j]->get_color()) 
+                for (int i = 0; i < 8; ++i)
+                    for (int j = 0; j < 8; ++j)
+                        if (mundo.getControl()[i][j] != nullptr) {
+                            if (mundo.getControl()[i][j]->get_color())
                                 fichas_blancas++;
                             else
                                 fichas_rojas++;
                         }
-                    }
-                }
 
                 if (fichas_blancas == 0) {
                     jugador_que_pierde = 2;
@@ -357,18 +293,14 @@ void OnTimer(int value) {
             }
         }
     }
-    
-    if (efectoEspecial.activo) {
-        efectoEspecial.tiempoRestante -= 0.033f;  // 33 ms por frame (~30 fps)
-        if (efectoEspecial.tiempoRestante <= 0.0f) {
-            efectoEspecial.activo = false;
-        }
-    }
+
+    if (efectoEspecial.activo)
+        efectoEspecial.mueve();
 
     glutTimerFunc(33, OnTimer, 0);
-   // efectoEspecial.mueve();
     glutPostRedisplay();
 }
+
 
 
 void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
@@ -393,24 +325,10 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t) {
 
 
 
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glutSwapBuffers();
-}
-
-bool es_pieza_con_captura(Pieza* pieza, const std::vector<std::pair<Pieza*, VECTOR2D>>& capturables) {
-    for (const auto& par : capturables) {
-        if (par.first == pieza) return true;
-    }
-    return false;
-}
-
 void mouseClick(int button, int state, int x, int y) {
-    // 1) Convertir píxel → coordenadas de mundo
     float x_normal = worldLeft + (float)x / windowWidth * (worldRight - worldLeft);
-
     float y_normal = worldBottom + (float)(windowHeight - y) / windowHeight * (worldTop - worldBottom);
-    // 2) MENÚS
+
     if (estado == MENU_START && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (x_normal > -10 && x_normal < 10 && y_normal > -5 && y_normal < 10) {
             estado = MENU_MODOS;
@@ -418,34 +336,28 @@ void mouseClick(int button, int state, int x, int y) {
         }
         return;
     }
+
     if (estado == MENU_MODOS && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // modo1
-        if (x_normal > -8 && x_normal < 8 && y_normal > 13 && y_normal < 15.5) {
-            modoSeleccionado = 1; tiempo_jugador1 = tiempo_jugador2 = 60;
-        }
-        // modo2
-        else if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11) {
-            modoSeleccionado = 2; tiempo_jugador1 = tiempo_jugador2 = 180;
-        }
-        // modo3
-        else if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5) {
-            modoSeleccionado = 3; tiempo_jugador1 = tiempo_jugador2 = 300;
-        }
-        // info
+        if (x_normal > -8 && x_normal < 8 && y_normal > 13 && y_normal < 15.5)
+            modoSeleccionado = 1, tiempo_jugador1 = tiempo_jugador2 = 60;
+        else if (x_normal > -8 && x_normal < 8 && y_normal > 8.5 && y_normal < 11)
+            modoSeleccionado = 2, tiempo_jugador1 = tiempo_jugador2 = 180;
+        else if (x_normal > -8 && x_normal < 8 && y_normal > 4 && y_normal < 6.5)
+            modoSeleccionado = 3, tiempo_jugador1 = tiempo_jugador2 = 300;
         else if (x_normal > 11 && x_normal < 13.5 && y_normal > -2 && y_normal < 0.5) {
             estado = MENU_INFO;
             glutPostRedisplay();
             return;
         }
-        else {
-            return; // fuera de botones
-        }
+        else return;
+
         ETSIDI::stopMusica();
         estado = JUEGO;
         mundo.inicializa();
         glutPostRedisplay();
         return;
     }
+
     if (estado == MENU_INFO && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (x_normal > -14 && x_normal < -11.5 && y_normal > 16 && y_normal < 18.5) {
             estado = MENU_MODOS;
@@ -454,10 +366,8 @@ void mouseClick(int button, int state, int x, int y) {
         return;
     }
 
-    // 3) JUEGO – sólo entramos si ya estamos en JUEGO
     if (estado != JUEGO || button != GLUT_LEFT_BUTTON || state != GLUT_DOWN)
         return;
-    // … tras comprobar estado==JUEGO y botón pulsado …
 
     auto capturables = mundo.piezas_con_captura();
     mundo.getTablero().limpiarResaltados();
@@ -466,27 +376,11 @@ void mouseClick(int button, int state, int x, int y) {
         Pieza* atacante = par.first;
         VECTOR2D dest = par.second;
 
-        // DEBUG: qué par estamos procesando
-        std::cout
-            << "[DEBUG] atacante en ("
-            << atacante->get_pos().x << "," << atacante->get_pos().y
-            << "), destino lógico = ("
-            << dest.x << "," << dest.y << ")\n";
-
-        // cálculo índices
         int col_at = int((atacante->get_pos().x - mundo.getTablero().coordenadas.x) / 2 + .5f);
         int fil_at = int((atacante->get_pos().y - mundo.getTablero().coordenadas.y) / 2 + .5f);
         int col_de = int((dest.x - mundo.getTablero().coordenadas.x) / 2 + .5f);
         int fil_de = int((dest.y - mundo.getTablero().coordenadas.y) / 2 + .5f);
 
-        std::cout
-            << "[DEBUG] índices → atacante("
-            << col_at << "," << fil_at
-            << "), destino("
-            << col_de << "," << fil_de
-            << ")\n";
-
-        // resalto si están en rango
         if (col_at >= 0 && col_at < 8 && fil_at >= 0 && fil_at < 8)
             mundo.getTablero().agregarResaltado(col_at, fil_at);
 
@@ -496,31 +390,19 @@ void mouseClick(int button, int state, int x, int y) {
 
     glutPostRedisplay();
 
-
-
-
-    // 3.2) Calcular casilla clicada
     raton.posicion.x = x_normal;
     raton.posicion.y = y_normal;
     VECTOR2D centro = raton.elige_casilla();
-    if (centro.x == 0.0f && centro.y == 0.0f) {
-        std::cout << "[INFO] Click fuera del tablero\n";
-        return;
-    }
+    if (centro.x == 0.0f && centro.y == 0.0f) return;
+
     int i = static_cast<int>(raton.casilla.x) - 1;
     int j = static_cast<int>(raton.casilla.y) - 1;
-    if (!mundo.casillaValida(i, j)) {
-        std::cout << "[INFO] Casilla vacía o inválida\n";
-        return;
-    }
+    if (!mundo.casillaValida(i, j)) return;
 
-    // 3.3) Primer clic: seleccionar pieza
     if (!pieza_seleccionada) {
         Pieza* p = mundo.getControl()[i][j];
-        if (!p || p->get_color() != mundo.get_turno()) {
-            std::cout << "[INFO] Selección inválida\n";
-            return;
-        }
+        if (!p || p->get_color() != mundo.get_turno()) return;
+
         posicion_central_click = centro;
         posicion_central_click_anterior = centro;
         mundo.set_posicion_central_click(centro);
@@ -530,38 +412,28 @@ void mouseClick(int button, int state, int x, int y) {
         return;
     }
 
-    // 3.4) Segundo clic: mover o capturar
-    if (posicion_central_click.x == centro.x &&
-        posicion_central_click.y == centro.y) {
-        // deselecciona
+    if (posicion_central_click.x == centro.x && posicion_central_click.y == centro.y) {
         pieza_seleccionada = false;
         mundo.casilla_seleccionada = false;
         return;
     }
-    // preparar para mover
+
     mundo.set_posicion_central_click(centro);
     mundo.set_posicion_central_click_anterior(posicion_central_click_anterior);
     mundo.set_casilla_actual(raton.casilla);
     mundo.set_casilla_anterior(raton.casilla_anterior);
 
-    // si hay capturas forzosas, obligar a destino enemigo
     if (!capturables.empty()) {
         Pieza* dest = mundo.getControl()[i][j];
         if (!dest || dest->get_color() == mundo.get_turno()) {
-            std::cout << "[INFO] Debes capturar una pieza enemiga\n";
             pieza_seleccionada = false;
             return;
         }
     }
 
-    // ejecuta la jugada
-   // … después de validar captura o movimiento …
     mundo.mueve();
-
-    // **Aquí** eliminamos cualquier resaltado pendiente
     mundo.getTablero().limpiarResaltados();
     glutPostRedisplay();
-
     pieza_seleccionada = false;
-
 }
+

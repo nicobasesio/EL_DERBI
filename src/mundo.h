@@ -60,7 +60,7 @@ class Mundo {
 public:
 	Mundo();
 
-	// ======== MÉTODOS PÚBLICOS ========
+	
 	std::vector<std::vector<Pieza*>>& getControl() { return control; }
 
 	void dibuja();
@@ -73,6 +73,9 @@ public:
 	void crear_matriz_control();
 	bool casillaValida(int fila, int columna);
 	void aplicar_efecto_especial(VECTOR2D pos);
+
+	EfectoEspecial efectoBalon;
+	EfectoEspecial efectoBonus;
 
 	// Getters/setters de posición
 	VECTOR2D get_posicion_central_click() const { return posicion_central_click; }

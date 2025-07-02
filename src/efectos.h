@@ -1,34 +1,29 @@
-/*#pragma once
-#include "VECTOR2D.h"
-
-class Efectos {
-public:
-    bool activo = false;
-    float escala = 1.0f;
-    float tiempoRestante = 2.0f;
-    VECTOR2D posicion;
-};
-
-// Variables globales
-extern Efectos efectoEspecial;
-
-// Declaración de función
-void aplicar_efecto_especial(VECTOR2D pos);
-
-// (Opcional) para el destello antiguo, si aún lo quieres
-extern bool efecto_activo;
-extern unsigned int tiempo_efecto;
-*/
 #pragma once
 #include "VECTOR2D.h"
+#include <string>
+#include <vector>
 
 class EfectoEspecial {
 public:
-    bool activo = false;
-    float escala = 1.0f;
-    float tiempoRestante = 0.0f;
-    VECTOR2D posicion;
+    bool activo = false; 
+    float tiempoRestante = 0.0f; 
+    float tiempoTotal = 2.0f;  
+    float escala = 1.0f;  
+    float rotacion = 0.0f; 
+    std::string tipo;                // "balon" o "bonus"
 
-    void mueve();
-    void dibuja();
+    VECTOR2D posicion;  
+    VECTOR2D destino;  
+
+    struct Particula {
+        VECTOR2D pos;               
+        VECTOR2D vel;               
+        float vida = 1.0f;          
+    };
+
+    std::vector<Particula> particulas; 
+    bool explosionHecha = false;        
+
+    void mueve();    
+    void dibuja();   
 };
