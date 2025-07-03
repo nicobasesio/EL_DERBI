@@ -24,7 +24,7 @@ void Tablero::dibuja_tablero(int columnas, int filas) {
 		dibujaResaltado(centro, 255, 235, 59);
 	}
 
-	// Destinos en naranja
+	// Destinos en azul
 	for (auto& pr : casillasResaltadasDestino) {
 		VECTOR2D centro{
 			coordenadas.x + 2.0 * pr.first,

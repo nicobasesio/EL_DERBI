@@ -63,6 +63,9 @@ void EfectoEspecial::dibuja() {
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
 
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.1f);
+
     if (tipo == "balon") {
         GLuint textura = ETSIDI::getTexture("imagenes/balon.png").id;
         if (textura > 0) glBindTexture(GL_TEXTURE_2D, textura);
@@ -119,4 +122,7 @@ void EfectoEspecial::dibuja() {
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
+    glAlphaFunc(GL_GREATER, 0.1f);
+    glEnable(GL_ALPHA_TEST);
+
 }
