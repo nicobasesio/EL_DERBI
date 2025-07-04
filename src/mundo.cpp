@@ -424,138 +424,32 @@ void Mundo::mueve() {
     Pieza* pieza = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
 
     if (!capturables.empty()) {
-        Pieza* pieza_seleccionada = control[casilla_anterior.x - 1][casilla_anterior.y - 1];
-        bool es_pieza_capturable = false;
+        bool es_capturable = false;
         for (const auto& par : capturables) {
-            if (par.first == pieza_seleccionada) {
-                es_pieza_capturable = true;
+            if (par.first == pieza) {
+                es_capturable = true;
                 break;
             }
         }
-        if (!es_pieza_capturable) {
+
+        if (!es_capturable) {
             std::cout << "[REGLA] Debes mover una de las piezas obligadas a capturar.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
             return;
         }
-        pieza = pieza_seleccionada;
     }
 
-    if (!pieza) 
-    {
-        imagen_arbitro = "imagenes/arbitroamarillo.png";
-        tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-        ETSIDI::play("sonido/pitido.mp3");
-    }
-
+    // Aquí se mueve cualquier pieza, tanto en caso obligatorio como libre
     bool capturo = false;
-
-    if (pieza->es_rey()) {
-        Rey* rey = dynamic_cast<Rey*>(pieza);
-        if (rey && rey->mover(posicion_central_click, control, capturo)) {
-            Pieza* comida = control[casilla_actual.x - 1][casilla_actual.y - 1];
-            if (capturo) {
-                if (pieza->get_color()) comidasB(); else comidasR();
-
-                // Efecto solo si el rey come una pieza enemiga
-                if (comida && comida->get_color() != pieza->get_color()) {
-                    aplicar_efecto_especial(posicion_central_click);
-                }
-            }
-            actualizar_matriz_control();
-            turno = !turno;
-            movida = true;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para el rey.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
+    if (pieza && pieza->mover(posicion_central_click, control, capturo)) {
+        if (capturo)
+            pieza->get_color() ? comidasB() : comidasR();
+        actualizar_matriz_control();
+        turno = !turno;
+        movida = true;
     }
-
-    if (pieza->es_peon()) {
-        Peon* p = dynamic_cast<Peon*>(pieza);
-        if (p && p->mover(posicion_central_click, control, capturo)) {
-            if (capturo) pieza->get_color() ? comidasB() : comidasR();
-            actualizar_matriz_control();
-            turno = !turno;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para el peon.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
+    else {
+        std::cout << "[REGLA] Movimiento no válido para la pieza.\n";
     }
-
-    if (pieza->es_torre()) {
-        Torre* t = dynamic_cast<Torre*>(pieza);
-        if (t && t->mover(posicion_central_click, control, capturo)) {
-            if (capturo) pieza->get_color() ? comidasB() : comidasR();
-            actualizar_matriz_control();
-            turno = !turno;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para la torre.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
-    }
-
-    if (pieza->es_alfil()) {
-        Alfil* a = dynamic_cast<Alfil*>(pieza);
-        if (a && a->mover(posicion_central_click, control, capturo)) {
-            if (capturo) pieza->get_color() ? comidasB() : comidasR();
-            actualizar_matriz_control();
-            turno = !turno;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para el alfil.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
-    }
-
-    if (pieza->es_reina()) {
-        Reina* r = dynamic_cast<Reina*>(pieza);
-        if (r && r->mover(posicion_central_click, control, capturo)) {
-            if (capturo) pieza->get_color() ? comidasB() : comidasR();
-            actualizar_matriz_control();
-            turno = !turno;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para la reina.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
-    }
-
-    if (pieza->es_caballo()) {
-        Caballo* c = dynamic_cast<Caballo*>(pieza);
-        if (c && c->mover(posicion_central_click, control, capturo)) {
-            if (capturo) pieza->get_color() ? comidasB() : comidasR();
-            actualizar_matriz_control();
-            turno = !turno;
-        }
-        else {
-            std::cout << "[REGLA] Movimiento no valido para el caballo.\n";
-            imagen_arbitro = "imagenes/arbitroamarillo.png";
-            tiempo_cambio_arbitro = glutGet(GLUT_ELAPSED_TIME);
-            ETSIDI::play("sonido/pitido.mp3");
-        }
-        return;
-    }
-
 }
 
 
